@@ -1,11 +1,12 @@
-package tool
+package util
 
 import (
 	"fmt"
+	"github.com/chengzhx76/go-tools/consts"
+	"log"
 	"math"
 	"strconv"
 	"time"
-	"log"
 )
 
 func AddDay(offset int, dateTime time.Time) time.Time {
@@ -139,7 +140,7 @@ func getNumMonthDays(num int, date time.Time) []string {
 	var days []string
 	var i int
 	for i = 0; i < differDays; i++ {
-		days = append(days, date.Format(DATE_FORMAT))
+		days = append(days, date.Format(consts.DATE_FORMAT))
 		date = AddDay(1, date)
 	}
 	return days
@@ -149,7 +150,7 @@ func getNumMonthDays(num int, date time.Time) []string {
 func getNumDays(num int, date time.Time) []string {
 	var days []string
 	for i := 0; i < num; i++ {
-		days = append(days, date.Format(DATE_FORMAT))
+		days = append(days, date.Format(consts.DATE_FORMAT))
 		date = AddDay(1, date)
 	}
 	return days
@@ -159,7 +160,7 @@ func getNumDays(num int, date time.Time) []string {
 func getMonth(num int, date time.Time) []string {
 	var months []string
 	for i := 0; i < num; i++ {
-		months = append(months, date.Format(DATE_FORMAT_YYYYMM))
+		months = append(months, date.Format(consts.DATE_FORMAT_YYYYMM))
 		date = AddMonth(1, date)
 	}
 	return months
@@ -251,8 +252,8 @@ func PmBetweenTime(t time.Time) (start time.Time, end time.Time) {
 
 // 如果是上午 返回 00:00 - 12:00 下午 12:01 - 23:59
 func StartAndEndBetweenTime(t time.Time) (start time.Time, end time.Time) {
-	start = INIT_TIME
-	end = INIT_TIME
+	start = consts.INIT_TIME
+	end = consts.INIT_TIME
 
 	if IsAm(t) {
 		start, end = AmBetweenTime(t)
@@ -300,7 +301,7 @@ func HourEqual(dateTime, compare time.Time) bool {
 }
 
 func IsInitTime(time time.Time) bool {
-	return INIT_TIME.Equal(time)
+	return consts.INIT_TIME.Equal(time)
 }
 
 // 在当前时间之后，就是大于当前时间
@@ -342,7 +343,7 @@ func DateCn(t time.Time) string {
 
 // 格式话成本地时间
 func ParseLocalTime(layout, value string) time.Time {
-	dateTime, err := time.ParseInLocation(layout, value, LOCAL_TIME)
+	dateTime, err := time.ParseInLocation(layout, value, consts.LOCAL_TIME)
 	if err != nil {
 		log.Fatal("parse time err", err)
 	}
@@ -350,10 +351,10 @@ func ParseLocalTime(layout, value string) time.Time {
 }
 
 func ParseLocalTimeError(layout, value string) (time.Time, error) {
-	dateTime, err := time.ParseInLocation(layout, value, LOCAL_TIME)
+	dateTime, err := time.ParseInLocation(layout, value, consts.LOCAL_TIME)
 	if err != nil {
 		log.Fatal("parse time err", err)
-		return INIT_TIME, err
+		return consts.INIT_TIME, err
 	}
 	return dateTime, nil
 }

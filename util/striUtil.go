@@ -1,10 +1,11 @@
-package tool
+package util
 
 import (
 	"bytes"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"github.com/chengzhx76/go-tools/consts"
 	"io"
 	"log"
 	"strconv"
@@ -95,7 +96,7 @@ func TrimSuffix(s, suffix string) string {
 
 // 去掉所有空格
 func TrimSpace(str string) string {
-	return strings.Replace(str, SYMBOL_SPACE, SYMBOL_EMPTY, -1)
+	return strings.Replace(str, consts.SYMBOL_SPACE, consts.SYMBOL_EMPTY, -1)
 }
 
 // s 根据 sep 拆分后 获取第 index 个元素 从 0 开始
@@ -142,12 +143,11 @@ func SubString(s string, start, end int) string {
 // 从第一位开始截取，返回截取的字符串
 // length 截取的个数
 func SubBeforeString(s string, length int) string {
-	startIndex := 0
-	endIndex := startIndex + length
+	endIndex := length
 	if endIndex > len(s) {
 		endIndex = len(s)
 	}
-	return s[startIndex:endIndex]
+	return s[:endIndex]
 }
 
 // 从最后一位开始截取，返回截取的字符串
@@ -385,14 +385,6 @@ func Float64ToUint8(s float64) uint8 {
 	return u8
 }
 
-/*func GetUint8(key string, def ...uint8) (uint8, error) {
-	strv := c.Ctx.Input.Query(key)
-	if len(strv) == 0 && len(def) > 0 {
-		return def[0], nil
-	}
-	u64, err := strconv.ParseUint(strv, 10, 8)
-	return uint8(u64), err
-}*/
 
 func HidePhone(phone string) string {
 	if len(phone) != 11 {

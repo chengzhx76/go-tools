@@ -1,4 +1,4 @@
-package tool
+package util
 
 import (
 	"math"
@@ -16,7 +16,7 @@ func From10To38(num int64) string {
 		var result byte
 		var tmp []byte
 
-		number := num % 38 // 100%64 = 38
+		number := num % 38
 		result  = dict38[number] // C
 
 		// 临时变量，为了追加到头部

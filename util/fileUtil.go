@@ -1,4 +1,4 @@
-package tool
+package util
 
 import (
 	"os"
@@ -32,10 +32,13 @@ func CreateDirectory(path string) error {
 
 // 创建目录 没有则创建
 func CreateFile(pathName string) error {
-	file, er := os.Open(pathName)
+	file, err := os.Open(pathName)
 	defer func() { file.Close() }()
-	if er != nil && os.IsNotExist(er) {
-		file, _ = os.Create(pathName)
+	if err != nil && os.IsNotExist(err) {
+		file, err = os.Create(pathName)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

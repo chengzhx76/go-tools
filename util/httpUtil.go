@@ -1,11 +1,12 @@
-package tool
+package util
 
 import (
+	. "github.com/chengzhx76/go-tools/consts"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
-	"log"
 )
 
 const (
@@ -15,11 +16,30 @@ const (
 	CONTENT_TYPE_FORM string = "application/x-www-form-urlencoded"
 )
 
-func GetRequest(url string, headers map[string]string) string {
+func GetRequest(url string, headers map[string]string) (string, error) {
+	result, err := GetRequestByte(url, headers)
+	if err != nil {
+		log.Fatal("get request err", err)
+		return SYMBOL_EMPTY, err
+	}
+	return string(result), nil
+}
+
+func PostRequest(url string, headers map[string]string, params map[string]string) (string, error) {
+	result, err := PostRequestByte(url, headers, params)
+	if err != nil {
+		log.Fatal("get request err", err)
+		return SYMBOL_EMPTY, err
+	}
+	return string(result), nil
+}
+
+func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Fatal("get request error", err)
+		log.Fatal("get request err", err)
+		return nil, err
 	}
 	if headers != nil && len(headers) > 0 {
 		for key, value := range headers {
@@ -28,50 +48,21 @@ func GetRequest(url string, headers map[string]string) string {
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal("get request error", err)
+		log.Fatal("get request err", err)
+		return nil, err
 	}
-
-	//resp, err := http.Get(url)
 
 	defer resp.Body.Close()
-
 	result, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal("get request error", err)
+		log.Fatal("get request err", err)
+		return nil, err
 	}
 
-	return string(result)
+	return result, nil
 }
 
-func GetRequestByte(url string, headers map[string]string) []byte {
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		log.Fatal("get request error", err)
-	}
-	if headers != nil && len(headers) > 0 {
-		for key, value := range headers {
-			req.Header.Set(key, value)
-		}
-	}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Fatal("get request error", err)
-	}
-
-	//resp, err := http.Get(url)
-
-	defer resp.Body.Close()
-
-	result, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal("get request error", err)
-	}
-
-	return result
-}
-
-func PostRequest(link string, headers map[string]string, params map[string]string) []byte {
+func PostRequestByte(link string, headers map[string]string, params map[string]string) ([]byte, error) {
 	client := &http.Client{}
 	val, _ := headers[HEADER_CONTENT_TYPE]
 
@@ -86,7 +77,7 @@ func PostRequest(link string, headers map[string]string, params map[string]strin
 		bte, err := JSONMarshal(params, true)
 		if err != nil {
 			log.Fatal("marshal params error", err)
-			return nil
+			return nil, err
 		}
 		reqData = string(bte)
 	}
@@ -94,7 +85,7 @@ func PostRequest(link string, headers map[string]string, params map[string]strin
 	req, err := http.NewRequest("POST", link, strings.NewReader(reqData))
 	if err != nil {
 		log.Fatal("post request error", err)
-		return nil
+		return nil, err
 	}
 	if headers != nil && len(headers) > 0 {
 		for key, value := range headers {
@@ -105,14 +96,15 @@ func PostRequest(link string, headers map[string]string, params map[string]strin
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal("post request error", err)
+		return nil, err
 	}
 
 	defer resp.Body.Close()
-
 	result, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatal("post request error", err)
+		return nil, err
 	}
 
-	return result
+	return result, nil
 }
