@@ -2,7 +2,7 @@ package asset
 
 import (
 	"errors"
-	"go-wechat-pinche/util"
+	"github.com/chengzhx76/go-tools/util"
 )
 
 func IsBlank(str string, err error) error {
