@@ -157,7 +157,7 @@ func getNumDays(num int, date time.Time) []string {
 }
 
 // 获取这几个月
-func getMonth(num int, date time.Time) []string {
+func GetMonth(num int, date time.Time) []string {
 	var months []string
 	for i := 0; i < num; i++ {
 		months = append(months, date.Format(consts.DATE_FORMAT_YYYYMM))
