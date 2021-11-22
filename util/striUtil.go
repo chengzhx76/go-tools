@@ -8,6 +8,7 @@ import (
 	"github.com/chengzhx76/go-tools/consts"
 	"io"
 	"log"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -308,13 +309,18 @@ func InterfaceToInt64(data interface{}) int64 {
 		log.Fatal("data is nil ret default 0")
 		return 0
 	}
-	val, ok := data.(float64)
-	if ok {
-		return int64(val)
-	} else {
+
+	val := int64(0)
+	typeof := reflect.TypeOf(data)
+	switch typeof.Name() {
+	case "float64":
+		val = int64(data.(float64))
+	case "string":
+		val = StringToInt64(data.(string))
+	default:
 		log.Fatal("data not num type ret default 0")
-		return 0
 	}
+	return val
 }
 
 func IntToString(i int) string {
@@ -384,7 +390,6 @@ func Float64ToUint8(s float64) uint8 {
 	u8 := uint8(s)
 	return u8
 }
-
 
 func HidePhone(phone string) string {
 	if len(phone) != 11 {
