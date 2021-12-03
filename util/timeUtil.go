@@ -345,7 +345,7 @@ func DateCn(t time.Time) string {
 func ParseLocalTime(layout, value string) time.Time {
 	dateTime, err := time.ParseInLocation(layout, value, consts.LOCAL_TIME)
 	if err != nil {
-		log.Fatal("parse time err", err)
+		log.Println("parse time err", err)
 	}
 	return dateTime
 }
@@ -353,7 +353,7 @@ func ParseLocalTime(layout, value string) time.Time {
 func ParseLocalTimeError(layout, value string) (time.Time, error) {
 	dateTime, err := time.ParseInLocation(layout, value, consts.LOCAL_TIME)
 	if err != nil {
-		log.Fatal("parse time err", err)
+		log.Println("parse time err", err)
 		return consts.INIT_TIME, err
 	}
 	return dateTime, nil

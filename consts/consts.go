@@ -11,14 +11,15 @@ var (
 )
 
 const (
-	SYMBOL_DOT      = "."
-	SYMBOL_COMMA    = ","
-	SYMBOL_HASHTAG  = "#"
-	SYMBOL_VERTICAL = "|"
-	SYMBOL_EMPTY    = ""
-	SYMBOL_SPACE    = " "
-	SYMBOL_COLON    = ":"
-	UNDERLINE       = "-"
+	SYMBOL_DOT           = "."
+	SYMBOL_COMMA         = ","
+	SYMBOL_HASHTAG       = "#"
+	SYMBOL_VERTICAL      = "|"
+	SYMBOL_EMPTY         = ""
+	SYMBOL_SPACE         = " "
+	SYMBOL_COLON         = ":"
+	SYMBOL_UNDERLINE     = "-"
+	ERROR_CODE_DELIMITER = "__"
 )
 
 const (
@@ -40,6 +41,11 @@ const (
 	DATE_FORMAT_YYYYMMDDHHMMSS      = "20060102150405" // 精确到秒
 	DATE_FORMAT_HHMM                = "1504"           // 时分
 	TIME_FORMAT                     = "15:04:05"
+)
+
+const (
+	TRUE  bool = true
+	FALSE bool = false
 )
 
 const (

@@ -8,7 +8,6 @@ import (
 	"github.com/chengzhx76/go-tools/consts"
 	"io"
 	"log"
-	"reflect"
 	"strconv"
 	"strings"
 )
@@ -65,7 +64,7 @@ func NilToBlank(data interface{}) string {
 	if ok {
 		return val
 	} else {
-		log.Fatal("data not string type")
+		log.Println("data not string type")
 	}
 	return ""
 }
@@ -184,7 +183,7 @@ func ValStr(body map[string]interface{}, key string) string {
 	if ok {
 		return val
 	} else {
-		log.Fatal("<%s> not string type", key)
+		log.Println("<%s> not string type", key)
 	}
 	return val
 }
@@ -206,7 +205,7 @@ func ValSlice(body map[string]interface{}, key string) []interface{} {
 	if ok {
 		return val
 	} else {
-		log.Fatal("<%s> not slice type return default val", key)
+		log.Println("<%s> not slice type return default val", key)
 	}
 	return nil
 }
@@ -217,7 +216,7 @@ func ValFloat64(body map[string]interface{}, key string) float64 {
 	if ok {
 		return val
 	} else {
-		log.Fatal("<%s> not float64 type return default val 0", key)
+		log.Println("<%s> not float64 type return default val 0", key)
 	}
 	return 0
 }
@@ -228,7 +227,7 @@ func ValFloat64ToInt32(body map[string]interface{}, key string) int32 {
 	if ok {
 		return int32(val)
 	} else {
-		log.Fatal("<%s> not float64 type return default val 0", key)
+		log.Println("<%s> not float64 type return default val 0", key)
 	}
 	return 0
 }
@@ -238,7 +237,7 @@ func ValFloat64ToInt64(body map[string]interface{}, key string) int64 {
 	if ok {
 		return int64(val)
 	} else {
-		log.Fatal("<%s> not float64 type return default val 0", key)
+		log.Println("<%s> not float64 type return default val 0", key)
 	}
 	return 0
 }
@@ -249,7 +248,7 @@ func ValUnit8(body map[string]interface{}, key string) uint8 {
 	if ok {
 		return uint8(val)
 	} else {
-		log.Fatal("<%s> not float64.unit8 type return default val 0", key)
+		log.Println("<%s> not float64.unit8 type return default val 0", key)
 	}
 	return 0
 }
@@ -260,7 +259,7 @@ func ValBool(body map[string]interface{}, key string) bool {
 	if ok {
 		return val
 	} else {
-		log.Fatal("<%s> not bool type return default val false", key)
+		log.Println("<%s> not bool type return default val false", key)
 	}
 	return false
 }
@@ -271,7 +270,7 @@ func ValMap(body map[string]interface{}, key string) map[string]interface{} {
 	if ok {
 		return val
 	} else {
-		log.Fatal("<%s> not map type return default val nil map", key)
+		log.Println("<%s> not map type return default val nil map", key)
 	}
 	return nil
 }
@@ -281,7 +280,7 @@ func InterfaceToMap(data interface{}) map[string]interface{} {
 	if ok {
 		return val
 	} else {
-		log.Fatal("data not map type return default val nil map")
+		log.Println("data not map type return default val nil map")
 	}
 	return val
 }
@@ -293,32 +292,32 @@ func InterfaceToString(data interface{}) string {
 
 func InterfaceToInt(data interface{}) int {
 	if data == nil {
-		log.Fatal("data is nil ret default 0")
+		log.Println("data is nil ret default 0")
 		return 0
 	}
 	val, ok := data.(float64)
 	if ok {
 		return int(val)
 	} else {
-		log.Fatal("data not num type ret default 0")
+		log.Println("data not num type ret default 0")
 		return 0
 	}
 }
 func InterfaceToInt64(data interface{}) int64 {
 	if data == nil {
-		log.Fatal("data is nil ret default 0")
+		log.Println("data is nil ret default 0")
 		return 0
 	}
 
 	val := int64(0)
-	typeof := reflect.TypeOf(data)
-	switch typeof.Name() {
-	case "float64":
+
+	switch data.(type) {
+	case float64:
 		val = int64(data.(float64))
-	case "string":
+	case string:
 		val = StringToInt64(data.(string))
 	default:
-		log.Fatal("data not num type ret default 0")
+		log.Println("data not num type ret default 0")
 	}
 	return val
 }
@@ -344,7 +343,7 @@ func Uint8SliceToStringSlice(is []uint8) []string {
 func StringToUint8(s string) uint8 {
 	u64, err := strconv.ParseUint(s, 10, 8)
 	if err != nil {
-		log.Fatal("string to uint8 error", err)
+		log.Println("string to uint8 error", err)
 	}
 	u8 := uint8(u64)
 	return u8
@@ -352,7 +351,7 @@ func StringToUint8(s string) uint8 {
 func StringToInt(s string) int {
 	i, err := strconv.Atoi(s)
 	if err != nil {
-		log.Fatal("string to int error", err)
+		log.Println("string to int error", err)
 	}
 	return i
 }
@@ -360,7 +359,7 @@ func StringToInt(s string) int {
 func StringToInt32(s string) int32 {
 	i64, err := strconv.ParseInt(s, 10, 32)
 	if err != nil {
-		log.Fatal("string to int error", err)
+		log.Println("string to int error", err)
 	}
 	return int32(i64)
 }
@@ -368,7 +367,7 @@ func StringToInt32(s string) int32 {
 func StringToInt64(s string) int64 {
 	i64, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
-		log.Fatal("string to int error", err)
+		log.Println("string to int error", err)
 	}
 	return i64
 }
@@ -381,7 +380,7 @@ func Int64ToString(i int64) string {
 func StringToFloat64(s string) float64 {
 	f64, err := strconv.ParseFloat(s, 10)
 	if err != nil {
-		log.Fatal("string to float64 error", err)
+		log.Println("string to float64 error", err)
 	}
 	return f64
 }

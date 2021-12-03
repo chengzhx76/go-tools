@@ -19,7 +19,7 @@ const (
 func GetRequest(url string, headers map[string]string) (string, error) {
 	result, err := GetRequestByte(url, headers)
 	if err != nil {
-		log.Fatal("get request err", err)
+		log.Println("get request err", err)
 		return SYMBOL_EMPTY, err
 	}
 	return string(result), nil
@@ -28,7 +28,7 @@ func GetRequest(url string, headers map[string]string) (string, error) {
 func PostRequest(url string, headers map[string]string, params map[string]string) (string, error) {
 	result, err := PostRequestByte(url, headers, params)
 	if err != nil {
-		log.Fatal("get request err", err)
+		log.Println("get request err", err)
 		return SYMBOL_EMPTY, err
 	}
 	return string(result), nil
@@ -38,7 +38,7 @@ func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Fatal("get request err", err)
+		log.Println("get request err", err)
 		return nil, err
 	}
 	if headers != nil && len(headers) > 0 {
@@ -48,14 +48,14 @@ func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal("get request err", err)
+		log.Println("get request err", err)
 		return nil, err
 	}
 
 	defer resp.Body.Close()
 	result, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal("get request err", err)
+		log.Println("get request err", err)
 		return nil, err
 	}
 
@@ -76,7 +76,7 @@ func PostRequestByte(link string, headers map[string]string, params map[string]s
 	} else {
 		bte, err := JSONMarshal(params, true)
 		if err != nil {
-			log.Fatal("marshal params error", err)
+			log.Println("marshal params error", err)
 			return nil, err
 		}
 		reqData = string(bte)
@@ -84,7 +84,7 @@ func PostRequestByte(link string, headers map[string]string, params map[string]s
 
 	req, err := http.NewRequest("POST", link, strings.NewReader(reqData))
 	if err != nil {
-		log.Fatal("post request error", err)
+		log.Println("post request error", err)
 		return nil, err
 	}
 	if headers != nil && len(headers) > 0 {
@@ -95,14 +95,14 @@ func PostRequestByte(link string, headers map[string]string, params map[string]s
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal("post request error", err)
+		log.Println("post request error", err)
 		return nil, err
 	}
 
 	defer resp.Body.Close()
 	result, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal("post request error", err)
+		log.Println("post request error", err)
 		return nil, err
 	}
 
