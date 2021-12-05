@@ -319,6 +319,27 @@ func IsNowTimeEqual(t time.Time) bool {
 	return t.Equal(time.Now())
 }
 
+// 在当前时间之后，就是大于当前时间
+func IsNowMinTimeAfter(t time.Time) bool {
+	now := GetMinStartTime(time.Now())
+	t = GetMinStartTime(t)
+	return t.After(now)
+}
+
+// 在当前时间之前，就是小于当前时间
+func IsNowMinTimeBefore(t time.Time) bool {
+	now := GetMinStartTime(time.Now())
+	t = GetMinStartTime(t)
+	return t.Before(now)
+}
+
+// 在当前时间之前，就是小于当前时间
+func IsNowMinTimeEqual(t time.Time) bool {
+	now := GetMinStartTime(time.Now())
+	t = GetMinStartTime(t)
+	return t.Equal(now)
+}
+
 var weeks = []string{"一", "二", "三", "四", "五", "六", "日"}
 
 func DateCn(t time.Time) string {
