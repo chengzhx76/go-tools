@@ -226,31 +226,33 @@ func IsYesterday(date time.Time) bool {
 	return date.Day()-AddDay(-1, time.Now()).Day() == 0
 }
 
-// 是否是上午
+// 是否是上午 0:00 - 12:59
 func IsAm(date time.Time) bool {
 	hour := date.Hour()
 	return hour >= 0 && hour <= 12
 }
 
-// 是否是下午
+// 是否是下午 13:00 - 24:59
 func IsPm(date time.Time) bool {
 	hour := date.Hour()
-	return hour > 12 && hour < 24
+	return hour > 12 && hour <= 24
 }
 
+//  0:00 - 12:59
 func AmBetweenTime(t time.Time) (start time.Time, end time.Time) {
 	start = GetZeroTime(t)
-	end = GetSpecifyHourAndMinTime(t, 12, 0)
+	end = GetSpecifyHourAndMinTime(t, 12, 59)
 	return start, end
 }
 
+// 13:00 - 24:59
 func PmBetweenTime(t time.Time) (start time.Time, end time.Time) {
-	start = GetSpecifyHourAndMinTime(t, 12, 01)
+	start = GetSpecifyHourAndMinTime(t, 13, 00)
 	end = GetLastTime(t)
 	return start, end
 }
 
-// 如果是上午 返回 00:00 - 12:00 下午 12:01 - 23:59
+// 如果是上午 返回 00:00 - 12:59 下午 13:00 - 23:59
 func StartAndEndBetweenTime(t time.Time) (start time.Time, end time.Time) {
 	start = consts.INIT_TIME
 	end = consts.INIT_TIME

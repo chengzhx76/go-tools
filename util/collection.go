@@ -36,7 +36,7 @@ func Uint8IndexOf(coll []uint8, value uint8) int {
 	return -1
 }
 
-// 移除集合中的值
+// 移除集合中的值, 返回移除之后的数组
 func CollectionRemove(coll []string, value string) []string {
 	if index := IndexOf(coll, value); index > -1 {
 		return append(coll[:index], coll[index+1:]...)
