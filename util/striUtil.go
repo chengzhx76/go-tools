@@ -275,11 +275,14 @@ func ValMap(body map[string]interface{}, key string) map[string]interface{} {
 	return nil
 }
 
-func InterfaceToMap(data interface{}) map[string]interface{} {
+func InterfaceToMap(data interface{}, defVal ...map[string]interface{}) map[string]interface{} {
 	val, ok := data.(map[string]interface{})
 	if ok {
 		return val
 	} else {
+		if len(defVal) > 0 && defVal[0] != nil {
+			return defVal[0]
+		}
 		log.Println("data not map type return default val nil map")
 	}
 	return val
@@ -290,8 +293,11 @@ func InterfaceToString(data interface{}) string {
 	return val
 }
 
-func InterfaceToInt(data interface{}) int {
+func InterfaceToInt(data interface{}, defVal ...int) int {
 	if data == nil {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
 		log.Println("data is nil ret default 0")
 		return 0
 	}
@@ -303,8 +309,11 @@ func InterfaceToInt(data interface{}) int {
 		return 0
 	}
 }
-func InterfaceToInt64(data interface{}) int64 {
+func InterfaceToInt64(data interface{}, defVal ...int64) int64 {
 	if data == nil {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
 		log.Println("data is nil ret default 0")
 		return 0
 	}
