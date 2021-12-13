@@ -124,22 +124,6 @@ func StringIndexOf(str, substr string) int {
 	return index
 }
 
-// 截取字符串
-// 例：util.SubString(京N12345, length-5, length-1) -> 345
-func SubString(s string, start, end int) string {
-	counter, startIdx := 0, 0
-	for i := range s {
-		if counter == start {
-			startIdx = i
-		}
-		if counter == end {
-			return s[startIdx:i]
-		}
-		counter++
-	}
-	return s[startIdx:]
-}
-
 // 从第一位开始截取，返回截取的字符串
 // length 截取的个数
 func SubBeforeString(s string, length int) string {
@@ -160,6 +144,24 @@ func SubAfterString(s string, length int) string {
 		startIndex = 0
 	}
 
+	return s[startIndex:endIndex]
+}
+
+// 从 start 位开始截取，截取 length 个，返回截取的字符串
+// length 截取的个数
+// ex: util.SubString("0123456789", 4, 2) = 45
+func SubString(s string, start, length int) string {
+
+	startIndex := start
+	if start < 0 {
+		startIndex = 0
+	}
+	endIndex := len(s)
+	if length < 0 {
+		endIndex = startIndex
+	} else if length <= endIndex {
+		endIndex = startIndex + length
+	}
 	return s[startIndex:endIndex]
 }
 
