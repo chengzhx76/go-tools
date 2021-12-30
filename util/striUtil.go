@@ -5,7 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
-	"github.com/chengzhx76/go-tools/consts"
+	. "github.com/chengzhx76/go-tools/consts"
 	"io"
 	"log"
 	"strconv"
@@ -15,7 +15,8 @@ import (
 //https://www.cnblogs.com/lpgit/p/10632756.html
 
 func IsBlank(str string) bool {
-	return len(str) == 0
+	str = TrimSpace(str)
+	return len(str) == 0 || str == SYMBOL_EMPTY
 }
 
 func IsHasBlank(strs ...string) bool {
@@ -96,14 +97,14 @@ func TrimSuffix(s, suffix string) string {
 
 // 去掉所有空格
 func TrimSpace(str string) string {
-	return strings.Replace(str, consts.SYMBOL_SPACE, consts.SYMBOL_EMPTY, -1)
+	return strings.Replace(str, SYMBOL_SPACE, SYMBOL_EMPTY, -1)
 }
 
 // s 根据 sep 拆分后 获取第 index 个元素 从 0 开始
 func Split(s, sep string, index int) string {
 	vals := strings.Split(s, sep)
 	if index > len(vals)-1 {
-		return ""
+		return SYMBOL_EMPTY
 	}
 	return vals[index]
 }
@@ -179,7 +180,7 @@ func JSONMarshal(v interface{}, safeEncoding bool) ([]byte, error) {
 func ValStr(body map[string]interface{}, key string) string {
 	valObj := body[key]
 	if IsNil(valObj) {
-		return ""
+		return SYMBOL_EMPTY
 	}
 	val, ok := valObj.(string)
 	if ok {

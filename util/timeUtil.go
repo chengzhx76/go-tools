@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	"github.com/chengzhx76/go-tools/consts"
+	. "github.com/chengzhx76/go-tools/consts"
 	"log"
 	"math"
 	"strconv"
@@ -140,7 +140,7 @@ func getNumMonthDays(num int, date time.Time) []string {
 	var days []string
 	var i int
 	for i = 0; i < differDays; i++ {
-		days = append(days, date.Format(consts.DATE_FORMAT))
+		days = append(days, date.Format(DATE_FORMAT))
 		date = AddDay(1, date)
 	}
 	return days
@@ -150,7 +150,7 @@ func getNumMonthDays(num int, date time.Time) []string {
 func getNumDays(num int, date time.Time) []string {
 	var days []string
 	for i := 0; i < num; i++ {
-		days = append(days, date.Format(consts.DATE_FORMAT))
+		days = append(days, date.Format(DATE_FORMAT))
 		date = AddDay(1, date)
 	}
 	return days
@@ -160,7 +160,7 @@ func getNumDays(num int, date time.Time) []string {
 func GetMonth(num int, date time.Time) []string {
 	var months []string
 	for i := 0; i < num; i++ {
-		months = append(months, date.Format(consts.DATE_FORMAT_YYYYMM))
+		months = append(months, date.Format(DATE_FORMAT_YYYYMM))
 		date = AddMonth(1, date)
 	}
 	return months
@@ -254,8 +254,8 @@ func PmBetweenTime(t time.Time) (start time.Time, end time.Time) {
 
 // 如果是上午 返回 00:00 - 12:59 下午 13:00 - 23:59
 func StartAndEndBetweenTime(t time.Time) (start time.Time, end time.Time) {
-	start = consts.INIT_TIME
-	end = consts.INIT_TIME
+	start = INIT_TIME
+	end = INIT_TIME
 
 	if IsAm(t) {
 		start, end = AmBetweenTime(t)
@@ -303,7 +303,7 @@ func HourEqual(dateTime, compare time.Time) bool {
 }
 
 func IsInitTime(time time.Time) bool {
-	return consts.INIT_TIME.Equal(time)
+	return INIT_TIME.Equal(time)
 }
 
 // 在当前时间之后，就是大于当前时间
@@ -355,29 +355,32 @@ func DateCn(t time.Time) string {
 		dateCn = "今天"
 	} else if IsTomorrow(t) {
 		dateCn = "明天"
-	} else if IsAfterTomorrow(t) {
-		dateCn = "后天"
 	} else {
 		week := GetWeek(t)
-		dateCn = fmt.Sprintf("周%s", weeks[week-1])
+		dateCn = WeekCn(week)
 	}
 	return dateCn
 }
 
+func WeekCn(week int) string {
+	return fmt.Sprintf("周%s", weeks[week-1])
+}
+
 // 格式话成本地时间
 func ParseLocalTime(layout, value string) time.Time {
-	dateTime, err := time.ParseInLocation(layout, value, consts.LOCAL_TIME)
+	dateTime, err := time.ParseInLocation(layout, value, LOCAL_TIME)
 	if err != nil {
 		log.Println("parse time err", err)
+		return INIT_TIME
 	}
 	return dateTime
 }
 
 func ParseLocalTimeError(layout, value string) (time.Time, error) {
-	dateTime, err := time.ParseInLocation(layout, value, consts.LOCAL_TIME)
+	dateTime, err := time.ParseInLocation(layout, value, LOCAL_TIME)
 	if err != nil {
 		log.Println("parse time err", err)
-		return consts.INIT_TIME, err
+		return INIT_TIME, err
 	}
 	return dateTime, nil
 }
