@@ -286,7 +286,7 @@ func InterfaceToMap(data interface{}, defVal ...map[string]interface{}) map[stri
 		if len(defVal) > 0 && defVal[0] != nil {
 			return defVal[0]
 		}
-		log.Println("data not map type return default val nil map")
+		log.Println("InterfaceToMap data not map type return default val nil map")
 	}
 	return val
 }
@@ -301,14 +301,14 @@ func InterfaceToInt(data interface{}, defVal ...int) int {
 		if len(defVal) > 0 {
 			return defVal[0]
 		}
-		log.Println("data is nil ret default 0")
+		log.Println("InterfaceToInt data is nil ret default 0")
 		return 0
 	}
 	val, ok := data.(float64)
 	if ok {
 		return int(val)
 	} else {
-		log.Println("data not num type ret default 0")
+		log.Println("InterfaceToInt data not num type ret default 0")
 		return 0
 	}
 }
@@ -317,7 +317,7 @@ func InterfaceToInt64(data interface{}, defVal ...int64) int64 {
 		if len(defVal) > 0 {
 			return defVal[0]
 		}
-		log.Println("data is nil ret default 0")
+		log.Println("InterfaceToInt64 data is nil ret default 0")
 		return 0
 	}
 
@@ -329,7 +329,7 @@ func InterfaceToInt64(data interface{}, defVal ...int64) int64 {
 	case string:
 		val = StringToInt64(data.(string))
 	default:
-		log.Println("data not num type ret default 0")
+		log.Println("InterfaceToInt64 data not num type ret default 0")
 	}
 	return val
 }

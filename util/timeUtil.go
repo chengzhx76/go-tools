@@ -110,9 +110,6 @@ func GetMonthDayNums(cycle int, date time.Time) int {
 
 // dateTime 距离 weekNum（周几）还有几天
 func FromWeekDays(weekNum int, dateTime time.Time) int {
-	//if constant.REPEAT_NUM_WEEK_SUNDAY == weekNum { // 周末 等于 0
-	//	weekNum = 0
-	//}
 	todayWeek := GetWeek(dateTime)
 	offset := 0
 	if weekNum >= todayWeek {
