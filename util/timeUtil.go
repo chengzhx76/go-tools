@@ -59,6 +59,11 @@ func Yesterday() time.Time {
 	return AddDay(-1, time.Now())
 }
 
+// 获取今天
+func Today() time.Time {
+	return time.Now()
+}
+
 // 获取明天
 func Tomorrow() time.Time {
 	return AddDay(1, time.Now())
@@ -191,7 +196,7 @@ func GetCurrentDateNextNumMonthNum(offset int, date time.Time) (year, month int)
 }
 
 // 两个日期间相差多少天,两个不同日期的，相差一秒都算一天.
-// 返回昨天和今天 所以是 2 天
+// 返回昨天和今天 所以是 1 天
 func DayDiffer(end, start time.Time) int {
 	days := GetZeroTime(end).Sub(GetZeroTime(start)).Hours() / 24
 	//return int(math.Ceil(days)) + 1
@@ -215,28 +220,27 @@ func IsCurrentMonth(date time.Time) bool {
 
 // 是否是今天
 func IsToday(date time.Time) bool {
-	return IsCurrentMonth(date) && (date.Day()-time.Now().Day()) == 0
+	return DayDiffer(date, Today()) == 0
 }
 
 // 是否是明天
 func IsTomorrow(date time.Time) bool {
-
-	return GetDay(Tomorrow()) == GetDay(date)
+	return DayDiffer(date, Today()) == 1
 }
 
 // 是否是后天
 func IsAfterTomorrow(date time.Time) bool {
-	return GetDay(AfterTomorrow()) == GetDay(date)
+	return DayDiffer(date, Today()) == 2
 }
 
 // 是否是大后天
 func IsBigAfterTomorrow(date time.Time) bool {
-	return GetDay(BigAfterTomorrow()) == GetDay(date)
+	return DayDiffer(date, Today()) == 3
 }
 
 // 是否是昨天
 func IsYesterday(date time.Time) bool {
-	return GetDay(Yesterday()) == GetDay(date)
+	return DayDiffer(date, Today()) == -1
 }
 
 // 是否是上午 0:00 - 12:59
