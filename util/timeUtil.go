@@ -54,9 +54,24 @@ func AddSecond(offset int64, dateTime time.Time) time.Time {
 }
 
 // https://golang.org/pkg/time/#Time.AddDate
+// 获取昨天
+func Yesterday() time.Time {
+	return AddDay(-1, time.Now())
+}
+
 // 获取明天
 func Tomorrow() time.Time {
 	return AddDay(1, time.Now())
+}
+
+// 后天
+func AfterTomorrow() time.Time {
+	return AddDay(2, time.Now())
+}
+
+// 大后天
+func BigAfterTomorrow() time.Time {
+	return AddDay(3, time.Now())
 }
 
 // 获取某一天的0点时间
@@ -205,22 +220,23 @@ func IsToday(date time.Time) bool {
 
 // 是否是明天
 func IsTomorrow(date time.Time) bool {
-	return IsCurrentMonth(date) && (date.Day()-time.Now().Day()) == 1
+
+	return GetDay(Tomorrow()) == GetDay(date)
 }
 
 // 是否是后天
 func IsAfterTomorrow(date time.Time) bool {
-	return IsCurrentMonth(date) && (date.Day()-time.Now().Day()) == 2
+	return GetDay(AfterTomorrow()) == GetDay(date)
 }
 
 // 是否是大后天
 func IsBigAfterTomorrow(date time.Time) bool {
-	return IsCurrentMonth(date) && (date.Day()-time.Now().Day()) == 3
+	return GetDay(BigAfterTomorrow()) == GetDay(date)
 }
 
 // 是否是昨天
 func IsYesterday(date time.Time) bool {
-	return date.Day()-AddDay(-1, time.Now()).Day() == 0
+	return GetDay(Yesterday()) == GetDay(date)
 }
 
 // 是否是上午 0:00 - 12:59
