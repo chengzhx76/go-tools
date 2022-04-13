@@ -52,6 +52,10 @@ func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 		return nil, err
 	}
 
+	if resp.StatusCode != 200 {
+		log.Println("get request status code<%d>", resp.StatusCode)
+	}
+
 	defer resp.Body.Close()
 	result, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -66,7 +70,7 @@ func PostRequestByte(link string, headers map[string]string, params map[string]s
 	client := &http.Client{}
 	val, _ := headers[HEADER_CONTENT_TYPE]
 
-	reqData := ""
+	reqData := SYMBOL_EMPTY
 	if val == CONTENT_TYPE_FORM {
 		form := url.Values{}
 		for key, val := range params {
@@ -97,6 +101,9 @@ func PostRequestByte(link string, headers map[string]string, params map[string]s
 	if err != nil {
 		log.Println("post request error", err)
 		return nil, err
+	}
+	if resp.StatusCode != 200 {
+		log.Println("post request status code<%d>", resp.StatusCode)
 	}
 
 	defer resp.Body.Close()
