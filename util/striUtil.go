@@ -390,8 +390,7 @@ func Int64ToString(i int64) string {
 }
 
 func Float64ToString(i float64) string {
-	s := strconv.FormatFloat(i, 'E', -1, 32)
-	return s
+	return fmt.Sprintf("%f", i)
 }
 
 func StringToFloat64(s string) float64 {
