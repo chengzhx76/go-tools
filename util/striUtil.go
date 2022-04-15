@@ -389,6 +389,11 @@ func Int64ToString(i int64) string {
 	return s
 }
 
+func Float64ToString(i float64) string {
+	s := strconv.FormatFloat(i, 'E', -1, 32)
+	return s
+}
+
 func StringToFloat64(s string) float64 {
 	f64, err := strconv.ParseFloat(s, 10)
 	if err != nil {
