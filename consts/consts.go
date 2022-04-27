@@ -19,6 +19,7 @@ const (
 	SYMBOL_SPACE         = " "
 	SYMBOL_COLON         = ":"
 	SYMBOL_UNDERLINE     = "-"
+	SYMBOL_AT            = "@"
 	ERROR_CODE_DELIMITER = "__"
 )
 

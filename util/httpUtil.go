@@ -52,15 +52,14 @@ func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 		return nil, err
 	}
 
-	if resp.StatusCode != 200 {
-		log.Println("get request status code<%d>", resp.StatusCode)
-	}
-
 	defer resp.Body.Close()
 	result, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println("get request err", err)
 		return nil, err
+	}
+	if resp.StatusCode != 200 {
+		log.Println("get request status code<%v> body<%s>", resp.StatusCode, result)
 	}
 
 	return result, nil
