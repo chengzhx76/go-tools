@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	. "github.com/chengzhx76/go-tools/consts"
 )
 
 func Contains(coll []string, value string) bool {
@@ -50,7 +51,7 @@ func SliceRemove(s []interface{}, index int) []interface{} {
 
 // 数组已符号链接
 func CollectionSymbolJoin(coll []string, symbol string) string {
-	result := ""
+	result := SYMBOL_EMPTY
 	for _, item := range coll {
 		if !IsBlank(item) {
 			result += fmt.Sprintf("%v%v", item, symbol)
@@ -61,7 +62,7 @@ func CollectionSymbolJoin(coll []string, symbol string) string {
 
 // 数组已符号链接
 func Uint8CollectionSymbolJoin(coll []uint8, symbol string) string {
-	result := ""
+	result := SYMBOL_EMPTY
 	for _, item := range coll {
 		if !IsNil(item) {
 			result += fmt.Sprintf("%d%s", item, symbol)
