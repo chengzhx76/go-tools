@@ -12,6 +12,7 @@ var (
 
 const (
 	SYMBOL_DOT           = "."
+	SYMBOL_ASTERISK      = "*"
 	SYMBOL_COMMA         = ","
 	SYMBOL_HASHTAG       = "#"
 	SYMBOL_VERTICAL      = "|"
@@ -73,6 +74,11 @@ const (
 	WEEKDAY uint8 = 0 // 工作日
 	WEEKEND uint8 = 1 // 假日（周末）
 	HOLIDAY uint8 = 2 // 节假日
+)
+
+// 货币类型
+const (
+	CURRENCY_TYPE_CNY string = "CNY" // 人民币
 )
 
 const (

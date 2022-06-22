@@ -6,74 +6,78 @@ import (
 )
 
 const (
+	//dict10 = "0123456789"
+	dict10 = "9876543210"
 	dict38 = "0123456789abcdefghijklmnopqrstuvwxyz_-"
 	dict64 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-"
 )
 
+func From10To10Str(num int64) string {
+	return HexConvert(num, dict10)
+}
+
+func From10StrTo10(str10 string) int64 {
+	return Convert10Hex(str10, dict10)
+}
+
 func From10To38(num int64) string {
-	var str38 []byte
-	for {
-		var result byte
-		var tmp []byte
-
-		number := num % 38
-		result  = dict38[number] // C
-
-		// 临时变量，为了追加到头部
-		tmp = append(tmp, result)
-
-		str38 = append(tmp, str38...)
-		num = num / 38
-
-		if num == 0 {
-			break
-		}
-	}
-	return string(str38)
+	return HexConvert(num, dict38)
 }
 
 func From38To10(str38 string) int64 {
-	var pos int
-	var number int64
-	str38Len := len(str38)
-
-	for i := 0; i < str38Len; i++ {
-		pos = strings.IndexAny(dict38, str38[i:i+1])
-		number = int64(math.Pow(38,  float64(str38Len - i - 1)) * float64(pos)) + number
-	}
-	return number
+	return Convert10Hex(str38, dict38)
 }
 
 func From10To64(num int64) string {
-	var str64 []byte
+	return HexConvert(num, dict64)
+}
+
+func From64To10(str64 string) int64 {
+	return Convert10Hex(str64, dict64)
+}
+
+/*
+	tenHexNum: 10进制数
+	toHex: 要转换的进制数
+	dict: 要转换的进制数的字典
+*/
+func HexConvert(tenHexNum int64, dict string) string {
+	var str []byte
+	toHex := int64(len(dict))
 	for {
 		var result byte
 		var tmp []byte
 
-		number := num % 64 // 100%64 = 64
-		result  = dict64[number] // C
+		number := tenHexNum % toHex
+		result = dict[number] // C
 
 		// 临时变量，为了追加到头部
 		tmp = append(tmp, result)
 
-		str64 = append(tmp, str64...)
-		num = num / 64
+		str = append(tmp, str...)
+		tenHexNum = tenHexNum / toHex
 
-		if num == 0 {
+		if tenHexNum == 0 {
 			break
 		}
 	}
-	return string(str64)
+	return string(str)
 }
 
-func From64To10(str64 string) int64 {
+/*
+	转换成 10 进制
+	str: 要转换的字符串
+	dict: 要转换的进制数的字典
+*/
+func Convert10Hex(str, dict string) int64 {
 	var pos int
 	var number int64
-	str64Len := len(str64)
+	originalHex := len(dict) // 原本进制数
+	strLen := len(str)
 
-	for i := 0; i < str64Len; i++ {
-		pos = strings.IndexAny(dict64, str64[i:i+1])
-		number = int64(math.Pow(64,  float64(str64Len - i - 1)) * float64(pos)) + number
+	for i := 0; i < strLen; i++ {
+		pos = strings.IndexAny(dict, str[i:i+1])
+		number = int64(math.Pow(float64(originalHex), float64(strLen-i-1))*float64(pos)) + number
 	}
 	return number
 }
