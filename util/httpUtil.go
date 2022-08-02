@@ -1,7 +1,10 @@
 package util
 
 import (
+	"compress/flate"
+	"compress/gzip"
 	. "github.com/chengzhx76/go-tools/consts"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -46,14 +49,19 @@ func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 			req.Header.Set(key, value)
 		}
 	}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("get request err", err)
 		return nil, err
 	}
-
 	defer resp.Body.Close()
-	result, err := ioutil.ReadAll(resp.Body)
+	body, err := switchContentEncoding(resp)
+	if err != nil {
+		log.Println("get encoding request err", err)
+		return nil, err
+	}
+	result, err := ioutil.ReadAll(body)
 	if err != nil {
 		log.Println("get request err", err)
 		return nil, err
@@ -63,6 +71,18 @@ func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 	}
 
 	return result, nil
+}
+
+func switchContentEncoding(resp *http.Response) (bodyReader io.Reader, err error) {
+	switch resp.Header.Get("Content-Encoding") {
+	case "gzip":
+		bodyReader, err = gzip.NewReader(resp.Body)
+	case "deflate":
+		bodyReader = flate.NewReader(resp.Body)
+	default:
+		bodyReader = resp.Body
+	}
+	return
 }
 
 func PostRequestByte(link string, headers map[string]string, params map[string]string) ([]byte, error) {

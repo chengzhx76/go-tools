@@ -15,6 +15,7 @@ const (
 	SYMBOL_ASTERISK      = "*"
 	SYMBOL_COMMA         = ","
 	SYMBOL_HASHTAG       = "#"
+	SYMBOL_AND           = "&"
 	SYMBOL_VERTICAL      = "|"
 	SYMBOL_EMPTY         = ""
 	SYMBOL_SPACE         = " "
@@ -25,10 +26,12 @@ const (
 )
 
 const (
+	DATE_FORMAT_YEAR                = "2006"
 	DATE_FORMAT_MONTH               = "2006-01"
 	DATE_FORMAT                     = "2006-01-02"
 	DATE_FORMAT_DATE_CN             = "2006年01月02日"
-	DATE_FORMAT_MONTH_DAY_CN        = "01月02日"
+	DATE_FORMAT_YEAR_MONTH_CN       = "01月02日"
+	DATE_FORMAT_MONTH_DAY_CN        = "2006年01月"
 	DATE_FORMAT_DATE_TIME_CN        = "01月02日 15:04"
 	DATE_FORMAT_TIME_CN             = "15:04:05"
 	DATE_FORMAT_HOUR_MINUTE_CN      = "15:04"

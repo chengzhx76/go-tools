@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/rand"
 	"encoding/json"
+	"errors"
 	"fmt"
 	. "github.com/chengzhx76/go-tools/consts"
 	"io"
@@ -177,7 +178,23 @@ func JSONMarshal(v interface{}, safeEncoding bool) ([]byte, error) {
 	return b, err
 }
 
+func ValidateValNotNil(body map[string]interface{}, key string) error {
+	valObj := body[key]
+	if IsNil(valObj) {
+		return errors.New(fmt.Sprintf("<%s> value is nil"))
+	}
+	return nil
+}
+
+func ValStrNotNil(body map[string]interface{}, key string) (string, error) {
+	err := ValidateValNotNil(body, key)
+	return ValStr(body, key), err
+}
+
 func ValStr(body map[string]interface{}, key string) string {
+	if body == nil {
+		return SYMBOL_EMPTY
+	}
 	valObj := body[key]
 	if IsNil(valObj) {
 		return SYMBOL_EMPTY
@@ -192,6 +209,9 @@ func ValStr(body map[string]interface{}, key string) string {
 }
 
 func ValString(body map[string]string, key string) string {
+	if body == nil {
+		return SYMBOL_EMPTY
+	}
 	valObj := body[key]
 	if IsNil(valObj) {
 		return ""
@@ -200,6 +220,9 @@ func ValString(body map[string]string, key string) string {
 }
 
 func ValSlice(body map[string]interface{}, key string) []interface{} {
+	if body == nil {
+		return nil
+	}
 	valObj := body[key]
 	if IsNil(valObj) {
 		return nil
@@ -214,6 +237,9 @@ func ValSlice(body map[string]interface{}, key string) []interface{} {
 }
 
 func ValFloat64(body map[string]interface{}, key string) float64 {
+	if body == nil {
+		return 0
+	}
 	valObj := body[key]
 	val, ok := valObj.(float64)
 	if ok {
@@ -225,6 +251,9 @@ func ValFloat64(body map[string]interface{}, key string) float64 {
 }
 
 func ValFloat64ToInt32(body map[string]interface{}, key string) int32 {
+	if body == nil {
+		return 0
+	}
 	valObj := body[key]
 	val, ok := valObj.(float64)
 	if ok {
@@ -235,6 +264,9 @@ func ValFloat64ToInt32(body map[string]interface{}, key string) int32 {
 	return 0
 }
 func ValFloat64ToInt64(body map[string]interface{}, key string) int64 {
+	if body == nil {
+		return 0
+	}
 	valObj := body[key]
 	val, ok := valObj.(float64)
 	if ok {
@@ -246,6 +278,9 @@ func ValFloat64ToInt64(body map[string]interface{}, key string) int64 {
 }
 
 func ValUnit8(body map[string]interface{}, key string) uint8 {
+	if body == nil {
+		return 0
+	}
 	valObj := body[key]
 	val, ok := valObj.(float64)
 	if ok {
@@ -257,6 +292,9 @@ func ValUnit8(body map[string]interface{}, key string) uint8 {
 }
 
 func ValBool(body map[string]interface{}, key string) bool {
+	if body == nil {
+		return false
+	}
 	valObj := body[key]
 	val, ok := valObj.(bool)
 	if ok {
@@ -268,6 +306,9 @@ func ValBool(body map[string]interface{}, key string) bool {
 }
 
 func ValMap(body map[string]interface{}, key string) map[string]interface{} {
+	if body == nil {
+		return nil
+	}
 	valObj := body[key]
 	val, ok := valObj.(map[string]interface{})
 	if ok {

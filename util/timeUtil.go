@@ -29,6 +29,10 @@ func AddMonth(offset int, dateTime time.Time) time.Time {
 	return time.Date(offsetAfterMonthFirstDate.Year(), offsetAfterMonthFirstDate.Month(), offsetAfterMonthLastDate.Day(), hour, min, sec, dateTime.Nanosecond(), dateTime.Location())
 }
 
+func AddQuarter(offset int, dateTime time.Time) time.Time {
+	return AddMonth(3*offset, dateTime)
+}
+
 func AddYear(offset int, dateTime time.Time) time.Time {
 	addAfterTime := dateTime.Local().AddDate(offset, 0, 0)
 	if dateTime.Day() == addAfterTime.Day() {
@@ -82,6 +86,20 @@ func BigAfterTomorrow() time.Time {
 // 获取某一天的0点时间
 func GetZeroTime(dateTime time.Time) time.Time {
 	return time.Date(dateTime.Year(), dateTime.Month(), dateTime.Day(), 0, 0, 0, 0, dateTime.Location())
+}
+
+// 获取某年的第一天0点时间
+func YearFirstDay(year string) time.Time {
+	dateFull := fmt.Sprintf("%s0101", year)
+	dateTime := ParseLocalTime(DATE_FORMAT_YYYYMMDD, dateFull)
+	return GetZeroTime(dateTime)
+}
+
+// 获取某年的最后一天23:59点时间
+func YearLastDay(year string) time.Time {
+	dateFull := fmt.Sprintf("%s1231", year)
+	dateTime := ParseLocalTime(DATE_FORMAT_YYYYMMDD, dateFull)
+	return GetLastTime(dateTime)
 }
 
 // 获取某一天指定的时间
