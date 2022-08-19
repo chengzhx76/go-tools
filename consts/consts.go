@@ -57,6 +57,9 @@ const (
 	YES uint8 = 1
 	NO  uint8 = 0
 )
+const (
+	ALL uint8 = 99
+)
 
 const (
 	DELETED uint8 = 0 // 删除

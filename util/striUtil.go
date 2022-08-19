@@ -101,6 +101,11 @@ func TrimSpace(str string) string {
 	return strings.Replace(str, SYMBOL_SPACE, SYMBOL_EMPTY, -1)
 }
 
+// 删除指定位置元素
+func RemoveElement(elems []string, index int32) []string {
+	return append(elems[:index], elems[index+1:]...)
+}
+
 // s 根据 sep 拆分后 获取第 index 个元素 从 0 开始
 func Split(s, sep string, index int) string {
 	vals := strings.Split(s, sep)
@@ -165,6 +170,14 @@ func SubString(s string, start, length int) string {
 		endIndex = startIndex + length
 	}
 	return s[startIndex:endIndex]
+}
+
+// 翻转切片 [8 6 7 5 3 0 9] reversed: [9 0 3 5 7 6 8]
+func ReverseStrings(input []string) []string {
+	if len(input) == 0 {
+		return input
+	}
+	return append(ReverseStrings(input[1:]), input[0])
 }
 
 func JSONMarshal(v interface{}, safeEncoding bool) ([]byte, error) {
