@@ -34,6 +34,9 @@ func RandString(length ...int) string {
 	if len(length) > 0 {
 		num = length[0]
 	}
+	if num < 10 {
+		num = 10
+	}
 	return GenerateBytesUUID(num)
 }
 
@@ -104,6 +107,15 @@ func TrimSpace(str string) string {
 // 删除指定位置元素
 func RemoveElement(elems []string, index int32) []string {
 	return append(elems[:index], elems[index+1:]...)
+}
+
+// s 根据 sep 拆分后 获取第 index(从后边开始数) 个元素 从 0 开始
+func SplitSuffix(s, sep string, index int) string {
+	vals := strings.Split(s, sep)
+	if index > len(vals)-1 {
+		return SYMBOL_EMPTY
+	}
+	return vals[len(vals)-1-index]
 }
 
 // s 根据 sep 拆分后 获取第 index 个元素 从 0 开始
