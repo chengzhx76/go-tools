@@ -3,6 +3,8 @@ package util
 import (
 	"compress/flate"
 	"compress/gzip"
+	"errors"
+	"fmt"
 	. "github.com/chengzhx76/go-tools/consts"
 	"io"
 	"io/ioutil"
@@ -67,7 +69,8 @@ func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 		return nil, err
 	}
 	if resp.StatusCode != 200 {
-		log.Println("get request status code<%v> body<%s>", resp.StatusCode, result)
+		log.Println(fmt.Sprintf("get request status code<%v> body<%s>", resp.StatusCode, result))
+		return nil, errors.New("request status code not is 200")
 	}
 
 	return result, nil
