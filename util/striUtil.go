@@ -459,8 +459,15 @@ func Float64ToString(i float64) string {
 	return fmt.Sprintf("%f", i)
 }
 
+func StringToFloat32(s string) float64 {
+	f32, err := strconv.ParseFloat(s, 32)
+	if err != nil {
+		log.Println("string to float32 error", err)
+	}
+	return f32
+}
 func StringToFloat64(s string) float64 {
-	f64, err := strconv.ParseFloat(s, 10)
+	f64, err := strconv.ParseFloat(s, 64)
 	if err != nil {
 		log.Println("string to float64 error", err)
 	}
