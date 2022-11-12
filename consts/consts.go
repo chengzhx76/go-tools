@@ -27,27 +27,29 @@ const (
 )
 
 const (
-	DATE_FORMAT_YEAR                = "2006"
-	DATE_FORMAT_MONTH               = "2006-01"
-	DATE_FORMAT                     = "2006-01-02"
-	DATE_FORMAT_DATE_CN             = "2006年01月02日"
-	DATE_FORMAT_YEAR_MONTH_CN       = "2006年01月"
-	DATE_FORMAT_MONTH_DAY_CN        = "01月02日"
-	DATE_FORMAT_MONTH_CN            = "01月"
-	DATE_FORMAT_DATE_TIME_CN        = "01月02日 15:04"
-	DATE_FORMAT_TIME_CN             = "15:04:05"
-	DATE_FORMAT_HOUR_MINUTE_CN      = "15:04"
-	DATE_FORMAT_MINUTE_CN           = "2006年01月02日 15:04"
 	DATE_TIME_FORMAT                = "2006-01-02 15:04:05"
 	DATE_TIME_MINUTE_FORMAT         = "2006-01-02 15:04"
 	DATE_TIME_MINUTE_FORMAT_NOCOLON = "2006-01-02 1504"
-	DATE_FORMAT_YYYYMM              = "200601"         // 精确到月
-	DATE_FORMAT_YYYYMMDD            = "20060102"       // 精确到天
-	DATE_FORMAT_YYYYMMDDHH          = "2006010215"     // 精确到小时
-	DATE_FORMAT_YYYYMMDDHHMM        = "200601021504"   // 精确到分
-	DATE_FORMAT_YYYYMMDDHHMMSS      = "20060102150405" // 精确到秒
-	DATE_FORMAT_HHMM                = "1504"           // 时分
+	DATE_FORMAT                     = "2006-01-02"
+	DATE_FORMAT_MONTH               = "2006-01"
+	DATE_FORMAT_YEAR                = "2006"
 	TIME_FORMAT                     = "15:04:05"
+	DATE_FORMAT_HOUR_MINUTE         = "15:04"
+
+	DATE_FORMAT_MINUTE_CN     = "2006年01月02日 15:04"
+	DATE_FORMAT_DATE_CN       = "2006年01月02日"
+	DATE_FORMAT_YEAR_MONTH_CN = "2006年01月"
+	DATE_FORMAT_DATE_TIME_CN  = "01月02日 15:04"
+	DATE_FORMAT_MONTH_DAY_CN  = "01月02日"
+	DATE_FORMAT_MONTH_CN      = "01月"
+
+	DATE_FORMAT_YYYYMMDDHHMMSS = "20060102150405" // 精确到秒
+	DATE_FORMAT_YYYYMMDDHHMM   = "200601021504"   // 精确到分
+	DATE_FORMAT_YYYYMMDDHH     = "2006010215"     // 精确到小时
+	DATE_FORMAT_YYYYMMDD       = "20060102"       // 精确到天
+	DATE_FORMAT_YYYYMM         = "200601"         // 精确到月
+	DATE_FORMAT_HHMMSS         = "150405"         // 时分秒
+	DATE_FORMAT_HHMM           = "1504"           // 时分
 )
 
 const (
