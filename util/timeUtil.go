@@ -221,6 +221,7 @@ func DayDiffer(end, start time.Time) int {
 	return int(math.Ceil(days))
 }
 
+// 相差小时数
 func HourDiffer(end, start time.Time) int {
 	days := end.Sub(start).Hours()
 	return int(math.Ceil(days))
@@ -390,9 +391,13 @@ func DateCn(t time.Time) string {
 		dateCn = "今天"
 	} else if IsTomorrow(t) {
 		dateCn = "明天"
-	} else {
+	} else if DayDiffer(time.Now(), t) < 7 {
 		week := GetWeek(t)
 		dateCn = WeekCn(week)
+	} else if DayDiffer(time.Now(), t) < 365 {
+		dateCn = t.Format(DATE_FORMAT_MONTH_DAY_CN)
+	} else {
+		dateCn = t.Format(DATE_FORMAT_DATE_CN)
 	}
 	return dateCn
 }
