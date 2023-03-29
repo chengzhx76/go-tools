@@ -352,7 +352,7 @@ func IsNowTimeBefore(t time.Time) bool {
 	return t.Before(time.Now())
 }
 
-// 在当前时间之前，就是小于当前时间
+// 等于当前时间
 func IsNowTimeEqual(t time.Time) bool {
 	return t.Equal(time.Now())
 }
