@@ -45,6 +45,26 @@ func CollectionRemove(coll []string, value string) []string {
 	return coll
 }
 
+// 移除集合中的值, 返回移除之后的数组
+func RemoveStrElms(sl []string, elms ...string) []string {
+	if len(sl) == 0 || len(elms) == 0 {
+		return sl
+	}
+	// 先将元素转为 set
+	m := make(map[string]struct{})
+	for _, v := range elms {
+		m[v] = struct{}{}
+	}
+	// 过滤掉指定元素
+	res := make([]string, 0, len(sl))
+	for _, v := range sl {
+		if _, ok := m[v]; !ok {
+			res = append(res, v)
+		}
+	}
+	return res
+}
+
 func SliceRemove(s []interface{}, index int) []interface{} {
 	return append(s[:index], s[index+1:]...)
 }
