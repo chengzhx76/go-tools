@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	. "github.com/chengzhx76/go-tools/consts"
 	"io"
 	"log"
 	"strconv"
@@ -302,8 +301,11 @@ func ValFloat64ToInt64(body map[string]interface{}, key string) int64 {
 	return 0
 }
 
-func ValUnit8(body map[string]interface{}, key string) uint8 {
+func ValUnit8(body map[string]interface{}, key string, def ...uint8) uint8 {
 	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
 		return 0
 	}
 	valObj := body[key]
@@ -311,6 +313,9 @@ func ValUnit8(body map[string]interface{}, key string) uint8 {
 	if ok {
 		return uint8(val)
 	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
 		log.Println("<%s> not float64.unit8 type return default val 0", key)
 	}
 	return 0
