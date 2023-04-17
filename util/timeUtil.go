@@ -131,6 +131,21 @@ func GetWeek(dateTime time.Time) int {
 	return week
 }
 
+// 返回当前日期是之后一周的时间
+func GetWeekDays(dateTime time.Time, format string) []string {
+	days := []string{
+		dateTime.Format(format),
+		AddDay(1, dateTime).Format(format),
+		AddDay(2, dateTime).Format(format),
+		AddDay(3, dateTime).Format(format),
+		AddDay(4, dateTime).Format(format),
+		AddDay(5, dateTime).Format(format),
+		AddDay(6, dateTime).Format(format),
+	}
+
+	return days
+}
+
 // 获取当前日期是几号
 func GetDay(date time.Time) int {
 	return date.Day()
