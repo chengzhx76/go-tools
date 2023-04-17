@@ -4,6 +4,10 @@ import (
 	"time"
 )
 
+const (
+	UNKNOWN uint8 = 0 // 未知
+)
+
 var (
 	INIT_TIME        = time.Unix(0, 0)
 	END_LESS_TIME, _ = time.ParseInLocation(DATE_FORMAT_YYYYMMDDHHMMSS, "99991231235959", LOCAL_TIME)
