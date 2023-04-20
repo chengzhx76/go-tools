@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	. "github.com/chengzhx76/go-tools/consts"
 	"io"
 	"log"
 	"strconv"
@@ -408,6 +407,9 @@ func InterfaceToInt64(data interface{}, defVal ...int64) int64 {
 
 func IntToString(i int) string {
 	return strconv.Itoa(i)
+}
+func Int32ToString(i int32) string {
+	return strconv.Itoa(int(i))
 }
 
 func Uint8ToString(i uint8) string {

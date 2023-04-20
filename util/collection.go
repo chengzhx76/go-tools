@@ -72,9 +72,13 @@ func SliceRemove(s []interface{}, index int) []interface{} {
 // 数组已符号链接
 func CollectionSymbolJoin(coll []string, symbol string) string {
 	result := SYMBOL_EMPTY
-	for _, item := range coll {
+	for i, item := range coll {
 		if !IsBlank(item) {
-			result += fmt.Sprintf("%v%v", item, symbol)
+			if i == 0 {
+				result += item
+				continue
+			}
+			result += fmt.Sprintf("%s%s", symbol, item)
 		}
 	}
 	return result
@@ -83,9 +87,13 @@ func CollectionSymbolJoin(coll []string, symbol string) string {
 // 数组已符号链接
 func Uint8CollectionSymbolJoin(coll []uint8, symbol string) string {
 	result := SYMBOL_EMPTY
-	for _, item := range coll {
+	for i, item := range coll {
 		if !IsNil(item) {
-			result += fmt.Sprintf("%d%s", item, symbol)
+			if i == 0 {
+				result += Uint8ToString(item)
+				continue
+			}
+			result += fmt.Sprintf("%s%d", symbol, item)
 		}
 	}
 	return result
@@ -93,10 +101,14 @@ func Uint8CollectionSymbolJoin(coll []uint8, symbol string) string {
 
 // 数组已符号链接
 func IntCollectionSymbolJoin(coll []int, symbol string) string {
-	result := ""
-	for _, item := range coll {
+	result := SYMBOL_EMPTY
+	for i, item := range coll {
 		if !IsNil(item) {
-			result += fmt.Sprintf("%d%s", item, symbol)
+			if i == 0 {
+				result += IntToString(item)
+				continue
+			}
+			result += fmt.Sprintf("%s%d", symbol, item)
 		}
 	}
 	return result
