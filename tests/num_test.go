@@ -8,18 +8,12 @@ import (
 )
 
 func TestNum(t *testing.T) {
+	t.Log(util.NumToHex(100003948, 10))
+	t.Log(util.NumToHex(100003948, 16))
+	t.Log(util.NumToHex(100003948, 36))
+	t.Log(util.NumToHex(100003948, 38))
+	t.Log(util.NumToHex(100003948, 64))
 
-	//t.Log(util.From10To10Str(1655879013569))
-	//t.Log(util.From10StrTo10("8344120986430"))
-	//t.Log(util.From10To10Str(1655879085094))
-
-	t.Log(util.StringToFloat64("39.956886460191924"))
-
-	//t.Log(util.From10To64(1655879085094))
-	//t.Log(util.From64To10("o6a5qMC"))
-	t.Log("==============================")
-	//t.Log(util.From10To38_2(1655879085094))
-	//t.Log(util.From38To10_2("eh_auwd8"))
 }
 
 func TestNum_a(t *testing.T) {
@@ -51,4 +45,19 @@ func formatOut(args ...interface{}) (bool, string) {
 		}
 	}
 	return false, ""
+}
+
+func Test_SubString(t *testing.T) {
+	t.Log(util.SubString("0123456789", 2, -1))
+	//s:="0123456789"
+	//t.Log(string(s[1:]))
+}
+
+func Test_Bu(t *testing.T) {
+	a := 663
+	fmt.Println(a)
+	//前置补0
+	fmt.Printf("%03d", a) //9位，不足前面凑0补齐
+	fmt.Println("")
+	fmt.Printf("%0*d", 9, a) //同上
 }

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	. "github.com/chengzhx76/go-tools/consts"
 	"io"
 	"log"
 	"strconv"
@@ -144,6 +145,8 @@ func StringIndexOf(str, substr string) int {
 
 // 从第一位开始截取，返回截取的字符串
 // length 截取的个数
+// 废弃 建议使用 SubString
+// Deprecated
 func SubBeforeString(s string, length int) string {
 	endIndex := length
 	if endIndex > len(s) {
@@ -154,6 +157,8 @@ func SubBeforeString(s string, length int) string {
 
 // 从最后一位开始截取，返回截取的字符串
 // length 截取的个数
+// 废弃 建议使用 SubString
+// Deprecated
 func SubAfterString(s string, length int) string {
 
 	endIndex := len(s)
@@ -165,22 +170,37 @@ func SubAfterString(s string, length int) string {
 	return s[startIndex:endIndex]
 }
 
-// 从 start 位开始截取，截取 length 个，返回截取的字符串
-// length 截取的个数
+// start：起始下标，负数从尾部开始，-1为最后一个
+// length：截取长度，负数表示截取到末尾
 // ex: util.SubString("0123456789", 4, 2) = 45
-func SubString(s string, start, length int) string {
-
+// ex: util.SubString("0123456789", 2, -1) = 23456789
+// ex: util.SubString("0123456789", -1, -1) = 9
+func SubString(str string, start, length int) string {
+	s := []rune(str)
+	totalLen := len(s)
+	if totalLen == 0 {
+		return SYMBOL_EMPTY
+	}
 	startIndex := start
+	// 允许从尾部开始计算
 	if start < 0 {
-		startIndex = 0
+		startIndex = totalLen + start
+		if startIndex < 0 {
+			return SYMBOL_EMPTY
+		}
 	}
-	endIndex := len(s)
+	if startIndex > totalLen {
+		return SYMBOL_EMPTY
+	}
+	endIndex := startIndex + length
 	if length < 0 {
-		endIndex = startIndex
-	} else if length <= endIndex {
-		endIndex = startIndex + length
+		endIndex = totalLen
 	}
-	return s[startIndex:endIndex]
+	if endIndex > totalLen {
+		return string(s[startIndex:])
+	} else {
+		return string(s[startIndex:endIndex])
+	}
 }
 
 // 翻转切片 [8 6 7 5 3 0 9] reversed: [9 0 3 5 7 6 8]

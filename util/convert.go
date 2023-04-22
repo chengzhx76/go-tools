@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"math"
 	"strings"
 )
@@ -8,32 +9,22 @@ import (
 const (
 	//dict10 = "0123456789"
 	dict10 = "9876543210"
-	dict38 = "0123456789abcdefghijklmnopqrstuvwxyz_-"
+	dict16 = "0123456789ABCDEF"
+	dict36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	dict38 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_-"
 	dict64 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-"
 )
 
-func From10To10Str(num int64) string {
-	return HexConvert(num, dict10)
+// hex 进制
+func NumToHex(num int64, hex ...int32) string {
+	h, dict := getHexDict(hex...)
+	return fmt.Sprintf("%2d%s", h, HexConvert(num, dict)) // %02d 不够两位补0
 }
 
-func From10StrTo10(str10 string) int64 {
-	return Convert10Hex(str10, dict10)
-}
-
-func From10To38(num int64) string {
-	return HexConvert(num, dict38)
-}
-
-func From38To10(str38 string) int64 {
-	return Convert10Hex(str38, dict38)
-}
-
-func From10To64(num int64) string {
-	return HexConvert(num, dict64)
-}
-
-func From64To10(str64 string) int64 {
-	return Convert10Hex(str64, dict64)
+func HexToNum(str string) int64 {
+	hex := StringToInt32(SubString(str, 0, 2))
+	_, dict := getHexDict(hex)
+	return Convert10Hex(SubString(str, 2, -1), dict)
 }
 
 /*
@@ -80,4 +71,28 @@ func Convert10Hex(str, dict string) int64 {
 		number = int64(math.Pow(float64(originalHex), float64(strLen-i-1))*float64(pos)) + number
 	}
 	return number
+}
+
+func getHexDict(hex ...int32) (int32, string) {
+	h := getHex(hex...)
+	dict := dict36
+	if h == 10 {
+		dict = dict10
+	} else if h == 16 {
+		dict = dict16
+	} else if h == 36 {
+		dict = dict36
+	} else if h == 38 {
+		dict = dict38
+	} else if h == 64 {
+		dict = dict64
+	}
+	return h, dict
+}
+
+func getHex(hex ...int32) int32 {
+	if len(hex) > 0 {
+		return hex[0]
+	}
+	return 36
 }
