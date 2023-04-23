@@ -341,6 +341,26 @@ func ValUnit8(body map[string]interface{}, key string, def ...uint8) uint8 {
 	return 0
 }
 
+func ValInt32(body map[string]interface{}, key string, def ...int32) int32 {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return 0
+	}
+	valObj := body[key]
+	val, ok := valObj.(float64)
+	if ok {
+		return int32(val)
+	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
+		log.Println("<%s> not float64.int32 type return default val 0", key)
+	}
+	return 0
+}
+
 func ValBool(body map[string]interface{}, key string) bool {
 	if body == nil {
 		return false
