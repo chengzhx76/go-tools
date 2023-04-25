@@ -1,11 +1,61 @@
 package timewheel
 
 import (
+	"log"
 	"math/rand"
 	"sync/atomic"
 	"testing"
 	"time"
 )
+
+var QUERY_TRADE_DELAY_TIME = []time.Duration{
+	5 * time.Second,
+	30 * time.Second,
+	time.Minute,
+	5 * time.Minute,
+	10 * time.Minute,
+	30 * time.Minute,
+}
+
+var tw = NewTimeoutWheel(WithTickInterval(time.Second))
+
+func Test_Run(t *testing.T) {
+	log.Println("start...")
+	times := 0
+	task := &Task{
+		Delay: QUERY_TRADE_DELAY_TIME[times],
+		Times: times,
+	}
+	addTask(task)
+
+	endRunning := make(chan bool, 1)
+	<-endRunning
+	log.Println("end")
+}
+
+func addTask(task *Task) {
+	log.Printf("times<%d> add delay <%ds> task", task.Times, task.Delay/time.Second)
+	tw.Schedule(task.Delay, execTask, task)
+}
+
+func execTask(a any) {
+	task := a.(*Task)
+
+	log.Printf("times<%d> exec task delay <%ds>", task.Times, task.Delay/time.Second)
+
+	task.Times = task.Times + 1
+	if task.Times > len(QUERY_TRADE_DELAY_TIME)-1 {
+		log.Println("exec task finish...")
+		return
+	}
+	task.Delay = QUERY_TRADE_DELAY_TIME[task.Times]
+	addTask(task)
+}
+
+type Task struct {
+	Delay time.Duration
+	Times int
+}
 
 func TestFindMSB(t *testing.T) {
 	if findMSB(2048) != 11 {
