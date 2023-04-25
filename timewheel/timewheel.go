@@ -13,8 +13,8 @@ import (
 // Ticking happens from a time.Ticker
 
 const (
-	defaultTickInterval = time.Millisecond
-	defaultNumBuckets   = 2048
+	defaultTickInterval = time.Millisecond // 默认周期
+	defaultNumBuckets   = 2048             // 默认桶的大小
 
 	cacheline    = 64
 	bitsInUint64 = 64
@@ -248,11 +248,7 @@ func (t *TimeoutWheel) Stop() {
 // Schedule adds a new function to be called after some duration of time has
 // elapsed. The returned Timeout can be used to cancel calling the function. If the duration falls
 // between two ticks, the latter tick is used.
-func (t *TimeoutWheel) Schedule(
-	d time.Duration,
-	expireCb func(any),
-	arg any,
-) (Timeout, error) {
+func (t *TimeoutWheel) Schedule(d time.Duration, expireCb func(any), arg any) (Timeout, error) {
 	dTicks := (d + t.tickInterval - 1) / t.tickInterval
 	deadline := atomic.LoadUint64(&t.ticks) + uint64(dTicks)
 	timeout := t.getTimeoutLocked(deadline)
