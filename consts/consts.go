@@ -8,6 +8,8 @@ var (
 	INIT_TIME        = time.Unix(0, 0)
 	END_LESS_TIME, _ = time.ParseInLocation(DATE_FORMAT_YYYYMMDDHHMMSS, "99991231235959", LOCAL_TIME)
 	LOCAL_TIME, _    = time.LoadLocation("Local")
+
+	TIME_NIL, _ = time.ParseInLocation(time.RFC3339, "0001-01-01T00:00:00Z", LOCAL_TIME)
 )
 
 const (
