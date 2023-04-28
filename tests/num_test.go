@@ -48,7 +48,7 @@ func formatOut(args ...interface{}) (bool, string) {
 }
 
 func Test_SubString(t *testing.T) {
-	t.Log(util.SubString("0123456789", 2, -1))
+	t.Log(util.SubString("0123456789", -3, 3))
 	//s:="0123456789"
 	//t.Log(string(s[1:]))
 }
