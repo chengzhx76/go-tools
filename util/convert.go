@@ -18,7 +18,7 @@ const (
 // hex 进制
 func NumToHex(num int64, hex ...int32) string {
 	h, dict := getHexDict(hex...)
-	return fmt.Sprintf("%2d%s", h, HexConvert(num, dict)) // %02d 不够两位补0
+	return fmt.Sprintf("%02d%s", h, HexConvert(num, dict)) // %02d 不够两位补0
 }
 
 func HexToNum(str string) int64 {
@@ -28,9 +28,9 @@ func HexToNum(str string) int64 {
 }
 
 /*
-	tenHexNum: 10进制数
-	toHex: 要转换的进制数
-	dict: 要转换的进制数的字典
+tenHexNum: 10进制数
+toHex: 要转换的进制数
+dict: 要转换的进制数的字典
 */
 func HexConvert(tenHexNum int64, dict string) string {
 	var str []byte
@@ -56,9 +56,9 @@ func HexConvert(tenHexNum int64, dict string) string {
 }
 
 /*
-	转换成 10 进制
-	str: 要转换的字符串
-	dict: 要转换的进制数的字典
+转换成 10 进制
+str: 要转换的字符串
+dict: 要转换的进制数的字典
 */
 func Convert10Hex(str, dict string) int64 {
 	var pos int
