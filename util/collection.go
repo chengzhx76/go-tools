@@ -70,6 +70,7 @@ func SliceRemove(s []interface{}, index int) []interface{} {
 }
 
 // 数组已符号链接
+// Deprecated 建议使用 strings.Join
 func CollectionSymbolJoin(coll []string, symbol string) string {
 	result := SYMBOL_EMPTY
 	for i, item := range coll {

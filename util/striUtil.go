@@ -175,6 +175,7 @@ func SubAfterString(s string, length int) string {
 // ex: util.SubString("0123456789", 4, 2) = 45
 // ex: util.SubString("0123456789", 2, -1) = 23456789
 // ex: util.SubString("0123456789", -1, -1) = 9
+// ex: util.SubString("0123456789", -3, 3) = 789
 func SubString(str string, start, length int) string {
 	s := []rune(str)
 	totalLen := len(s)
