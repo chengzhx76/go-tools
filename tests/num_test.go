@@ -8,12 +8,13 @@ import (
 )
 
 func TestNum(t *testing.T) {
-	//t.Log(util.NumToHex(100003948, 10))
+	t.Log(util.NumToHex(100003948, 10))
 	//t.Log(util.NumToHex(100003948, 16))
 	//t.Log(util.NumToHex(100003948, 36))
 	//t.Log(util.NumToHex(100003948, 38))
 	//t.Log(util.NumToHex(100003948, 64))
 
+	//10899996051
 }
 
 func TestNum_a(t *testing.T) {
