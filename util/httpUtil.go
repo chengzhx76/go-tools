@@ -63,7 +63,7 @@ func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 		log.Println("get encoding request err", err)
 		return nil, err
 	}
-	result, err := ioutil.ReadAll(body)
+	result, err := io.ReadAll(body)
 	if err != nil {
 		log.Println("get request err", err)
 		return nil, err
