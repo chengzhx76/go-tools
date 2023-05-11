@@ -20,6 +20,7 @@ const (
 	SYMBOL_DOT           = "."
 	SYMBOL_ASTERISK      = "*"
 	SYMBOL_COMMA         = ","
+	SYMBOL_BACKQUOTE     = "`"
 	SYMBOL_CAESURA       = "、"
 	SYMBOL_HASHTAG       = "#"
 	SYMBOL_AND           = "&"

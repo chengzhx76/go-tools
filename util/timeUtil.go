@@ -117,6 +117,11 @@ func GetLastTime(dateTime time.Time) time.Time {
 	return time.Date(dateTime.Year(), dateTime.Month(), dateTime.Day(), 23, 59, 59, 0, dateTime.Location())
 }
 
+// 获取某一天的 开始时间和结束时间
+func GetDayBetweenTime(dateTime time.Time) (time.Time, time.Time) {
+	return GetZeroTime(dateTime), GetLastTime(dateTime)
+}
+
 // 获取当前日期的年份
 func GetYear(date time.Time) int {
 	return date.Year()
@@ -289,7 +294,7 @@ func IsPm(date time.Time) bool {
 	return hour > 12 && hour <= 24
 }
 
-//  0:00 - 12:59
+// 0:00 - 12:59
 func AmBetweenTime(t time.Time) (start time.Time, end time.Time) {
 	start = GetZeroTime(t)
 	end = GetSpecifyHourAndMinTime(t, 12, 59)
