@@ -7,7 +7,6 @@ import (
 	"fmt"
 	. "github.com/chengzhx76/go-tools/consts"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -41,7 +40,7 @@ func PostRequest(url string, headers map[string]string, params map[string]string
 
 func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		log.Println("get request err", err)
 		return nil, err
@@ -108,7 +107,7 @@ func PostRequestByte(link string, headers map[string]string, params map[string]s
 		reqData = string(bte)
 	}
 
-	req, err := http.NewRequest("POST", link, strings.NewReader(reqData))
+	req, err := http.NewRequest(http.MethodPost, link, strings.NewReader(reqData))
 	if err != nil {
 		log.Println("post request error", err)
 		return nil, err
@@ -129,7 +128,7 @@ func PostRequestByte(link string, headers map[string]string, params map[string]s
 	}
 
 	defer resp.Body.Close()
-	result, err := ioutil.ReadAll(resp.Body)
+	result, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Println("post request error", err)
 		return nil, err
