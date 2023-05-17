@@ -31,6 +31,9 @@ const (
 	SYMBOL_MIDDLELINE    = "-"
 	SYMBOL_UNDERLINE     = "_"
 	SYMBOL_AT            = "@"
+	SYMBOL_EQUAL         = "="
+	SYMBOL_LT            = "<"
+	SYMBOL_GT            = ">"
 	ERROR_CODE_DELIMITER = "__"
 )
 
