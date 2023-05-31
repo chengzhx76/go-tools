@@ -4,4 +4,4 @@ Go语言常用工具类封装
 
 Go 泛型
 
-https://www.jianshu.com/p/4421586b78ef
+https://www.jianshu.com/p/4421586b78ef.
