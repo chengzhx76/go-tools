@@ -29,7 +29,7 @@ func GetRequest(url string, headers map[string]string) (string, error) {
 	return string(result), nil
 }
 
-func PostRequest(url string, headers map[string]string, params map[string]string) (string, error) {
+func PostRequest(url string, headers map[string]string, params map[string]interface{}) (string, error) {
 	result, err := PostRequestByte(url, headers, params)
 	if err != nil {
 		log.Println("get request err", err)
@@ -87,7 +87,7 @@ func switchContentEncoding(resp *http.Response) (bodyReader io.Reader, err error
 	return
 }
 
-func PostRequestByte(link string, headers map[string]string, params map[string]string) ([]byte, error) {
+func PostRequestByte(link string, headers map[string]string, params map[string]interface{}) ([]byte, error) {
 	client := &http.Client{}
 	val, _ := headers[HEADER_CONTENT_TYPE]
 
@@ -95,7 +95,7 @@ func PostRequestByte(link string, headers map[string]string, params map[string]s
 	if val == CONTENT_TYPE_FORM {
 		form := url.Values{}
 		for key, val := range params {
-			form.Add(key, val)
+			form.Add(key, val.(string))
 		}
 		reqData = form.Encode()
 	} else {
