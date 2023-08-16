@@ -13,7 +13,8 @@ var (
 )
 
 const (
-	UNKNOWN uint8 = 0 // 未知
+	UNKNOWN      uint8 = 0  // 未知
+	UNKNOWN_BOOL uint8 = 99 // 未知
 )
 
 const (
