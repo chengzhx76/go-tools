@@ -550,5 +550,13 @@ func HidePhone(phone string) string {
 	if len(phone) != 11 {
 		return phone
 	}
-	return phone[:3] + "****" + phone[len(phone)-4:]
+	return phone[:3] + SYMBOL_FOUR_ASTERISK + phone[len(phone)-4:]
+}
+
+func IsHidePhone(phone string) bool {
+	if len(phone) != 11 {
+		return false
+	}
+	subMobileId := SubString(phone, 3, 4)
+	return subMobileId == SYMBOL_FOUR_ASTERISK
 }

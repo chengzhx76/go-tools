@@ -21,6 +21,8 @@ const (
 const (
 	SYMBOL_DOT           = "."
 	SYMBOL_ASTERISK      = "*"
+	SYMBOL_FOUR_ASTERISK = "****"
+	SYMBOL_THREE_DOT     = "..."
 	SYMBOL_COMMA         = ","
 	SYMBOL_BACKQUOTE     = "`"
 	SYMBOL_CAESURA       = "、"
@@ -36,6 +38,7 @@ const (
 	SYMBOL_EQUAL         = "="
 	SYMBOL_LT            = "<"
 	SYMBOL_GT            = ">"
+	SYMBOL_REPLACE_EMOJI = "[e]"
 	ERROR_CODE_DELIMITER = "__"
 )
 
