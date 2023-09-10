@@ -30,6 +30,16 @@ func IsHasBlank(strs ...string) bool {
 	return false
 }
 
+// 有一个不等于空的返回true(只要有值就返回true)
+func IsHasNotBlank(strs ...string) bool {
+	for _, v := range strs {
+		if !IsBlank(v) {
+			return true
+		}
+	}
+	return false
+}
+
 func RandString(length ...int) string {
 	num := 32
 	if len(length) > 0 {
