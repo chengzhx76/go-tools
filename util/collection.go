@@ -2,12 +2,26 @@ package util
 
 import (
 	"fmt"
-	. "github.com/chengzhx76/go-tools/consts"
+	"regexp"
 )
 
 func Contains(coll []string, value string) bool {
 	if !IsNil(coll) && len(coll) > 0 {
 		return IndexOf(coll, value) >= 0
+	}
+	return false
+}
+
+func RegexContains(coll []string, value string) bool {
+	if Contains(coll, value) {
+		return true
+	} else {
+		for _, collRegx := range coll {
+			regex := regexp.MustCompile(collRegx)
+			if regex.MatchString(value) {
+				return true
+			}
+		}
 	}
 	return false
 }
