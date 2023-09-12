@@ -19,10 +19,10 @@ const (
 )
 
 const (
-	SYMBOL_DOT           = "."
-	SYMBOL_ASTERISK      = "*"
-	SYMBOL_FOUR_ASTERISK = "****"
-	SYMBOL_THREE_DOT     = "..."
+	SYMBOL_DOT      = "."
+	SYMBOL_ASTERISK = "*"
+	//SYMBOL_FOUR_ASTERISK = "****" // strings.Repeat(SYMBOL_ASTERISK, 3)
+	//SYMBOL_THREE_DOT     = "..."  // strings.Repeat(SYMBOL_DOT, 3)
 	SYMBOL_COMMA         = ","
 	SYMBOL_BACKQUOTE     = "`"
 	SYMBOL_CAESURA       = "、"
