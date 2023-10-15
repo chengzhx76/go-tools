@@ -568,5 +568,5 @@ func IsHidePhone(phone string) bool {
 		return false
 	}
 	subMobileId := SubString(phone, 3, 4)
-	return subMobileId == strings.Repeat(SYMBOL_ASTERISK, 3)
+	return subMobileId == strings.Repeat(SYMBOL_ASTERISK, 4)
 }
