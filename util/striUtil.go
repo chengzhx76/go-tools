@@ -247,8 +247,11 @@ func ValStrNotNil(body map[string]interface{}, key string) (string, error) {
 	return ValStr(body, key), err
 }
 
-func ValStr(body map[string]interface{}, key string) string {
+func ValStr(body map[string]interface{}, key string, def ...string) string {
 	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
 		return SYMBOL_EMPTY
 	}
 	valObj := body[key]
@@ -259,25 +262,37 @@ func ValStr(body map[string]interface{}, key string) string {
 	if ok {
 		return val
 	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
 		log.Printf("<%s> is <%v> not string type value<%v>", key, keyType, keyValue)
 	}
 	return val
 }
 
-func ValString(body map[string]string, key string) string {
+func ValString(body map[string]string, key string, def ...string) string {
 	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
 		return SYMBOL_EMPTY
 	}
 	valObj := body[key]
 	if IsNil(valObj) {
 		return SYMBOL_EMPTY
 	}
+	if len(def) > 0 {
+		return def[0]
+	}
 	return valObj
 }
 
-func ValSlice(body map[string]interface{}, key string) []interface{} {
+func ValSlice(body map[string]interface{}, key string, def ...[]interface{}) []interface{} {
 	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
 		return nil
 	}
 	valObj := body[key]
@@ -288,14 +303,20 @@ func ValSlice(body map[string]interface{}, key string) []interface{} {
 	if ok {
 		return val
 	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
 		log.Printf("<%s> is <%v> not slice type return default val value<%v>", key, keyType, keyValue)
 	}
 	return nil
 }
 
-func ValFloat64(body map[string]interface{}, key string) float64 {
+func ValFloat64(body map[string]interface{}, key string, def ...float64) float64 {
 	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
 		return 0
 	}
 	valObj := body[key]
@@ -303,14 +324,20 @@ func ValFloat64(body map[string]interface{}, key string) float64 {
 	if ok {
 		return val
 	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
 		log.Printf("<%s> is <%v> not float64 type return default val 0 value<%v>", key, keyType, keyValue)
 	}
 	return 0
 }
 
-func ValFloat64ToInt32(body map[string]interface{}, key string) int32 {
+func ValFloat64ToInt32(body map[string]interface{}, key string, def ...int32) int32 {
 	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
 		return 0
 	}
 	valObj := body[key]
@@ -318,13 +345,19 @@ func ValFloat64ToInt32(body map[string]interface{}, key string) int32 {
 	if ok {
 		return int32(val)
 	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
 		log.Printf("<%s> is <%v> not float64 type return default val 0 value<%v>", key, keyType, keyValue)
 	}
 	return 0
 }
-func ValFloat64ToInt64(body map[string]interface{}, key string) int64 {
+func ValFloat64ToInt64(body map[string]interface{}, key string, def ...int64) int64 {
 	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
 		return 0
 	}
 	valObj := body[key]
@@ -332,6 +365,9 @@ func ValFloat64ToInt64(body map[string]interface{}, key string) int64 {
 	if ok {
 		return int64(val)
 	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
 		log.Printf("<%s> is <%v> not float64 type return default val 0 value<%v>", key, keyType, keyValue)
 	}
@@ -380,8 +416,11 @@ func ValInt32(body map[string]interface{}, key string, def ...int32) int32 {
 	return 0
 }
 
-func ValBool(body map[string]interface{}, key string) bool {
+func ValBool(body map[string]interface{}, key string, def ...bool) bool {
 	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
 		return false
 	}
 	valObj := body[key]
@@ -389,14 +428,20 @@ func ValBool(body map[string]interface{}, key string) bool {
 	if ok {
 		return val
 	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
 		log.Printf("<%s> is <%v> not bool type return default val false value<%v>", key, keyType, keyValue)
 	}
 	return false
 }
 
-func ValMap(body map[string]interface{}, key string) map[string]interface{} {
+func ValMap(body map[string]interface{}, key string, def ...map[string]interface{}) map[string]interface{} {
 	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
 		return nil
 	}
 	valObj := body[key]
@@ -404,6 +449,9 @@ func ValMap(body map[string]interface{}, key string) map[string]interface{} {
 	if ok {
 		return val
 	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
 		log.Printf("<%s> is <%v> not map type return default val nil map value<%v>", key, keyType, keyValue)
 	}
