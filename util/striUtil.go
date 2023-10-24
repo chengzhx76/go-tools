@@ -604,6 +604,11 @@ func Float64ToUint8(s float64) uint8 {
 	return u8
 }
 
+func Float64ToInt64(s float64) int64 {
+	it := int64(s)
+	return it
+}
+
 func HidePhone(phone string) string {
 	if len(phone) != 11 {
 		return phone
