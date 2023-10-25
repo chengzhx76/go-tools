@@ -358,6 +358,11 @@ func HourEqual(dateTime, compare time.Time) bool {
 	return DayEqual(dateTime, compare) && (dateTime.Hour()-compare.Hour()) == 0
 }
 
+// 分钟维度判断两个时间是否相等.
+func MinEqual(dateTime, compare time.Time) bool {
+	return HourEqual(dateTime, compare) && (dateTime.Minute()-compare.Minute()) == 0
+}
+
 func IsInitTime(time time.Time) bool {
 	return INIT_TIME.Equal(time)
 }
@@ -391,7 +396,7 @@ func IsNowMinTimeBefore(t time.Time) bool {
 	return t.Before(now)
 }
 
-// 在当前时间之前，就是小于当前时间（去掉秒）
+// 等于当前时间（去掉秒）
 func IsNowMinTimeEqual(t time.Time) bool {
 	now := GetMinStartTime(time.Now())
 	t = GetMinStartTime(t)
