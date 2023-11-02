@@ -88,6 +88,22 @@ func switchContentEncoding(resp *http.Response) (bodyReader io.Reader, err error
 }
 
 func PostRequestByte(link string, headers map[string]string, params map[string]interface{}) ([]byte, error) {
+	resp, err := PostRequestToResponse(link, headers, params)
+	if err != nil {
+		log.Println("post request error", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	result, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Println("post request error", err)
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func PostRequestToResponse(link string, headers map[string]string, params map[string]interface{}) (*http.Response, error) {
 	client := &http.Client{}
 	val, _ := headers[HEADER_CONTENT_TYPE]
 
@@ -126,13 +142,5 @@ func PostRequestByte(link string, headers map[string]string, params map[string]i
 	if resp.StatusCode != 200 {
 		log.Println("post request status code<%d>", resp.StatusCode)
 	}
-
-	defer resp.Body.Close()
-	result, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Println("post request error", err)
-		return nil, err
-	}
-
-	return result, nil
+	return resp, err
 }
