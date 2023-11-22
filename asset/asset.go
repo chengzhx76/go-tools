@@ -9,6 +9,10 @@ type Asset struct {
 	Err error
 }
 
+func NewAsset() *Asset {
+	return &Asset{}
+}
+
 func (as *Asset) IsBlank(str string, err error) {
 	if as.Err == nil {
 		as.Err = IsBlank(str, err)
