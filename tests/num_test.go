@@ -2,17 +2,17 @@ package tests
 
 import (
 	"fmt"
-	"github.com/chengzhx76/go-tools/util"
+	. "github.com/chengzhx76/go-tools/util"
 	"strings"
 	"testing"
 )
 
 func TestNum(t *testing.T) {
-	t.Log(util.NumToHex(100003948, 10))
-	//t.Log(util.NumToHex(100003948, 16))
-	//t.Log(util.NumToHex(100003948, 36))
-	//t.Log(util.NumToHex(100003948, 38))
-	//t.Log(util.NumToHex(100003948, 64))
+	t.Log(NumToHex(100003948, 10))
+	//t.Log(NumToHex(100003948, 16))
+	//t.Log(NumToHex(100003948, 36))
+	//t.Log(NumToHex(100003948, 38))
+	//t.Log(NumToHex(100003948, 64))
 
 	//10899996051
 }
@@ -49,7 +49,7 @@ func formatOut(args ...interface{}) (bool, string) {
 }
 
 func Test_SubString(t *testing.T) {
-	t.Log(util.SubString("0123456789", 0, -2))
+	t.Log(SubString("0123456789", 0, -2))
 	//s:="0123456789"
 	//t.Log(string(s[1:]))
 }
@@ -61,4 +61,19 @@ func Test_Bu(t *testing.T) {
 	fmt.Printf("%03d", a) //9位，不足前面凑0补齐
 	fmt.Println("")
 	fmt.Printf("%0*d", 9, a) //同上
+}
+
+func Test_RoundFloat(t *testing.T) {
+	number := 12.3456789
+
+	fmt.Println(RoundFloat(number, 1))
+	fmt.Println(RoundFloat(number, 2))
+	fmt.Println(RoundFloat(number, 3))
+	fmt.Println(RoundFloat(number, 4))
+	fmt.Println(RoundFloat(number, 5))
+
+	number = -12.3456789
+	fmt.Println(RoundFloat(number, 0))
+	fmt.Println(RoundFloat(number, 1))
+	fmt.Println(RoundFloat(number, 10))
 }
