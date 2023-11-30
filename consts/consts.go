@@ -29,6 +29,7 @@ const (
 	SYMBOL_HASHTAG       = "#"
 	SYMBOL_AND           = "&"
 	SYMBOL_VERTICAL      = "|"
+	SYMBOL_SLASH         = "/"
 	SYMBOL_EMPTY         = ""
 	SYMBOL_SPACE         = " "
 	SYMBOL_COLON         = ":"
