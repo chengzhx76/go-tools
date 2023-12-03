@@ -21,6 +21,24 @@ func IsBlank(str string) bool {
 	return len(str) == 0 || str == SYMBOL_EMPTY
 }
 
+// 是否全部为空，全部为空返回 true,有一个不为空返回 false
+func IsAllBlank(strs ...string) bool {
+	var flags []bool
+	for i, v := range strs {
+		flags[i] = IsBlank(v)
+	}
+	return !BoolContains(flags, false)
+}
+
+// 是否全部不为空，全部不为空返回 true, 有一个为空返回 false
+func IsAllNotBlank(strs ...string) bool {
+	var flags []bool
+	for i, v := range strs {
+		flags[i] = !IsBlank(v)
+	}
+	return !BoolContains(flags, false)
+}
+
 func IsHasBlank(strs ...string) bool {
 	for _, v := range strs {
 		if IsBlank(v) {

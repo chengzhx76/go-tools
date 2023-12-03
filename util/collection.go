@@ -34,6 +34,13 @@ func Uint8Contains(coll []uint8, value uint8) bool {
 	return false
 }
 
+func BoolContains(coll []bool, value bool) bool {
+	if !IsNil(coll) && len(coll) > 0 {
+		return BoolIndexOf(coll, value) >= 0
+	}
+	return false
+}
+
 func IndexOf(coll []string, value string) int {
 	for index, item := range coll {
 		if item == value {
@@ -44,6 +51,14 @@ func IndexOf(coll []string, value string) int {
 }
 
 func Uint8IndexOf(coll []uint8, value uint8) int {
+	for index, item := range coll {
+		if item == value {
+			return index
+		}
+	}
+	return -1
+}
+func BoolIndexOf(coll []bool, value bool) int {
 	for index, item := range coll {
 		if item == value {
 			return index
