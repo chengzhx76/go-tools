@@ -1,10 +1,12 @@
 package util
 
 import (
+	. "github.com/chengzhx76/go-tools/consts"
 	"os"
+	"strings"
 )
 
-//判断文件或文件夹是否存在
+// 判断文件或文件夹是否存在
 func IsExist(path string) bool {
 	_, err := os.Stat(path)
 	if err != nil {
@@ -20,9 +22,9 @@ func IsExist(path string) bool {
 }
 
 // 创建目录 没有则创建
-func CreateDirectory(path string) error {
-	if !IsExist(path) {
-		err := os.MkdirAll(path, os.ModePerm)
+func CreateDirectory(dir string) error {
+	if !IsExist(dir) {
+		err := os.MkdirAll(dir, os.ModePerm)
 		if err != nil {
 			return err
 		}
@@ -30,8 +32,13 @@ func CreateDirectory(path string) error {
 	return nil
 }
 
-// 创建目录 没有则创建
+// 创建文件 没有则创建
 func CreateFile(pathName string) error {
+	dir, _ := GetDirAndFileName(pathName)
+	if !IsExist(dir) {
+		err := CreateDirectory(dir)
+		return err
+	}
 	file, err := os.Open(pathName)
 	defer func() { file.Close() }()
 	if err != nil && os.IsNotExist(err) {
@@ -40,5 +47,13 @@ func CreateFile(pathName string) error {
 			return err
 		}
 	}
+
 	return nil
+}
+
+func GetDirAndFileName(filePath string) (string, string) {
+	index := strings.LastIndex(filePath, SYMBOL_SLASH)
+	fileName := filePath[index+1:]
+	dir := filePath[:index+1]
+	return dir, fileName
 }
