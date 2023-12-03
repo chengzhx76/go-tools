@@ -13,6 +13,10 @@ func NewAsset() *Asset {
 	return &Asset{}
 }
 
+func (as *Asset) HasError() bool {
+	return as.Err != nil
+}
+
 func (as *Asset) IsBlank(str string, err error) {
 	if as.Err == nil {
 		as.Err = IsBlank(str, err)

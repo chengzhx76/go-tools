@@ -382,6 +382,13 @@ func IsNowTimeEqual(t time.Time) bool {
 	return t.Equal(time.Now())
 }
 
+// 结束时间在开始时间之后，就是`end`大于`start`时间（去掉秒）
+func EndMinTimeAtStartMinTimeAfter(start, end time.Time) bool {
+	start = GetMinStartTime(start)
+	end = GetMinStartTime(end)
+	return end.After(start)
+}
+
 // 在当前时间之后，就是大于当前时间（去掉秒）
 func IsNowMinTimeAfter(t time.Time) bool {
 	now := GetMinStartTime(time.Now())
