@@ -23,7 +23,7 @@ func IsBlank(str string) bool {
 
 // 是否全部为空，全部为空返回 true,有一个不为空返回 false
 func IsAllBlank(strs ...string) bool {
-	var flags []bool
+	flags := make([]bool, len(strs))
 	for i, v := range strs {
 		flags[i] = IsBlank(v)
 	}
@@ -32,7 +32,7 @@ func IsAllBlank(strs ...string) bool {
 
 // 是否全部不为空，全部不为空返回 true, 有一个为空返回 false
 func IsAllNotBlank(strs ...string) bool {
-	var flags []bool
+	flags := make([]bool, len(strs))
 	for i, v := range strs {
 		flags[i] = !IsBlank(v)
 	}
