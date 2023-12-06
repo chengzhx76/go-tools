@@ -43,3 +43,26 @@ func RoundFloat(val float64, precision uint) float64 {
 func RoundInt64(val float64) int64 {
 	return int64(RoundFloat(val, 0))
 }
+
+// https://blog.csdn.net/qq_42410605/article/details/125339144
+
+// 向上取整 1.11->2, 1.99->2, -1.11->1
+func RoundUp(val float64) int64 {
+	return int64(math.Ceil(val))
+}
+
+// 向上取整 1.11->1, 1.99->1, -1.11->2
+func RoundDown(val float64) int64 {
+	return int64(math.Floor(val))
+}
+
+func RoundUpMultiple(numToRound, multiple int64) int64 {
+	if multiple == 0 {
+		return numToRound
+	}
+	remainder := numToRound % multiple
+	if remainder == 0 {
+		return numToRound
+	}
+	return numToRound + multiple - remainder
+}

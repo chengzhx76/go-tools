@@ -77,3 +77,18 @@ func Test_RoundFloat(t *testing.T) {
 	fmt.Println(RoundFloat(number, 1))
 	fmt.Println(RoundFloat(number, 10))
 }
+
+func Test_RoundUpMultiple(t *testing.T) {
+	a := int64(663)
+	r := RoundUpMultiple(a, 5)
+	fmt.Println(r)
+}
+
+func Test_RoundUp(t *testing.T) {
+	r := RoundUp(-1.11)
+	fmt.Println(r)
+}
+func Test_RoundDown(t *testing.T) {
+	r := RoundDown(-1.11)
+	fmt.Println(r)
+}
