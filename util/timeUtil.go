@@ -190,7 +190,7 @@ func GetLastDateOfMonth(d time.Time) time.Time {
 }
 
 // 获取num个月的日期数
-func getNumMonthDays(num int, date time.Time) []string {
+func GetNumMonthDays(num int, date time.Time) []string {
 	differDays := DayDiffer(GetLastDateOfMonth(AddMonth(num, date)), date)
 	var days []string
 	var i int
@@ -202,7 +202,7 @@ func getNumMonthDays(num int, date time.Time) []string {
 }
 
 // 获取num个天的日期数
-func getNumDays(num int, date time.Time) []string {
+func GetNumDays(num int, date time.Time) []string {
 	var days []string
 	for i := 0; i < num; i++ {
 		days = append(days, date.Format(DATE_FORMAT))
@@ -468,6 +468,6 @@ func FormatTime(time time.Time, layout string) string {
 // 时间戳 to 时间
 func UnixToTime(sec string) (time.Time, error) {
 	data, err := strconv.ParseInt(sec, 10, 64)
-	datatime := time.Unix(data/1000, 0)
-	return datatime, err
+	datetime := time.Unix(data/1000, 0)
+	return datetime, err
 }

@@ -13,9 +13,10 @@ var (
 )
 
 const (
-	UNKNOWN      uint8 = 0      // 未知
-	UNKNOWN_BOOL uint8 = 99     // 未知
-	UNKNOWN_INT  int   = -99999 // 未知
+	UNKNOWN       uint8 = 0      // 未知
+	UNKNOWN_BOOL  uint8 = 99     // 未知
+	UNKNOWN_INT   int   = -99999 // 未知
+	UNKNOWN_INT32 int32 = -99999 // 未知
 )
 
 const (
