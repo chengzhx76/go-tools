@@ -631,7 +631,7 @@ func HidePhone(phone string) string {
 	if len(phone) != 11 {
 		return phone
 	}
-	return phone[:3] + strings.Repeat(SYMBOL_ASTERISK, 3) + phone[len(phone)-4:]
+	return phone[:3] + strings.Repeat(SYMBOL_ASTERISK, 4) + phone[len(phone)-4:]
 }
 
 func IsHidePhone(phone string) bool {
