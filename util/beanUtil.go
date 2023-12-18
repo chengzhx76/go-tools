@@ -7,7 +7,7 @@ import (
 )
 
 // 引用 https://github.com/fishyxin/simple-copy-properties
-func BeanCopy(dst, src interface{}) (err error) {
+func BeanCopy(dst, src any) (err error) {
 	// 防止意外panic
 	defer func() {
 		if e := recover(); e != nil {
