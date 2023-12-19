@@ -23,8 +23,8 @@ func AddMonth(offset int, dateTime time.Time) time.Time {
 		return addAfterTime
 	}
 
-	offsetAfterMonthFirstDate := GetFirstDateOfMonth(dateTime).Local().AddDate(0, offset, 0)
-	offsetAfterMonthLastDate := GetLastDateOfMonth(offsetAfterMonthFirstDate)
+	offsetAfterMonthFirstDate := StartOfMonth(dateTime).Local().AddDate(0, offset, 0)
+	offsetAfterMonthLastDate := EndOfMonth(offsetAfterMonthFirstDate)
 	hour, min, sec := addAfterTime.Clock()
 	return time.Date(offsetAfterMonthFirstDate.Year(), offsetAfterMonthFirstDate.Month(), offsetAfterMonthLastDate.Day(), hour, min, sec, dateTime.Nanosecond(), dateTime.Location())
 }
@@ -38,8 +38,8 @@ func AddYear(offset int, dateTime time.Time) time.Time {
 	if dateTime.Day() == addAfterTime.Day() {
 		return addAfterTime
 	}
-	offsetAfterMonthFirstDate := GetFirstDateOfMonth(dateTime).Local().AddDate(offset, 0, 0)
-	offsetAfterMonthLastDate := GetLastDateOfMonth(offsetAfterMonthFirstDate)
+	offsetAfterMonthFirstDate := StartOfMonth(dateTime).Local().AddDate(offset, 0, 0)
+	offsetAfterMonthLastDate := EndOfMonth(offsetAfterMonthFirstDate)
 
 	hour, min, sec := addAfterTime.Clock()
 	return time.Date(offsetAfterMonthFirstDate.Year(), offsetAfterMonthFirstDate.Month(), offsetAfterMonthLastDate.Day(), hour, min, sec, dateTime.Nanosecond(), dateTime.Location())
@@ -84,22 +84,12 @@ func BigAfterTomorrow() time.Time {
 }
 
 // 获取某一天的0点时间
+// Deprecated 建议使用 StartOfDay
 func GetZeroTime(dateTime time.Time) time.Time {
+	return StartOfDay(dateTime)
+}
+func StartOfDay(dateTime time.Time) time.Time {
 	return time.Date(dateTime.Year(), dateTime.Month(), dateTime.Day(), 0, 0, 0, 0, dateTime.Location())
-}
-
-// 获取某年的第一天0点时间
-func YearFirstDay(year string) time.Time {
-	dateFull := fmt.Sprintf("%s0101", year)
-	dateTime := ParseLocalTime(DATE_FORMAT_YYYYMMDD, dateFull)
-	return GetZeroTime(dateTime)
-}
-
-// 获取某年的最后一天23:59点时间
-func YearLastDay(year string) time.Time {
-	dateFull := fmt.Sprintf("%s1231", year)
-	dateTime := ParseLocalTime(DATE_FORMAT_YYYYMMDD, dateFull)
-	return GetLastTime(dateTime)
 }
 
 // 获取某一天指定的时间
@@ -108,27 +98,47 @@ func GetSpecifyHourAndMinTime(dateTime time.Time, hour, min int) time.Time {
 }
 
 // 获取某一分钟的0秒时间
+// Deprecated 建议使用 StartOfMin
 func GetMinStartTime(dateTime time.Time) time.Time {
+	return StartOfMin(dateTime)
+}
+func StartOfMin(dateTime time.Time) time.Time {
 	return GetSpecifyHourAndMinTime(dateTime, dateTime.Hour(), dateTime.Minute())
 }
 
 // 获取某一天的最后时间
+// Deprecated 建议使用 EndOfDay
 func GetLastTime(dateTime time.Time) time.Time {
+	return EndOfDay(dateTime)
+}
+func EndOfDay(dateTime time.Time) time.Time {
 	return time.Date(dateTime.Year(), dateTime.Month(), dateTime.Day(), 23, 59, 59, 0, dateTime.Location())
 }
 
 // 获取某一天的 开始时间和结束时间
+// Deprecated 建议使用 StartAndEndOfDay
 func GetDayBetweenTime(dateTime time.Time) (time.Time, time.Time) {
-	return GetZeroTime(dateTime), GetLastTime(dateTime)
+	return StartAndEndOfDay(dateTime)
+}
+func StartAndEndOfDay(dateTime time.Time) (time.Time, time.Time) {
+	return StartOfDay(dateTime), EndOfDay(dateTime)
 }
 
 // 获取当前日期的年份
+// Deprecated 建议使用 Year
 func GetYear(date time.Time) int {
+	return Year(date)
+}
+func Year(date time.Time) int {
 	return date.Year()
 }
 
 // 返回当前日期是星期几
+// Deprecated 建议使用 Week
 func GetWeek(dateTime time.Time) int {
+	return Week(dateTime)
+}
+func Week(dateTime time.Time) int {
 	week := int(dateTime.Weekday())
 	if week == 0 {
 		return 7 // 周日改为 7
@@ -137,7 +147,11 @@ func GetWeek(dateTime time.Time) int {
 }
 
 // 返回当前日期是之后一周的时间
+// Deprecated 建议使用 WeekDays
 func GetWeekDays(dateTime time.Time, format string) []string {
+	return WeekDays(dateTime, format)
+}
+func WeekDays(dateTime time.Time, format string) []string {
 	days := []string{
 		dateTime.Format(format),
 		AddDay(1, dateTime).Format(format),
@@ -152,23 +166,27 @@ func GetWeekDays(dateTime time.Time, format string) []string {
 }
 
 // 获取当前日期是几号
+// Deprecated 建议使用 Day
 func GetDay(date time.Time) int {
+	return Day(date)
+}
+func Day(date time.Time) int {
 	return date.Day()
 }
 
-// 获取从当前 date 算有之后的 cycle 个月有几天
+// 获取从当前 date 算有之后的 cycle 个月有几天；指定日期 date 后经过几个月有几天
 func GetMonthDayNums(cycle int, date time.Time) int {
 	days := 0
 	for i := 0; i < cycle; i++ {
 		date = AddMonth(1, date)
-		days += GetLastDateOfMonth(date).Day()
+		days += EndOfMonth(date).Day()
 	}
 	return days
 }
 
 // dateTime 距离 weekNum（周几）还有几天
 func FromWeekDays(weekNum int, dateTime time.Time) int {
-	todayWeek := GetWeek(dateTime)
+	todayWeek := Week(dateTime)
 	offset := 0
 	if weekNum >= todayWeek {
 		offset = weekNum - todayWeek
@@ -178,20 +196,88 @@ func FromWeekDays(weekNum int, dateTime time.Time) int {
 	return offset
 }
 
-// 获取传入的时间所在月份的第一天，即某月第一天的0点。如传入time.Now(), 返回当前月份的第一天0点时间。
-func GetFirstDateOfMonth(d time.Time) time.Time {
-	d = d.AddDate(0, 0, -d.Day()+1)
-	return GetZeroTime(d)
+// 获取某年的第一天0点时间
+func YearStartDay(year string) time.Time {
+	if len(year) != 4 {
+		return INIT_TIME
+	}
+	return StartOfYear(ParseLocalTime(DATE_FORMAT_YYYYMMDD, fmt.Sprintf("%s0101", year)))
 }
 
-// 获取传入的时间所在月份的最后一天，即某月最后一天的0点。如传入time.Now(), 返回当前月份的最后一天0点时间。
+// 获取某年的最后一天23:59点时间
+func YearEndDay(year string) time.Time {
+	if len(year) != 4 {
+		return INIT_TIME
+	}
+	return EndOfYear(ParseLocalTime(DATE_FORMAT_YYYYMMDD, fmt.Sprintf("%s1231", year)))
+}
+
+// 获取某月的第一天0点时间
+func MonthStartDay(month string) time.Time {
+	if len(month) != 6 {
+		return INIT_TIME
+	}
+	return StartOfMonth(ParseLocalTime(DATE_FORMAT_YYYYMMDD, fmt.Sprintf("%s01", month)))
+}
+
+// 获取某月的最后一天23:59点时间
+func MonthEndDay(month string) time.Time {
+	if len(month) != 6 {
+		return INIT_TIME
+	}
+	return EndOfMonth(ParseLocalTime(DATE_FORMAT_YYYYMMDD, fmt.Sprintf("%s31", month)))
+}
+
+// 获取某天的第一天0点时间
+func DayStartDay(day string) time.Time {
+	if len(day) != 8 {
+		return INIT_TIME
+	}
+	return StartOfMonth(ParseLocalTime(DATE_FORMAT_YYYYMMDD, day))
+}
+
+// 获取某天的最后一天23:59点时间
+func DayEndDay(day string) time.Time {
+	if len(day) != 8 {
+		return INIT_TIME
+	}
+	return EndOfMonth(ParseLocalTime(DATE_FORMAT_YYYYMMDD, day))
+}
+
+// 获取某年的第一天0点时间
+func StartOfYear(year time.Time) time.Time {
+	return time.Date(year.Year(), time.January, 1, 0, 0, 0, 0, year.Location())
+}
+
+// 获取某年的最后一天23:59:59点时间
+func EndOfYear(year time.Time) time.Time {
+	return time.Date(year.Year(), time.December, 31, 23, 59, 59, 0, year.Location())
+}
+
+// 获取传入的时间所在月份的第一天，即某月第一天的0点。如传入time.Now(), 返回当前月份的第一天0点时间。
+// Deprecated 建议使用 StartOfMonth
+func GetFirstDateOfMonth(d time.Time) time.Time {
+	//d = d.AddDate(0, 0, -d.Day()+1)
+	//return GetZeroTime(d)
+	return StartOfMonth(d)
+}
+func StartOfMonth(month time.Time) time.Time {
+	return time.Date(month.Year(), month.Month(), 1, 0, 0, 0, 0, month.Location())
+}
+
+// 获取传入的时间所在月份的最后一天，即某月最后一天的23:59:59点。如传入time.Now(), 返回当前月份的最后一天23:59:59点时间。
+// Deprecated 建议使用 EndOfMonth
 func GetLastDateOfMonth(d time.Time) time.Time {
-	return GetFirstDateOfMonth(d).AddDate(0, 1, -1)
+	//return GetFirstDateOfMonth(d).AddDate(0, 1, -1)
+	return EndOfMonth(d)
+}
+func EndOfMonth(month time.Time) time.Time {
+	return time.Date(month.Year(), month.Month(), 31, 23, 59, 59, 0, month.Location())
 }
 
 // 获取num个月的日期数
 func GetNumMonthDays(num int, date time.Time) []string {
-	differDays := DayDiffer(GetLastDateOfMonth(AddMonth(num, date)), date)
+	differDays := DayDiffer(EndOfMonth(AddMonth(num, date)), date)
 	var days []string
 	var i int
 	for i = 0; i < differDays; i++ {
@@ -202,7 +288,11 @@ func GetNumMonthDays(num int, date time.Time) []string {
 }
 
 // 获取num个天的日期数
+// Deprecated 建议使用 NumDays
 func GetNumDays(num int, date time.Time) []string {
+	return NumDays(num, date)
+}
+func NumDays(num int, date time.Time) []string {
 	var days []string
 	for i := 0; i < num; i++ {
 		days = append(days, date.Format(DATE_FORMAT))
@@ -212,7 +302,11 @@ func GetNumDays(num int, date time.Time) []string {
 }
 
 // 获取这几个月
+// Deprecated 建议使用 NumMonths
 func GetMonth(num int, date time.Time) []string {
+	return NumMonths(num, date)
+}
+func NumMonths(num int, date time.Time) []string {
 	var months []string
 	for i := 0; i < num; i++ {
 		months = append(months, date.Format(DATE_FORMAT_YYYYMM))
@@ -236,7 +330,7 @@ func GetCurrentDateNextNumMonthNum(offset int, date time.Time) (year, month int)
 // 两个日期间相差多少天,两个不同日期的，相差一秒都算一天.
 // 返回昨天和今天 所以是 1 天
 func DayDiffer(end, start time.Time) int {
-	days := GetZeroTime(end).Sub(GetZeroTime(start)).Hours() / 24
+	days := StartOfDay(end).Sub(StartOfDay(start)).Hours() / 24
 	//return int(math.Ceil(days)) + 1
 	return int(math.Ceil(days))
 }
@@ -296,7 +390,7 @@ func IsPm(date time.Time) bool {
 
 // 0:00 - 12:59
 func AmBetweenTime(t time.Time) (start time.Time, end time.Time) {
-	start = GetZeroTime(t)
+	start = StartOfDay(t)
 	end = GetSpecifyHourAndMinTime(t, 12, 59)
 	return start, end
 }
@@ -304,7 +398,7 @@ func AmBetweenTime(t time.Time) (start time.Time, end time.Time) {
 // 13:00 - 24:59
 func PmBetweenTime(t time.Time) (start time.Time, end time.Time) {
 	start = GetSpecifyHourAndMinTime(t, 13, 00)
-	end = GetLastTime(t)
+	end = EndOfDay(t)
 	return start, end
 }
 
@@ -334,7 +428,7 @@ func MinuteDiffer(end, start time.Time) int {
 // 离今天结束时间还有多长分钟
 func TodayHasMinute() int {
 	now := time.Now()
-	minute := MinuteDiffer(GetLastTime(now), now)
+	minute := MinuteDiffer(EndOfDay(now), now)
 	return minute
 }
 
@@ -384,29 +478,29 @@ func IsNowTimeEqual(t time.Time) bool {
 
 // 结束时间在开始时间之后，就是`end`大于`start`时间（去掉秒）
 func EndMinTimeAtStartMinTimeAfter(start, end time.Time) bool {
-	start = GetMinStartTime(start)
-	end = GetMinStartTime(end)
+	start = StartOfMin(start)
+	end = StartOfMin(end)
 	return end.After(start)
 }
 
 // 在当前时间之后，就是大于当前时间（去掉秒）
 func IsNowMinTimeAfter(t time.Time) bool {
-	now := GetMinStartTime(time.Now())
-	t = GetMinStartTime(t)
+	now := StartOfMin(time.Now())
+	t = StartOfMin(t)
 	return t.After(now)
 }
 
 // 在当前时间之前，就是小于当前时间（去掉秒）
 func IsNowMinTimeBefore(t time.Time) bool {
-	now := GetMinStartTime(time.Now())
-	t = GetMinStartTime(t)
+	now := StartOfMin(time.Now())
+	t = StartOfMin(t)
 	return t.Before(now)
 }
 
 // 等于当前时间（去掉秒）
 func IsNowMinTimeEqual(t time.Time) bool {
-	now := GetMinStartTime(time.Now())
-	t = GetMinStartTime(t)
+	now := StartOfMin(time.Now())
+	t = StartOfMin(t)
 	return t.Equal(now)
 }
 
@@ -424,7 +518,7 @@ func DateCn(t time.Time) string {
 	} else if IsTomorrow(t) {
 		dateCn = "明天"
 	} else if DayDiffer(time.Now(), t) < 7 {
-		week := GetWeek(t)
+		week := Week(t)
 		dateCn = WeekCn(week)
 	} else if DayDiffer(time.Now(), t) < 365 {
 		dateCn = t.Format(DATE_FORMAT_MONTH_DAY_CN)

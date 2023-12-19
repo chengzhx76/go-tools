@@ -68,6 +68,7 @@ const (
 	DATE_FORMAT_YYYYMMDDHH     = "2006010215"     // 精确到小时
 	DATE_FORMAT_YYYYMMDD       = "20060102"       // 精确到天
 	DATE_FORMAT_YYYYMM         = "200601"         // 精确到月
+	DATE_FORMAT_YYYY           = "2006"           // 精确到年
 	DATE_FORMAT_HHMMSS         = "150405"         // 时分秒
 	DATE_FORMAT_HHMM           = "1504"           // 时分
 )
