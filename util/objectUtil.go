@@ -4,8 +4,7 @@ import (
 	"reflect"
 )
 
-
-func IsNils(objs ...interface{}) bool {
+func IsNils(objs ...any) bool {
 	if len(objs) == 1 {
 		return IsNil(objs[0])
 	} else {
@@ -18,7 +17,7 @@ func IsNils(objs ...interface{}) bool {
 	return false
 }
 
-func IsNil(obj interface{}) bool {
+func IsNil(obj any) bool {
 	if obj == nil {
 		return true
 	}

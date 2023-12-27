@@ -41,22 +41,22 @@ func (as *Asset) NotBlankStr(str string, msg string) {
 	}
 }
 
-func (as *Asset) IsNil(obj interface{}, err error) {
+func (as *Asset) IsNil(obj any, err error) {
 	if as.Err == nil {
 		as.Err = IsNil(obj, err)
 	}
 }
-func (as *Asset) NotNil(obj interface{}, err error) {
+func (as *Asset) NotNil(obj any, err error) {
 	if as.Err == nil {
 		as.Err = NotNil(obj, err)
 	}
 }
-func (as *Asset) IsNilStr(obj interface{}, msg string) {
+func (as *Asset) IsNilStr(obj any, msg string) {
 	if as.Err == nil {
 		as.Err = IsNilStr(obj, msg)
 	}
 }
-func (as *Asset) NotNilStr(obj interface{}, msg string) {
+func (as *Asset) NotNilStr(obj any, msg string) {
 	if as.Err == nil {
 		as.Err = NotNilStr(obj, msg)
 	}
@@ -82,22 +82,22 @@ func (as *Asset) NotTrueStr(bl bool, msg string) {
 		as.Err = NotTrueStr(bl, msg)
 	}
 }
-func (as *Asset) IsEmpty(objs []interface{}, err error) {
+func (as *Asset) IsEmpty(objs []any, err error) {
 	if as.Err == nil {
 		as.Err = IsEmpty(objs, err)
 	}
 }
-func (as *Asset) NotIsEmpty(objs []interface{}, err error) {
+func (as *Asset) NotIsEmpty(objs []any, err error) {
 	if as.Err == nil {
 		as.Err = NotIsEmpty(objs, err)
 	}
 }
-func (as *Asset) IsEmptyStr(objs []interface{}, msg string) {
+func (as *Asset) IsEmptyStr(objs []any, msg string) {
 	if as.Err == nil {
 		as.Err = IsEmptyStr(objs, msg)
 	}
 }
-func (as *Asset) NotIsEmptyStr(objs []interface{}, msg string) {
+func (as *Asset) NotIsEmptyStr(objs []any, msg string) {
 	if as.Err == nil {
 		as.Err = NotIsEmptyStr(objs, msg)
 	}
@@ -113,11 +113,11 @@ func NotBlankStr(str string, msg string) error {
 	return NotBlank(str, errors.New(msg))
 }
 
-func IsNilStr(obj interface{}, msg string) error {
+func IsNilStr(obj any, msg string) error {
 	return IsNil(obj, errors.New(msg))
 }
 
-func NotNilStr(obj interface{}, msg string) error {
+func NotNilStr(obj any, msg string) error {
 	return NotNil(obj, errors.New(msg))
 }
 
@@ -129,11 +129,11 @@ func NotTrueStr(bl bool, msg string) error {
 	return NotTrue(bl, errors.New(msg))
 }
 
-func IsEmptyStr(objs []interface{}, msg string) error {
+func IsEmptyStr(objs []any, msg string) error {
 	return IsEmpty(objs, errors.New(msg))
 }
 
-func NotIsEmptyStr(objs []interface{}, msg string) error {
+func NotIsEmptyStr(objs []any, msg string) error {
 	return NotIsEmpty(objs, errors.New(msg))
 }
 
@@ -153,14 +153,14 @@ func NotBlank(str string, err error) error {
 	return nil
 }
 
-func IsNil(str interface{}, err error) error {
+func IsNil(str any, err error) error {
 	if util.IsNil(str) {
 		return err
 	}
 	return nil
 }
 
-func NotNil(obj interface{}, err error) error {
+func NotNil(obj any, err error) error {
 	if util.IsNil(obj) {
 		return err
 	}
@@ -181,14 +181,14 @@ func NotTrue(bl bool, err error) error {
 	return nil
 }
 
-func IsEmpty(objs []interface{}, err error) error {
+func IsEmpty(objs []any, err error) error {
 	if len(objs) != 0 {
 		return err
 	}
 	return nil
 }
 
-func NotIsEmpty(objs []interface{}, err error) error {
+func NotIsEmpty(objs []any, err error) error {
 	if len(objs) == 0 {
 		return err
 	}

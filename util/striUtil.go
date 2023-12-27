@@ -90,7 +90,7 @@ func idBytesToStr(id []byte, length int) string {
 	return str[:length]
 }
 
-func NilToBlank(data interface{}) string {
+func NilToBlank(data any) string {
 	if IsNil(data) {
 		return ""
 	}
@@ -241,7 +241,7 @@ func ReverseStrings(input []string) []string {
 	return append(ReverseStrings(input[1:]), input[0])
 }
 
-func JSONMarshal(v interface{}, safeEncoding bool) ([]byte, error) {
+func JSONMarshal(v any, safeEncoding bool) ([]byte, error) {
 	b, err := json.Marshal(v)
 
 	if safeEncoding {
@@ -252,7 +252,7 @@ func JSONMarshal(v interface{}, safeEncoding bool) ([]byte, error) {
 	return b, err
 }
 
-func ValidateValNotNil(body map[string]interface{}, key string) error {
+func ValidateValNotNil(body map[string]any, key string) error {
 	valObj := body[key]
 	if IsNil(valObj) {
 		return errors.New(fmt.Sprintf("<%s> value is nil"))
@@ -260,12 +260,12 @@ func ValidateValNotNil(body map[string]interface{}, key string) error {
 	return nil
 }
 
-func ValStrNotNil(body map[string]interface{}, key string) (string, error) {
+func ValStrNotNil(body map[string]any, key string) (string, error) {
 	err := ValidateValNotNil(body, key)
 	return ValStr(body, key), err
 }
 
-func ValStr(body map[string]interface{}, key string, def ...string) string {
+func ValStr(body map[string]any, key string, def ...string) string {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -306,7 +306,7 @@ func ValString(body map[string]string, key string, def ...string) string {
 	return valObj
 }
 
-func ValSlice(body map[string]interface{}, key string, def ...[]interface{}) []interface{} {
+func ValSlice(body map[string]any, key string, def ...[]any) []any {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -317,7 +317,7 @@ func ValSlice(body map[string]interface{}, key string, def ...[]interface{}) []i
 	if IsNil(valObj) {
 		return nil
 	}
-	val, ok := valObj.([]interface{})
+	val, ok := valObj.([]any)
 	if ok {
 		return val
 	} else {
@@ -330,7 +330,7 @@ func ValSlice(body map[string]interface{}, key string, def ...[]interface{}) []i
 	return nil
 }
 
-func ValFloat64(body map[string]interface{}, key string, def ...float64) float64 {
+func ValFloat64(body map[string]any, key string, def ...float64) float64 {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -351,7 +351,7 @@ func ValFloat64(body map[string]interface{}, key string, def ...float64) float64
 	return 0
 }
 
-func ValFloat64ToInt32(body map[string]interface{}, key string, def ...int32) int32 {
+func ValFloat64ToInt32(body map[string]any, key string, def ...int32) int32 {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -371,7 +371,7 @@ func ValFloat64ToInt32(body map[string]interface{}, key string, def ...int32) in
 	}
 	return 0
 }
-func ValFloat64ToInt64(body map[string]interface{}, key string, def ...int64) int64 {
+func ValFloat64ToInt64(body map[string]any, key string, def ...int64) int64 {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -392,7 +392,7 @@ func ValFloat64ToInt64(body map[string]interface{}, key string, def ...int64) in
 	return 0
 }
 
-func ValUnit8(body map[string]interface{}, key string, def ...uint8) uint8 {
+func ValUnit8(body map[string]any, key string, def ...uint8) uint8 {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -413,7 +413,7 @@ func ValUnit8(body map[string]interface{}, key string, def ...uint8) uint8 {
 	return 0
 }
 
-func ValInt32(body map[string]interface{}, key string, def ...int32) int32 {
+func ValInt32(body map[string]any, key string, def ...int32) int32 {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -434,7 +434,7 @@ func ValInt32(body map[string]interface{}, key string, def ...int32) int32 {
 	return 0
 }
 
-func ValBool(body map[string]interface{}, key string, def ...bool) bool {
+func ValBool(body map[string]any, key string, def ...bool) bool {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -455,7 +455,7 @@ func ValBool(body map[string]interface{}, key string, def ...bool) bool {
 	return false
 }
 
-func ValMap(body map[string]interface{}, key string, def ...map[string]interface{}) map[string]interface{} {
+func ValMap(body map[string]any, key string, def ...map[string]any) map[string]any {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -463,7 +463,7 @@ func ValMap(body map[string]interface{}, key string, def ...map[string]interface
 		return nil
 	}
 	valObj := body[key]
-	val, ok := valObj.(map[string]interface{})
+	val, ok := valObj.(map[string]any)
 	if ok {
 		return val
 	} else {
@@ -476,8 +476,8 @@ func ValMap(body map[string]interface{}, key string, def ...map[string]interface
 	return nil
 }
 
-func InterfaceToMap(data interface{}, defVal ...map[string]interface{}) map[string]interface{} {
-	val, ok := data.(map[string]interface{})
+func InterfaceToMap(data any, defVal ...map[string]any) map[string]any {
+	val, ok := data.(map[string]any)
 	if ok {
 		return val
 	} else {
@@ -490,12 +490,12 @@ func InterfaceToMap(data interface{}, defVal ...map[string]interface{}) map[stri
 	return val
 }
 
-func InterfaceToString(data interface{}) string {
+func InterfaceToString(data any) string {
 	val := NilToBlank(data)
 	return val
 }
 
-func InterfaceToInt(data interface{}, defVal ...int) int {
+func InterfaceToInt(data any, defVal ...int) int {
 	if data == nil {
 		if len(defVal) > 0 {
 			return defVal[0]
@@ -512,7 +512,7 @@ func InterfaceToInt(data interface{}, defVal ...int) int {
 		return 0
 	}
 }
-func InterfaceToInt64(data interface{}, defVal ...int64) int64 {
+func InterfaceToInt64(data any, defVal ...int64) int64 {
 	if data == nil {
 		if len(defVal) > 0 {
 			return defVal[0]

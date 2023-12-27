@@ -95,7 +95,7 @@ func RemoveStrElms(sl []string, elms ...string) []string {
 	return res
 }
 
-func SliceRemove(s []interface{}, index int) []interface{} {
+func SliceRemove(s []any, index int) []any {
 	return append(s[:index], s[index+1:]...)
 }
 
