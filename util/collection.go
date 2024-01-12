@@ -4,6 +4,7 @@ import (
 	"fmt"
 	. "github.com/chengzhx76/go-tools/consts"
 	"regexp"
+	"sort"
 )
 
 func Contains(coll []string, value string) bool {
@@ -34,6 +35,13 @@ func Uint8Contains(coll []uint8, value uint8) bool {
 	return false
 }
 
+func Int64Contains(coll []int64, value int64) bool {
+	if !IsNil(coll) && len(coll) > 0 {
+		return Int64IndexOf(coll, value) >= 0
+	}
+	return false
+}
+
 func BoolContains(coll []bool, value bool) bool {
 	if !IsNil(coll) && len(coll) > 0 {
 		return BoolIndexOf(coll, value) >= 0
@@ -51,6 +59,14 @@ func IndexOf(coll []string, value string) int {
 }
 
 func Uint8IndexOf(coll []uint8, value uint8) int {
+	for index, item := range coll {
+		if item == value {
+			return index
+		}
+	}
+	return -1
+}
+func Int64IndexOf(coll []int64, value int64) int {
 	for index, item := range coll {
 		if item == value {
 			return index
@@ -95,8 +111,20 @@ func RemoveStrElms(sl []string, elms ...string) []string {
 	return res
 }
 
+// 移除指定位置的元素，返回新切片
+func SliceRemoveInt64(s []int64, index int) []int64 {
+	return append(s[:index], s[index+1:]...)
+}
+
 func SliceRemove(s []any, index int) []any {
 	return append(s[:index], s[index+1:]...)
+}
+
+func SortInt64(s []int64) []int64 {
+	sort.Slice(s, func(i, j int) bool {
+		return s[i] < s[j]
+	})
+	return s
 }
 
 // 数组已符号链接
