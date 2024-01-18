@@ -476,6 +476,17 @@ func ValMap(body map[string]any, key string, def ...map[string]any) map[string]a
 	return nil
 }
 
+func ValAny(body map[string]any, key string, def ...any) any {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return nil
+	}
+	valObj := body[key]
+	return valObj
+}
+
 func InterfaceToMap(data any, defVal ...map[string]any) map[string]any {
 	val, ok := data.(map[string]any)
 	if ok {
