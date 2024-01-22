@@ -1,9 +1,14 @@
 package util
 
 import (
+	"crypto/hmac"
+	"crypto/md5"
 	"crypto/sha1"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
+	"io"
 )
 
 var HASH_CHECK_FAIL = errors.New("check hash err")
@@ -18,4 +23,16 @@ func Sha1HashCheck(bodyBytes []byte, hash string) error {
 		return HASH_CHECK_FAIL
 	}
 	return nil
+}
+
+func Md5(val string) string {
+	h := md5.New()
+	_, _ = io.WriteString(h, val)
+	return fmt.Sprintf("%x", h.Sum(nil))
+}
+
+func HmacSha256(data string, secret string) string {
+	h := hmac.New(sha256.New, []byte(secret))
+	h.Write([]byte(data))
+	return hex.EncodeToString(h.Sum(nil))
 }
