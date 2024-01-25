@@ -461,12 +461,12 @@ func IsInitTime(time time.Time) bool {
 	return INIT_TIME.Equal(time)
 }
 
-// 在当前时间之后，就是大于当前时间
+// 在当前时间之后（就是未来的时间），就是大于当前时间
 func IsNowTimeAfter(t time.Time) bool {
 	return t.After(time.Now())
 }
 
-// 在当前时间之前，就是小于当前时间
+// 在当前时间之前（就是已过去的时间），就是小于当前时间
 func IsNowTimeBefore(t time.Time) bool {
 	return t.Before(time.Now())
 }
@@ -483,14 +483,14 @@ func EndMinTimeAtStartMinTimeAfter(start, end time.Time) bool {
 	return end.After(start)
 }
 
-// 在当前时间之后，就是大于当前时间（去掉秒）
+// 在当前时间之后（就是未来的时间），就是大于当前时间（去掉秒）
 func IsNowMinTimeAfter(t time.Time) bool {
 	now := StartOfMin(time.Now())
 	t = StartOfMin(t)
 	return t.After(now)
 }
 
-// 在当前时间之前，就是小于当前时间（去掉秒）
+// 在当前时间之前（就是已过去的时间），就是小于当前时间（去掉秒）
 func IsNowMinTimeBefore(t time.Time) bool {
 	now := StartOfMin(time.Now())
 	t = StartOfMin(t)
