@@ -415,6 +415,13 @@ func StartAndEndBetweenTime(t time.Time) (start time.Time, end time.Time) {
 	return
 }
 
+// 偏移20分钟
+func OffsetTwentyMinutes(t time.Time) (start time.Time, end time.Time) {
+	start = AddMinute(-20, t)
+	end = AddMinute(20, t)
+	return
+}
+
 // 是否是当前小时内
 func IsCurrentHour(date time.Time) bool {
 	return IsToday(date) && (date.Hour()-time.Now().Hour()) == 0
@@ -455,6 +462,11 @@ func HourEqual(dateTime, compare time.Time) bool {
 // 分钟维度判断两个时间是否相等.
 func MinEqual(dateTime, compare time.Time) bool {
 	return HourEqual(dateTime, compare) && (dateTime.Minute()-compare.Minute()) == 0
+}
+
+// 判断 checkTime 是否在 startTime 和 endTime 时间之间
+func TimeBetween(checkTime, startTime, endTime time.Time) bool {
+	return (MinEqual(checkTime, startTime) || MinEqual(checkTime, endTime)) || checkTime.After(startTime) && checkTime.Before(endTime)
 }
 
 func IsInitTime(time time.Time) bool {
