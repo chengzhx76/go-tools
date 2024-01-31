@@ -284,7 +284,7 @@ func ValStr(body map[string]any, key string, def ...string) string {
 			return def[0]
 		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not string type value<%v>", key, keyType, keyValue)
+		log.Printf("[error] <%s> is <%v> not string type value<%v>", key, keyType, keyValue)
 	}
 	return val
 }
@@ -325,7 +325,7 @@ func ValSlice(body map[string]any, key string, def ...[]any) []any {
 			return def[0]
 		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not slice type return default val value<%v>", key, keyType, keyValue)
+		log.Printf("[error] <%s> is <%v> not slice type return default val value<%v>", key, keyType, keyValue)
 	}
 	return nil
 }
