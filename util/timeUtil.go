@@ -416,9 +416,9 @@ func StartAndEndBetweenTime(t time.Time) (start time.Time, end time.Time) {
 }
 
 // 偏移20分钟
-func OffsetTwentyMinutes(t time.Time) (start time.Time, end time.Time) {
-	start = AddMinute(-20, t)
-	end = AddMinute(20, t)
+func OffsetStartAndEndMinutes(t time.Time, offset int64) (start time.Time, end time.Time) {
+	start = AddMinute(-offset, t)
+	end = AddMinute(offset, t)
 	return
 }
 
