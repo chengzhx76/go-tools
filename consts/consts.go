@@ -20,6 +20,7 @@ const (
 )
 
 const (
+	SYMBOL_EMPTY    = ""
 	SYMBOL_DOT      = "."
 	SYMBOL_ASTERISK = "*"
 	//SYMBOL_FOUR_ASTERISK = "****" // strings.Repeat(SYMBOL_ASTERISK, 3)
@@ -31,7 +32,6 @@ const (
 	SYMBOL_AND           = "&"
 	SYMBOL_VERTICAL      = "|"
 	SYMBOL_SLASH         = "/"
-	SYMBOL_EMPTY         = ""
 	SYMBOL_SPACE         = " "
 	SYMBOL_COLON         = ":"
 	SYMBOL_MIDDLELINE    = "-"

@@ -92,7 +92,7 @@ func idBytesToStr(id []byte, length int) string {
 
 func NilToBlank(data any) string {
 	if IsNil(data) {
-		return ""
+		return SYMBOL_EMPTY
 	}
 	val, ok := data.(string)
 	if ok {
@@ -100,7 +100,7 @@ func NilToBlank(data any) string {
 	} else {
 		log.Println("data not string type")
 	}
-	return ""
+	return SYMBOL_EMPTY
 }
 
 // 替换 url 中的占位符
@@ -156,6 +156,7 @@ func Split(s, sep string, index int) string {
 	return vals[index]
 }
 
+// 包含字符串 strings.Contains("", "")
 // 查找字符串位置
 func StringIndexOf(str, substr string) int {
 	// 子串在字符串的字节位置
@@ -501,7 +502,26 @@ func InterfaceToMap(data any, defVal ...map[string]any) map[string]any {
 	return val
 }
 
+func AnyToMap(data any, defVal ...map[string]any) map[string]any {
+	val, ok := data.(map[string]any)
+	if ok {
+		return val
+	} else {
+		if len(defVal) > 0 && defVal[0] != nil {
+			return defVal[0]
+		}
+		keyType := reflect.TypeOf(data)
+		log.Printf("InterfaceToMap data is<%v> not map type return default val nil map", keyType)
+	}
+	return val
+}
+
 func InterfaceToString(data any) string {
+	val := NilToBlank(data)
+	return val
+}
+
+func AnyToString(data any) string {
 	val := NilToBlank(data)
 	return val
 }
