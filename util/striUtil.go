@@ -352,6 +352,52 @@ func ValFloat64(body map[string]any, key string, def ...float64) float64 {
 	return 0
 }
 
+func ValJsonNumberToInt64(body map[string]any, key string, def ...int64) int64 {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return 0
+	}
+	valObj := body[key]
+	val, ok := valObj.(json.Number)
+	if ok {
+		i64, err := val.Int64()
+		if err != nil {
+			log.Printf(fmt.Sprintf("json.Number to Int64 err %s", err.Error()))
+		}
+		return i64
+	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
+		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
+		log.Printf("<%s> is <%v> not json.Number type return default val 0 value<%v>", key, keyType, keyValue)
+	}
+	return 0
+}
+
+func ValJsonNumberToString(body map[string]any, key string, def ...string) string {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return SYMBOL_EMPTY
+	}
+	valObj := body[key]
+	val, ok := valObj.(json.Number)
+	if ok {
+		return val.String()
+	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
+		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
+		log.Printf("<%s> is <%v> not json.Number type return default val '' value<%v>", key, keyType, keyValue)
+	}
+	return SYMBOL_EMPTY
+}
+
 func ValFloat64ToInt32(body map[string]any, key string, def ...int32) int32 {
 	if body == nil {
 		if len(def) > 0 {
@@ -414,6 +460,27 @@ func ValUnit8(body map[string]any, key string, def ...uint8) uint8 {
 	return 0
 }
 
+func ValInt(body map[string]any, key string, def ...int) int {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return 0
+	}
+	valObj := body[key]
+	val, ok := valObj.(int)
+	if ok {
+		return int(val)
+	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
+		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
+		log.Printf("<%s> is <%v> not float64.int type return default val 0 value<%v>", key, keyType, keyValue)
+	}
+	return 0
+}
+
 func ValInt32(body map[string]any, key string, def ...int32) int32 {
 	if body == nil {
 		if len(def) > 0 {
@@ -431,6 +498,27 @@ func ValInt32(body map[string]any, key string, def ...int32) int32 {
 		}
 		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
 		log.Printf("<%s> is <%v> not float64.int32 type return default val 0 value<%v>", key, keyType, keyValue)
+	}
+	return 0
+}
+
+func ValInt64(body map[string]any, key string, def ...int64) int64 {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return 0
+	}
+	valObj := body[key]
+	val, ok := valObj.(float64)
+	if ok {
+		return int64(val)
+	} else {
+		if len(def) > 0 {
+			return def[0]
+		}
+		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
+		log.Printf("<%s> is <%v> not float64.int64 type return default val 0 value<%v>", key, keyType, keyValue)
 	}
 	return 0
 }
