@@ -74,8 +74,8 @@ const (
 )
 
 const (
-	TRUE  bool = true
-	FALSE bool = false
+	TRUE  = true
+	FALSE = false
 )
 
 const (

@@ -666,6 +666,18 @@ func Uint8ToString(i uint8) string {
 	return strconv.Itoa(int(i))
 }
 
+func BoolToString(boolVal bool) string {
+	return strconv.FormatBool(boolVal)
+}
+
+func StringToBool(boolStr string) bool {
+	boolVal, err := strconv.ParseBool(boolStr)
+	if err != nil {
+		log.Fatal(fmt.Sprintf("string to bool err<%s>", err.Error()))
+	}
+	return boolVal
+}
+
 func Uint8SliceToStringSlice(is []uint8) []string {
 	ss := make([]string, len(is))
 	for i, v := range is {
