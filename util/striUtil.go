@@ -12,6 +12,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
 
 //https://www.cnblogs.com/lpgit/p/10632756.html
@@ -771,4 +772,10 @@ func IsHidePhone(phone string) bool {
 	}
 	subMobileId := SubString(phone, 3, 4)
 	return subMobileId == strings.Repeat(SYMBOL_ASTERISK, 4)
+}
+
+// https://www.cnblogs.com/heris/p/16025741.html
+// 返回字符串的长度
+func StrLen(str string) int {
+	return utf8.RuneCountInString(str)
 }
