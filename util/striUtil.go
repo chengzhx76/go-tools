@@ -157,7 +157,6 @@ func Split(s, sep string, index int) string {
 	return vals[index]
 }
 
-// 包含字符串 strings.Contains("", "")
 // 查找字符串位置
 func StringIndexOf(str, substr string) int {
 	// 子串在字符串的字节位置
@@ -172,6 +171,11 @@ func StringIndexOf(str, substr string) int {
 	}
 
 	return index
+}
+
+// 包含字符串
+func StrContains(str, substr string) bool {
+	return strings.Contains(str, substr)
 }
 
 // 从第一位开始截取，返回截取的字符串

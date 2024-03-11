@@ -22,6 +22,7 @@ const (
 const (
 	SYMBOL_EMPTY    = ""
 	SYMBOL_DOT      = "."
+	SYMBOL_POINT    = "·"
 	SYMBOL_ASTERISK = "*"
 	//SYMBOL_FOUR_ASTERISK = "****" // strings.Repeat(SYMBOL_ASTERISK, 3)
 	//SYMBOL_THREE_DOT     = "..."  // strings.Repeat(SYMBOL_DOT, 3)
