@@ -357,6 +357,7 @@ func ValFloat64(body map[string]any, key string, def ...float64) float64 {
 	return 0
 }
 
+// 大整数精度丢失
 func ValJsonNumberToInt64(body map[string]any, key string, def ...int64) int64 {
 	if body == nil {
 		if len(def) > 0 {
@@ -382,6 +383,7 @@ func ValJsonNumberToInt64(body map[string]any, key string, def ...int64) int64 {
 	return 0
 }
 
+// 大整数精度丢失
 func ValJsonNumberToString(body map[string]any, key string, def ...string) string {
 	if body == nil {
 		if len(def) > 0 {
@@ -581,20 +583,6 @@ func ValAny(body map[string]any, key string, def ...any) any {
 	return valObj
 }
 
-func InterfaceToMap(data any, defVal ...map[string]any) map[string]any {
-	val, ok := data.(map[string]any)
-	if ok {
-		return val
-	} else {
-		if len(defVal) > 0 && defVal[0] != nil {
-			return defVal[0]
-		}
-		keyType := reflect.TypeOf(data)
-		log.Printf("InterfaceToMap data is<%v> not map type return default val nil map", keyType)
-	}
-	return val
-}
-
 func AnyToMap(data any, defVal ...map[string]any) map[string]any {
 	val, ok := data.(map[string]any)
 	if ok {
@@ -609,17 +597,12 @@ func AnyToMap(data any, defVal ...map[string]any) map[string]any {
 	return val
 }
 
-func InterfaceToString(data any) string {
-	val := NilToBlank(data)
-	return val
-}
-
 func AnyToString(data any) string {
 	val := NilToBlank(data)
 	return val
 }
 
-func InterfaceToInt(data any, defVal ...int) int {
+func AnyToInt(data any, defVal ...int) int {
 	if data == nil {
 		if len(defVal) > 0 {
 			return defVal[0]
@@ -636,7 +619,8 @@ func InterfaceToInt(data any, defVal ...int) int {
 		return 0
 	}
 }
-func InterfaceToInt64(data any, defVal ...int64) int64 {
+
+func AnyToInt64(data any, defVal ...int64) int64 {
 	if data == nil {
 		if len(defVal) > 0 {
 			return defVal[0]
@@ -658,6 +642,52 @@ func InterfaceToInt64(data any, defVal ...int64) int64 {
 		log.Printf("InterfaceToInt64 data is <%v> not num type ret default 0", keyType)
 	}
 	return val
+}
+
+func AnyToBool(data any, defVal ...bool) bool {
+	if data == nil {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
+		keyType := reflect.TypeOf(data)
+		log.Printf("InterfaceToInt64 data is <%v> not num type ret default 0", keyType)
+		return false
+	}
+
+	val := false
+
+	switch data.(type) {
+	case bool:
+		val = data.(bool)
+	default:
+		keyType := reflect.TypeOf(data)
+		log.Printf("AnyToBool data is <%v> not bool type ret default false", keyType)
+	}
+	return val
+}
+
+// 废弃 建议使用 AnyToMap
+// Deprecated
+func InterfaceToMap(data any, defVal ...map[string]any) map[string]any {
+	return AnyToMap(data, defVal...)
+}
+
+// 废弃 建议使用 AnyToString
+// Deprecated
+func InterfaceToString(data any) string {
+	return AnyToString(data)
+}
+
+// 废弃 建议使用 AnyToInt
+// Deprecated
+func InterfaceToInt(data any, defVal ...int) int {
+	return AnyToInt(data, defVal...)
+}
+
+// 废弃 建议使用 AnyToInt64
+// Deprecated
+func InterfaceToInt64(data any, defVal ...int64) int64 {
+	return AnyToInt64(data, defVal...)
 }
 
 func IntToString(i int) string {
