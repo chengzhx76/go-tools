@@ -724,6 +724,10 @@ func Uint8SliceToStringSlice(is []uint8) []string {
 // https://www.cnblogs.com/f-ck-need-u/p/9863915.html
 
 func StringToUint8(s string) uint8 {
+	if IsBlank(s) {
+		log.Println("string s is nil return 0")
+		return UNKNOWN
+	}
 	u64, err := strconv.ParseUint(s, 10, 8)
 	if err != nil {
 		log.Println("string to uint8 error", err)
