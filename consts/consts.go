@@ -7,6 +7,7 @@ import (
 var (
 	INIT_TIME        = time.Unix(0, 0)
 	END_LESS_TIME, _ = time.ParseInLocation(DATE_FORMAT_YYYYMMDDHHMMSS, "99991231235959", LOCAL_TIME)
+	END_TIME         = END_LESS_TIME
 	LOCAL_TIME, _    = time.LoadLocation("Local")
 
 	TIME_NIL, _ = time.ParseInLocation(time.RFC3339, "0001-01-01T00:00:00Z", LOCAL_TIME)
@@ -72,6 +73,8 @@ const (
 	DATE_FORMAT_YYYY           = "2006"           // 精确到年
 	DATE_FORMAT_HHMMSS         = "150405"         // 时分秒
 	DATE_FORMAT_HHMM           = "1504"           // 时分
+
+	DATE_END_YYYYMMDD = "99991231" // 时分
 )
 
 const (
