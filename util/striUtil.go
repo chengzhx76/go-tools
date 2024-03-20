@@ -278,21 +278,7 @@ func ValStr(body map[string]any, key string, def ...string) string {
 		}
 		return SYMBOL_EMPTY
 	}
-	valObj := body[key]
-	if IsNil(valObj) {
-		return SYMBOL_EMPTY
-	}
-	val, ok := valObj.(string)
-	if ok {
-		return val
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("[error] <%s> is <%v> not string type value<%v>", key, keyType, keyValue)
-	}
-	return val
+	return AnyToString(body[key], def...)
 }
 
 func ValString(body map[string]string, key string, def ...string) string {
@@ -302,14 +288,7 @@ func ValString(body map[string]string, key string, def ...string) string {
 		}
 		return SYMBOL_EMPTY
 	}
-	valObj := body[key]
-	if IsNil(valObj) {
-		return SYMBOL_EMPTY
-	}
-	if len(def) > 0 {
-		return def[0]
-	}
-	return valObj
+	return AnyToString(body[key], def...)
 }
 
 func ValSlice(body map[string]any, key string, def ...[]any) []any {
@@ -319,21 +298,7 @@ func ValSlice(body map[string]any, key string, def ...[]any) []any {
 		}
 		return nil
 	}
-	valObj := body[key]
-	if IsNil(valObj) {
-		return nil
-	}
-	val, ok := valObj.([]any)
-	if ok {
-		return val
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("[error] <%s> is <%v> not slice type return default val value<%v>", key, keyType, keyValue)
-	}
-	return nil
+	return AnyToSlice(body[key], def...)
 }
 
 func ValFloat64(body map[string]any, key string, def ...float64) float64 {
@@ -344,17 +309,7 @@ func ValFloat64(body map[string]any, key string, def ...float64) float64 {
 		return 0
 	}
 	valObj := body[key]
-	val, ok := valObj.(float64)
-	if ok {
-		return val
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not float64 type return default val 0 value<%v>", key, keyType, keyValue)
-	}
-	return 0
+	return AnyToFloat64(valObj)
 }
 
 // 大整数精度丢失
@@ -405,45 +360,14 @@ func ValJsonNumberToString(body map[string]any, key string, def ...string) strin
 	return SYMBOL_EMPTY
 }
 
+// Deprecated ValInt32
 func ValFloat64ToInt32(body map[string]any, key string, def ...int32) int32 {
-	if body == nil {
-		if len(def) > 0 {
-			return def[0]
-		}
-		return 0
-	}
-	valObj := body[key]
-	val, ok := valObj.(float64)
-	if ok {
-		return int32(val)
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not float64 type return default val 0 value<%v>", key, keyType, keyValue)
-	}
-	return 0
+	return ValInt32(body, key, def...)
 }
+
+// Deprecated ValInt64
 func ValFloat64ToInt64(body map[string]any, key string, def ...int64) int64 {
-	if body == nil {
-		if len(def) > 0 {
-			return def[0]
-		}
-		return 0
-	}
-	valObj := body[key]
-	val, ok := valObj.(float64)
-	if ok {
-		return int64(val)
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not float64 type return default val 0 value<%v>", key, keyType, keyValue)
-	}
-	return 0
+	return ValInt64(body, key, def...)
 }
 
 func ValUnit8(body map[string]any, key string, def ...uint8) uint8 {
@@ -454,17 +378,7 @@ func ValUnit8(body map[string]any, key string, def ...uint8) uint8 {
 		return 0
 	}
 	valObj := body[key]
-	val, ok := valObj.(float64)
-	if ok {
-		return uint8(val)
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not float64.unit8 type return default val 0 value<%v>", key, keyType, keyValue)
-	}
-	return 0
+	return AnyToUint8(valObj, def...)
 }
 
 func ValInt(body map[string]any, key string, def ...int) int {
@@ -475,17 +389,7 @@ func ValInt(body map[string]any, key string, def ...int) int {
 		return 0
 	}
 	valObj := body[key]
-	val, ok := valObj.(int)
-	if ok {
-		return int(val)
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not float64.int type return default val 0 value<%v>", key, keyType, keyValue)
-	}
-	return 0
+	return AnyToInt(valObj, def...)
 }
 
 func ValInt32(body map[string]any, key string, def ...int32) int32 {
@@ -496,17 +400,7 @@ func ValInt32(body map[string]any, key string, def ...int32) int32 {
 		return 0
 	}
 	valObj := body[key]
-	val, ok := valObj.(float64)
-	if ok {
-		return int32(val)
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not float64.int32 type return default val 0 value<%v>", key, keyType, keyValue)
-	}
-	return 0
+	return AnyToInt32(valObj, def...)
 }
 
 func ValInt64(body map[string]any, key string, def ...int64) int64 {
@@ -517,17 +411,7 @@ func ValInt64(body map[string]any, key string, def ...int64) int64 {
 		return 0
 	}
 	valObj := body[key]
-	val, ok := valObj.(float64)
-	if ok {
-		return int64(val)
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not float64.int64 type return default val 0 value<%v>", key, keyType, keyValue)
-	}
-	return 0
+	return AnyToInt64(valObj, def...)
 }
 
 func ValBool(body map[string]any, key string, def ...bool) bool {
@@ -538,17 +422,7 @@ func ValBool(body map[string]any, key string, def ...bool) bool {
 		return false
 	}
 	valObj := body[key]
-	val, ok := valObj.(bool)
-	if ok {
-		return val
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not bool type return default val false value<%v>", key, keyType, keyValue)
-	}
-	return false
+	return AnyToBool(valObj, def...)
 }
 
 func ValMap(body map[string]any, key string, def ...map[string]any) map[string]any {
@@ -559,17 +433,7 @@ func ValMap(body map[string]any, key string, def ...map[string]any) map[string]a
 		return nil
 	}
 	valObj := body[key]
-	val, ok := valObj.(map[string]any)
-	if ok {
-		return val
-	} else {
-		if len(def) > 0 {
-			return def[0]
-		}
-		keyType, keyValue := reflect.TypeOf(valObj), reflect.ValueOf(valObj)
-		log.Printf("<%s> is <%v> not map type return default val nil map value<%v>", key, keyType, keyValue)
-	}
-	return nil
+	return AnyToMap(valObj, def...)
 }
 
 func ValAny(body map[string]any, key string, def ...any) any {
@@ -597,12 +461,55 @@ func AnyToMap(data any, defVal ...map[string]any) map[string]any {
 	return val
 }
 
-func AnyToString(data any) string {
+func AnyToString(data any, defVal ...string) string {
 	val := NilToBlank(data)
+	if !IsBlank(val) {
+		return val
+	} else {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
+	}
 	return val
 }
 
+func AnyToUint8(data any, defVal ...uint8) uint8 {
+	if data == nil {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
+		log.Println("AnyToUint8 data is nil ret default 0")
+		return 0
+	}
+	val, ok := data.(float64)
+	if ok {
+		return uint8(val)
+	} else {
+		keyType := reflect.TypeOf(data)
+		log.Printf("AnyToUint8 data is <%v> not num type ret default 0", keyType)
+		return 0
+	}
+}
+
 func AnyToInt(data any, defVal ...int) int {
+	if data == nil {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
+		log.Println("AnyToInt data is nil ret default 0")
+		return 0
+	}
+	val, ok := data.(float64)
+	if ok {
+		return int(val)
+	} else {
+		keyType := reflect.TypeOf(data)
+		log.Printf("AnyToInt data is <%v> not num type ret default 0", keyType)
+		return 0
+	}
+}
+
+func AnyToInt32(data any, defVal ...int32) int32 {
 	if data == nil {
 		if len(defVal) > 0 {
 			return defVal[0]
@@ -612,7 +519,7 @@ func AnyToInt(data any, defVal ...int) int {
 	}
 	val, ok := data.(float64)
 	if ok {
-		return int(val)
+		return int32(val)
 	} else {
 		keyType := reflect.TypeOf(data)
 		log.Printf("InterfaceToInt data is <%v> not num type ret default 0", keyType)
@@ -626,7 +533,7 @@ func AnyToInt64(data any, defVal ...int64) int64 {
 			return defVal[0]
 		}
 		keyType := reflect.TypeOf(data)
-		log.Printf("InterfaceToInt64 data is <%v> not num type ret default 0", keyType)
+		log.Printf("AnyToInt64 data is <%v> not num type ret default 0", keyType)
 		return 0
 	}
 
@@ -639,7 +546,31 @@ func AnyToInt64(data any, defVal ...int64) int64 {
 		val = StringToInt64(data.(string))
 	default:
 		keyType := reflect.TypeOf(data)
-		log.Printf("InterfaceToInt64 data is <%v> not num type ret default 0", keyType)
+		log.Printf("AnyToInt64 data is <%v> not num type ret default 0", keyType)
+	}
+	return val
+}
+
+func AnyToFloat64(data any, defVal ...float64) float64 {
+	if data == nil {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
+		keyType := reflect.TypeOf(data)
+		log.Printf("AnyToFloat64 data is <%v> not num type ret default 0", keyType)
+		return 0
+	}
+
+	val := float64(0)
+
+	switch data.(type) {
+	case float64:
+		val = float64(data.(float64))
+	case string:
+		val = StringToFloat64(data.(string))
+	default:
+		keyType := reflect.TypeOf(data)
+		log.Printf("AnyToInt64 data is <%v> not num type ret default 0", keyType)
 	}
 	return val
 }
@@ -650,12 +581,11 @@ func AnyToBool(data any, defVal ...bool) bool {
 			return defVal[0]
 		}
 		keyType := reflect.TypeOf(data)
-		log.Printf("InterfaceToInt64 data is <%v> not num type ret default 0", keyType)
+		log.Printf("AnyToBool data is <%v> not bool type ret default false", keyType)
 		return false
 	}
 
 	val := false
-
 	switch data.(type) {
 	case bool:
 		val = data.(bool)
@@ -664,6 +594,25 @@ func AnyToBool(data any, defVal ...bool) bool {
 		log.Printf("AnyToBool data is <%v> not bool type ret default false", keyType)
 	}
 	return val
+}
+
+func AnyToSlice(data any, defVal ...[]any) []any {
+	if data == nil {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
+	}
+	val, ok := data.([]any)
+	if ok {
+		return val
+	} else {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
+		keyType, keyValue := reflect.TypeOf(data), reflect.ValueOf(data)
+		log.Printf("[error] <%v> not slice type return default val value<%v>", keyType, keyValue)
+	}
+	return nil
 }
 
 // 废弃 建议使用 AnyToMap
