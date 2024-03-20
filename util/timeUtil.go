@@ -341,6 +341,11 @@ func HourDiffer(end, start time.Time) int {
 	return int(math.Ceil(days))
 }
 
+// 两个日期间相差多少分钟,两个不同日期的
+func MinuteDiffer(end, start time.Time) int {
+	return int(end.Sub(start).Minutes())
+}
+
 // 是否是今年
 func IsCurrentYear(date time.Time) bool {
 	return (date.Year() - time.Now().Year()) == 0
@@ -425,11 +430,6 @@ func OffsetStartAndEndMinutes(t time.Time, offset int64) (start time.Time, end t
 // 是否是当前小时内
 func IsCurrentHour(date time.Time) bool {
 	return IsToday(date) && (date.Hour()-time.Now().Hour()) == 0
-}
-
-// 两个日期间相差多少分钟,两个不同日期的
-func MinuteDiffer(end, start time.Time) int {
-	return int(end.Sub(start).Minutes())
 }
 
 // 离今天结束时间还有多长分钟
@@ -576,4 +576,77 @@ func UnixToTime(sec string) (time.Time, error) {
 	data, err := strconv.ParseInt(sec, 10, 64)
 	datetime := time.Unix(data/1000, 0)
 	return datetime, err
+}
+
+type TimeFormatDTO struct {
+	Num     int
+	Uint    string
+	Tips    string
+	Expired bool
+}
+
+func TimeFormat(t time.Time) *TimeFormatDTO {
+	now := time.Now()
+	diffMin := MinuteDiffer(now, t)
+	expired := diffMin < 0
+	diffMin = int(math.Abs(float64(diffMin)))
+	suffix := "后"
+	if expired {
+		suffix = "前"
+	}
+	if diffMin > 60*24*31 {
+		return &TimeFormatDTO{
+			Num:     diffMin,
+			Uint:    "月",
+			Tips:    fmt.Sprintf("%d月%s", diffMin, suffix),
+			Expired: expired,
+		}
+	} else if diffMin > 60*24 {
+		return &TimeFormatDTO{
+			Num:     diffMin,
+			Uint:    "天",
+			Tips:    fmt.Sprintf("%d天%s", diffMin, suffix),
+			Expired: expired,
+		}
+	} else if diffMin > 60 {
+		diffHour := int(math.Round(float64(diffMin) / float64(60)))
+		if diffHour == 24 {
+			return &TimeFormatDTO{
+				Num:     1,
+				Uint:    "天",
+				Tips:    fmt.Sprintf("1天%s", suffix),
+				Expired: expired,
+			}
+		} else {
+			return &TimeFormatDTO{
+				Num:     diffHour,
+				Uint:    "时",
+				Tips:    fmt.Sprintf("%d小时%s", diffHour, suffix),
+				Expired: expired,
+			}
+		}
+	} else { // 小于等于1小时
+		if diffMin == 60 {
+			return &TimeFormatDTO{
+				Num:     1,
+				Uint:    "时",
+				Tips:    fmt.Sprintf("1小时%s", suffix),
+				Expired: expired,
+			}
+		} else if diffMin > 3 {
+			return &TimeFormatDTO{
+				Num:     diffMin,
+				Uint:    "分",
+				Tips:    fmt.Sprintf("%d分钟%s", diffMin, suffix),
+				Expired: expired,
+			}
+		} else {
+			return &TimeFormatDTO{
+				Num:     diffMin,
+				Uint:    "分",
+				Tips:    "刚刚",
+				Expired: expired,
+			}
+		}
+	}
 }
