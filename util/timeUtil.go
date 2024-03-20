@@ -587,29 +587,31 @@ type TimeFormatDTO struct {
 
 func TimeFormat(t time.Time) *TimeFormatDTO {
 	now := time.Now()
-	diffMin := MinuteDiffer(now, t)
+	diffMin := MinuteDiffer(t, now)
 	expired := diffMin < 0
-	diffMin = int(math.Abs(float64(diffMin)))
 	suffix := "后"
 	if expired {
 		suffix = "前"
 	}
+	diffMin = int(math.Abs(float64(diffMin)))
 	if diffMin > 60*24*31 {
+		monthDay := int(math.Floor(float64(diffMin) / float64(60*24*31)))
 		return &TimeFormatDTO{
-			Num:     diffMin,
+			Num:     monthDay,
 			Uint:    "月",
-			Tips:    fmt.Sprintf("%d月%s", diffMin, suffix),
+			Tips:    fmt.Sprintf("%d月%s", monthDay, suffix),
 			Expired: expired,
 		}
 	} else if diffMin > 60*24 {
+		diffDay := int(math.Floor(float64(diffMin) / float64(60*24)))
 		return &TimeFormatDTO{
-			Num:     diffMin,
+			Num:     diffDay,
 			Uint:    "天",
-			Tips:    fmt.Sprintf("%d天%s", diffMin, suffix),
+			Tips:    fmt.Sprintf("%d天%s", diffDay, suffix),
 			Expired: expired,
 		}
 	} else if diffMin > 60 {
-		diffHour := int(math.Round(float64(diffMin) / float64(60)))
+		diffHour := int(math.Floor(float64(diffMin) / float64(60)))
 		if diffHour == 24 {
 			return &TimeFormatDTO{
 				Num:     1,
