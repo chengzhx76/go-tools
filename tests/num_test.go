@@ -104,7 +104,7 @@ func Test_NumberFormatCn(t *testing.T) {
 	//r := NumberFormatCn(20001) // 2万
 	//r := NumberFormatCn(20100) // 2万1千
 	//r := NumberFormatCn(20199) // 2万1千
-	r := NumberFormatCn(21900) // 2万2千
+	//r := NumberFormatCn(21900) // 2万2千
 	//r := SubString2("0123456789", 4, 2) //  = 45 // 从第4索引个开始截取2个
 	//r := SubString2("0123456789", 2, -1) //  = 1
 	//r := SubString2("0123456789", -1, -1) // = 8
@@ -114,6 +114,7 @@ func Test_NumberFormatCn(t *testing.T) {
 	//r := SubString2("0123456789", 0, -3) // =
 	//r := SubString2("0123456789", -3, 0) // = 789
 	//r := SubString2("0123456789", 0, 0) // = 0123456789
+	r := SubString2("0123456789", 2, 0) // = 0123456789
 	fmt.Println(r)
 }
 

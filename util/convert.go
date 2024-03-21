@@ -24,7 +24,7 @@ func NumToHex(num int64, hex ...int32) string {
 func HexToNum(str string) int64 {
 	hex := StringToInt32(SubString(str, 0, 2))
 	_, dict := getHexDict(hex)
-	return Convert10Hex(SubString(str, 2, -1), dict)
+	return Convert10Hex(SubString(str, 2, 0), dict)
 }
 
 /*
