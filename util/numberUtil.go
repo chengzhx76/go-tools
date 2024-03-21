@@ -2,7 +2,9 @@ package util
 
 import (
 	"fmt"
+	. "github.com/chengzhx76/go-tools/consts"
 	"math"
+	"strings"
 )
 
 // 将浮点数四舍五入为 string，downDouble 为缩小的倍数
@@ -56,6 +58,38 @@ func RoundDown(val float64) int64 {
 	return int64(math.Floor(val))
 }
 
+// NumberFormatCn(20001) // 2万
+// NumberFormatCn(20100) // 2万1千
+// NumberFormatCn(20199) // 2万1千
+// NumberFormatCn(21900) // 2万2千
+func NumberFormatCn(num int64) string {
+	numStr := Int64ToString(num)
+	if len(numStr) == 4 {
+		/*maxNum := StringToInt64(strings.Replace(numStr, SubString(numStr, -3, 0), SYMBOL_EMPTY, 1))
+		decimalPart := SubString(numStr, -3, 2)
+		decimal := RoundUp(StringToFloat64(decimalPart) / float64(10))
+		if decimal == 0 {
+			return fmt.Sprintf("%d千", maxNum)
+		} else if decimal == 10 {
+			maxNum += 1
+			return fmt.Sprintf("%d千", maxNum)
+		}
+		return fmt.Sprintf("%d千%d百", maxNum, decimal)*/
+	} else if len(numStr) >= 5 {
+		maxNum := StringToInt64(strings.Replace(numStr, SubString(numStr, -4, 0), SYMBOL_EMPTY, 1))
+		decimalPart := SubString(numStr, -4, 2)
+		decimal := RoundUp(StringToFloat64(decimalPart) / float64(10))
+		if decimal == 0 {
+			return fmt.Sprintf("%d万", maxNum)
+		} else if decimal == 10 {
+			maxNum += 1
+			return fmt.Sprintf("%d万", maxNum)
+		}
+		return fmt.Sprintf("%d万%d千", maxNum, decimal)
+
+	}
+	return Int64ToString(num)
+}
 func RoundUpMultiple(numToRound, multiple int64) int64 {
 	if multiple == 0 {
 		return numToRound

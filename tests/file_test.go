@@ -15,5 +15,5 @@ func Test_DecodeLastRuneInString(t *testing.T) {
 	name := "张三"
 	//firstLetter, _ := utf8.DecodeLastRuneInString(name)
 	//firstLetter, _ := utf8.DecodeLastRuneInString(name)
-	t.Log(util.SubString(name, -1, 1))
+	t.Log(util.SubString(name, 0, -1))
 }

@@ -92,3 +92,73 @@ func Test_RoundDown(t *testing.T) {
 	r := RoundDown(-1.11)
 	fmt.Println(r)
 }
+
+func Test_s(t *testing.T) {
+	str := "0123456789"
+	s := []rune(str)
+	fmt.Println(len(s))
+	fmt.Println(str[0:len(s)])
+}
+
+func Test_NumberFormatCn(t *testing.T) {
+	//r := NumberFormatCn(20001) // 2万
+	//r := NumberFormatCn(20100) // 2万1千
+	//r := NumberFormatCn(20199) // 2万1千
+	r := NumberFormatCn(21900) // 2万2千
+	//r := SubString2("0123456789", 4, 2) //  = 45 // 从第4索引个开始截取2个
+	//r := SubString2("0123456789", 2, -1) //  = 1
+	//r := SubString2("0123456789", -1, -1) // = 8
+	//r := SubString2("0123456789", -3, 3) // = 789
+	//r := SubString2("0123456789", -1, 3) // = 9
+	//r := SubString2("0123456789", -3, -3) // = 456
+	//r := SubString2("0123456789", 0, -3) // =
+	//r := SubString2("0123456789", -3, 0) // = 789
+	//r := SubString2("0123456789", 0, 0) // = 0123456789
+	fmt.Println(r)
+}
+
+func SubString2(str string, start, length int) string {
+	s := []rune(str)
+	totalLen := len(s)
+	if totalLen == 0 {
+		return ""
+	}
+	startIndex := start
+	endIndex := totalLen
+	// 允许从尾部开始计算
+	if start > 0 {
+		if length > 0 {
+			endIndex = startIndex + length
+		} else if length < 0 {
+			startIndex = startIndex - (-length)         // 绝对值
+			endIndex = startIndex + (start - (-length)) // 绝对值
+		}
+	} else if start < 0 {
+		if length > 0 {
+			startIndex = endIndex - (-start) // 绝对值
+			endIndex = startIndex + length
+		} else if length < 0 {
+			startIndex = endIndex - (-start) - (-length) // 绝对值
+			endIndex = startIndex + (-length)            // 绝对值
+		} else if length == 0 {
+			startIndex = totalLen - (-start) // 绝对值
+			endIndex = totalLen
+		}
+	} else if start == 0 {
+		if length > 0 {
+			endIndex = startIndex + length
+		} else if length < 0 {
+			return ""
+		} else if length == 0 {
+			endIndex = totalLen
+		}
+	}
+	if startIndex > totalLen {
+		return ""
+	}
+	if endIndex > totalLen {
+		return string(s[startIndex:])
+	} else {
+		return string(s[startIndex:endIndex])
+	}
+}

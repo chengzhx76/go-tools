@@ -205,13 +205,68 @@ func SubAfterString(s string, length int) string {
 	return s[startIndex:endIndex]
 }
 
+// start：起始下标，负数从尾部开始。这里的-表示反向读取，从1开始；正数从0开始
+// length：截取长度，负数表示反向截取；0 表示截取到末尾
+// SubString("0123456789", 4, 2) //  = 45 // 从第4索引个开始截取2个
+// SubString("0123456789", 2, -1) //  = 1
+// SubString("0123456789", -1, -1) // = 8
+// SubString("0123456789", -3, 3) // = 789
+// SubString("0123456789", -1, 3) // = 9
+// SubString("0123456789", -3, -3) // = 456
+// SubString("0123456789", 0, -3) // =
+// SubString("0123456789", -3, 0) // = 789
+// SubString2("0123456789", 0, 0) // = 0123456789
+func SubString(str string, start, length int) string {
+	s := []rune(str)
+	totalLen := len(s)
+	if totalLen == 0 {
+		return SYMBOL_EMPTY
+	}
+	startIndex := start
+	endIndex := totalLen
+	// 允许从尾部开始计算
+	if start > 0 {
+		if length > 0 {
+			endIndex = startIndex + length
+		} else if length < 0 {
+			startIndex = startIndex - (-length)         // 绝对值
+			endIndex = startIndex + (start - (-length)) // 绝对值
+		}
+	} else if start < 0 {
+		if length > 0 {
+			startIndex = endIndex - (-start) // 绝对值
+			endIndex = startIndex + length
+		} else if length < 0 {
+			startIndex = endIndex - (-start) - (-length) // 绝对值
+			endIndex = startIndex + (-length)            // 绝对值
+		} else if length == 0 {
+			startIndex = totalLen - (-start) // 绝对值
+			endIndex = totalLen
+		}
+	} else if start == 0 {
+		if length > 0 {
+			endIndex = startIndex + length
+		} else if length < 0 || length == 0 {
+			return SYMBOL_EMPTY
+		}
+	}
+	if startIndex > totalLen {
+		return SYMBOL_EMPTY
+	}
+	if endIndex > totalLen {
+		return string(s[startIndex:])
+	} else {
+		return string(s[startIndex:endIndex])
+	}
+}
+
 // start：起始下标，负数从尾部开始，-1为最后一个
 // length：截取长度，负数表示截取到末尾
 // ex: util.SubString("0123456789", 4, 2) = 45
 // ex: util.SubString("0123456789", 2, -1) = 23456789
 // ex: util.SubString("0123456789", -1, -1) = 9
 // ex: util.SubString("0123456789", -3, 3) = 789
-func SubString(str string, start, length int) string {
+/*func SubString(str string, start, length int) string {
 	s := []rune(str)
 	totalLen := len(s)
 	if totalLen == 0 {
@@ -237,7 +292,7 @@ func SubString(str string, start, length int) string {
 	} else {
 		return string(s[startIndex:endIndex])
 	}
-}
+}*/
 
 // 翻转切片 [8 6 7 5 3 0 9] reversed: [9 0 3 5 7 6 8]
 func ReverseStrings(input []string) []string {
