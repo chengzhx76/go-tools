@@ -12,8 +12,9 @@ func Test_file(t *testing.T) {
 }
 
 func Test_DecodeLastRuneInString(t *testing.T) {
-	name := "张三"
+	name := "北京市"
 	//firstLetter, _ := utf8.DecodeLastRuneInString(name)
 	//firstLetter, _ := utf8.DecodeLastRuneInString(name)
-	t.Log(util.SubString(name, 0, -1))
+
+	t.Log(util.SubString(name, 0, len([]rune(name))-1))
 }
