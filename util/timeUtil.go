@@ -88,6 +88,7 @@ func BigAfterTomorrow() time.Time {
 func GetZeroTime(dateTime time.Time) time.Time {
 	return StartOfDay(dateTime)
 }
+
 func StartOfDay(dateTime time.Time) time.Time {
 	return time.Date(dateTime.Year(), dateTime.Month(), dateTime.Day(), 0, 0, 0, 0, dateTime.Location())
 }
