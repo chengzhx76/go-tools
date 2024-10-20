@@ -656,6 +656,7 @@ func AnyToSlice(data any, defVal ...[]any) []any {
 		if len(defVal) > 0 {
 			return defVal[0]
 		}
+		return nil
 	}
 	val, ok := data.([]any)
 	if ok {
