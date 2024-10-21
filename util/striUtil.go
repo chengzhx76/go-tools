@@ -99,7 +99,7 @@ func NilToBlank(data any) string {
 	if ok {
 		return val
 	} else {
-		log.Println("data not string type")
+		log.Printf("data not string type, is type %v \n", reflect.TypeOf(data))
 	}
 	return SYMBOL_EMPTY
 }

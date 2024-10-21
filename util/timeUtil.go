@@ -473,6 +473,9 @@ func TimeBetween(checkTime, startTime, endTime time.Time) bool {
 func IsInitTime(time time.Time) bool {
 	return INIT_TIME.Equal(time)
 }
+func IsEndLessTime(time time.Time) bool {
+	return END_LESS_TIME.Equal(time)
+}
 
 // 在当前时间之后（就是未来的时间），就是大于当前时间
 func IsNowTimeAfter(t time.Time) bool {

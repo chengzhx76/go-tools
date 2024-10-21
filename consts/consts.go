@@ -96,6 +96,10 @@ const (
 )
 
 const (
+	AUDIT uint8 = 99 // 审核 DB
+)
+
+const (
 	HIDE uint8 = 0 // 隐藏
 	SHOW uint8 = 1 // 显示
 )
