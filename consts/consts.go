@@ -96,7 +96,7 @@ const (
 )
 
 const (
-	AUDIT uint8 = 99 // 审核 DB
+	AUDIT uint8 = 9 // 审核 DB
 )
 
 const (
