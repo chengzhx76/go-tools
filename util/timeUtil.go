@@ -89,6 +89,7 @@ func GetZeroTime(dateTime time.Time) time.Time {
 	return StartOfDay(dateTime)
 }
 
+// 获取某一天的0点时间
 func StartOfDay(dateTime time.Time) time.Time {
 	return time.Date(dateTime.Year(), dateTime.Month(), dateTime.Day(), 0, 0, 0, 0, dateTime.Location())
 }
@@ -112,6 +113,8 @@ func StartOfMin(dateTime time.Time) time.Time {
 func GetLastTime(dateTime time.Time) time.Time {
 	return EndOfDay(dateTime)
 }
+
+// 获取某一天的最后时间
 func EndOfDay(dateTime time.Time) time.Time {
 	return time.Date(dateTime.Year(), dateTime.Month(), dateTime.Day(), 23, 59, 59, 0, dateTime.Location())
 }
@@ -302,7 +305,7 @@ func NumDays(num int, date time.Time) []string {
 	return days
 }
 
-// 获取这几个月
+// 从date开始获取这num月的字符串
 // Deprecated 建议使用 NumMonths
 func GetMonth(num int, date time.Time) []string {
 	return NumMonths(num, date)
@@ -421,7 +424,7 @@ func StartAndEndBetweenTime(t time.Time) (start time.Time, end time.Time) {
 	return
 }
 
-// 偏移20分钟
+// 偏移offset分钟
 func OffsetStartAndEndMinutes(t time.Time, offset int64) (start time.Time, end time.Time) {
 	start = AddMinute(-offset, t)
 	end = AddMinute(offset, t)
@@ -438,6 +441,17 @@ func TodayHasMinute() int {
 	now := time.Now()
 	minute := MinuteDiffer(EndOfDay(now), now)
 	return minute
+}
+
+// 现在是今天的第 %d 分钟
+func MinutesToday() int {
+	now := time.Now()
+	return now.Hour()*60 + now.Minute()
+}
+
+// 分钟转小时
+func MinutesToHours(minutes int) int {
+	return minutes / 60
 }
 
 // 年维度判断两个时间是否相等.
@@ -470,9 +484,12 @@ func TimeBetween(checkTime, startTime, endTime time.Time) bool {
 	return (MinEqual(checkTime, startTime) || MinEqual(checkTime, endTime)) || checkTime.After(startTime) && checkTime.Before(endTime)
 }
 
+// 是否是初始时间
 func IsInitTime(time time.Time) bool {
 	return INIT_TIME.Equal(time)
 }
+
+// 是否是最终时间
 func IsEndLessTime(time time.Time) bool {
 	return END_LESS_TIME.Equal(time)
 }
