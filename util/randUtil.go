@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"time"
 )
@@ -21,9 +22,10 @@ min: 范围值[最小]
 max: 范围值[最大]
 minGap: 间隔
 */
-func RandomNumbers(count, min, max, minGap int) ([]int, error) {
-	if (max - min) < (count-1)*(minGap-1) {
-		return nil, fmt.Errorf("the range is insufficient to generate %d unique numbers with a minimum gap of %d", count, minGap)
+func RandomNumbers(count, min, max, minGap int) []int {
+	if (max - min) < (count*minGap)*3 {
+		log.Println(fmt.Sprintf("the range is insufficient to generate %d unique numbers with a minimum gap of %d", count, minGap))
+		return nil
 	}
 	selected := make(map[int]bool)
 	var randomNumbers []int
@@ -37,7 +39,7 @@ func RandomNumbers(count, min, max, minGap int) ([]int, error) {
 		}
 	}
 
-	return randomNumbers, nil
+	return randomNumbers
 }
 
 // isValid 检查新数字与现有的是否间隔至少为 minGap
