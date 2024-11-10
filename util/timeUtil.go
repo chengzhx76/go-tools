@@ -331,12 +331,17 @@ func GetCurrentDateNextNumMonthNum(offset int, date time.Time) (year, month int)
 	return year, month
 }
 
-// 两个日期间相差多少天,两个不同日期的，相差一秒都算一天.
-// 返回昨天和今天 所以是 1 天
+// 两个日期间相差多少天,两个不同日期的，不同天比较，相同天是0，负数表示开始时间大约结束时间.
+// 返回昨天和今天 所以是 1 天；
 func DayDiffer(end, start time.Time) int {
 	days := StartOfDay(end).Sub(StartOfDay(start)).Hours() / 24
 	//return int(math.Ceil(days)) + 1
 	return int(math.Ceil(days))
+}
+
+// 两个不同日期的，相差一秒都算一天.
+func DaySecondDiffer(end, start time.Time) int {
+	return DayDiffer(end, start) + 1
 }
 
 // 相差小时数

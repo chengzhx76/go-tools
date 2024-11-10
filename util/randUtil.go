@@ -16,6 +16,11 @@ func RangeInt(min int, max int) int {
 	return rand.Intn(max-min) + min
 }
 
+// 指定范围的随机数（int64）
+func RangeInt64(min int, max int) int64 {
+	return int64(rand.Intn(max-min) + min)
+}
+
 /*
 count: 生成的个数
 min: 范围值[最小]
