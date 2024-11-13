@@ -339,9 +339,14 @@ func DayDiffer(end, start time.Time) int {
 	return int(math.Ceil(days))
 }
 
-// 两个不同日期的，相差一秒都算一天.
+// 两个不同日期的，相差一秒都算一天. 两个日期相等就是0
 func DaySecondDiffer(end, start time.Time) int {
-	return DayDiffer(end, start) + 1
+	if end.Equal(start) {
+		return 0
+	} else {
+		seconds := EndOfDay(end).Sub(EndOfDay(start)).Seconds()
+		return If[int](seconds == 0, 1, int(seconds/(24*60*60)))
+	}
 }
 
 // 相差小时数

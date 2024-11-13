@@ -53,7 +53,7 @@ func RoundUp(val float64) int64 {
 	return int64(math.Ceil(val))
 }
 
-// 向上取整 1.11->1, 1.99->1, -1.11->2
+// 向下取整 1.11->1, 1.99->1, -1.11->2
 func RoundDown(val float64) int64 {
 	return int64(math.Floor(val))
 }

@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"fmt"
 	"github.com/chengzhx76/go-tools/consts"
 	"github.com/chengzhx76/go-tools/util"
 	"testing"
@@ -22,4 +23,19 @@ func Test_Differ(t *testing.T) {
 	s := util.DayDiffer(end, start)
 
 	t.Logf("===> %v", s)
+
+}
+
+func Test_Differ_s(t *testing.T) {
+	start := util.ParseLocalTime(consts.DATE_TIME_FORMAT, "2024-11-12 01:59:59")
+	end := util.ParseLocalTime(consts.DATE_TIME_FORMAT, "2024-11-14 23:59:59")
+
+	seconds := util.EndOfDay(end).Sub(util.EndOfDay(start)).Seconds()
+	if seconds == 0 {
+		//return 1
+	} else {
+
+	}
+	//seconds := end.Sub(start).Seconds()
+	t.Logf("===> %v|%v|%v|%v|%v", seconds, 24*60*60, fmt.Sprintf("%.2f", seconds/float64(24*60*60)), util.RoundUp(seconds/(24*60*60)), seconds/(24*60*60))
 }
