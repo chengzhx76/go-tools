@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"hash"
 	"io"
 )
 
@@ -31,8 +32,24 @@ func Md5(val string) string {
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
+func HmacSha1(data string, secret string) string {
+	return HmacSha(sha1.New, data, secret)
+}
+
 func HmacSha256(data string, secret string) string {
 	h := hmac.New(sha256.New, []byte(secret))
+	h.Write([]byte(data))
+	return HmacSha(sha256.New, data, secret)
+}
+
+func HmacSha(hashFunc func() hash.Hash, data string, secret string) string {
+	h := hmac.New(hashFunc, []byte(secret))
+	h.Write([]byte(data))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+func Sha1HexDigest(data string) string {
+	h := sha1.New()
 	h.Write([]byte(data))
 	return hex.EncodeToString(h.Sum(nil))
 }
