@@ -3,6 +3,7 @@ package util
 import (
 	. "github.com/chengzhx76/go-tools/consts"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -22,7 +23,12 @@ func IsExist(path string) bool {
 }
 
 // 创建目录 没有则创建
-func CreateDirectory(dir string) error {
+func CreateDirectory(fileDir string) error {
+	ext := filepath.Ext(fileDir)
+	dir := fileDir
+	if !IsBlank(ext) {
+		dir = filepath.Dir(dir)
+	}
 	if !IsExist(dir) {
 		err := os.MkdirAll(dir, os.ModePerm)
 		if err != nil {

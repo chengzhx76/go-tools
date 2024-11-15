@@ -53,3 +53,9 @@ func Sha1HexDigest(data string) string {
 	h.Write([]byte(data))
 	return hex.EncodeToString(h.Sum(nil))
 }
+
+func Sha1HexDigestByte(data []byte) string {
+	h := sha1.New()
+	h.Write(data)
+	return hex.EncodeToString(h.Sum(nil))
+}
