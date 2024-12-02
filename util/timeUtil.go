@@ -237,7 +237,7 @@ func DayStartDay(day string) time.Time {
 	if len(day) != 8 {
 		return INIT_TIME
 	}
-	return StartOfMonth(ParseLocalTime(DATE_FORMAT_YYYYMMDD, day))
+	return StartOfDay(ParseLocalTime(DATE_FORMAT_YYYYMMDD, day))
 }
 
 // 获取某天的最后一天23:59点时间
@@ -245,7 +245,7 @@ func DayEndDay(day string) time.Time {
 	if len(day) != 8 {
 		return INIT_TIME
 	}
-	return EndOfMonth(ParseLocalTime(DATE_FORMAT_YYYYMMDD, day))
+	return EndOfDay(ParseLocalTime(DATE_FORMAT_YYYYMMDD, day))
 }
 
 // 获取某年的第一天0点时间
