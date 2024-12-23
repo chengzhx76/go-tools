@@ -10,6 +10,7 @@ import (
 	"io"
 	"log"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -121,7 +122,22 @@ func ParamEncode(params map[string]string, start string) string {
 	return TrimSuffix(args, SYMBOL_AND)
 }
 
-// 去掉 suffix
+// id=1&i=1 解析成map对象
+func ParamDecode(urlParams string) map[string]string {
+	regx := regexp.MustCompile(`([^&=]+)=([^&=]+)`)
+	matches := regx.FindAllStringSubmatch(urlParams, -1)
+
+	params := make(map[string]string)
+	for _, match := range matches {
+		key := match[1]
+		value := match[2]
+		params[key] = value
+	}
+
+	return params
+}
+
+// 去掉 suffix(后缀)
 func TrimSuffix(s, suffix string) string {
 	if strings.HasSuffix(s, suffix) {
 		s = s[:len(s)-len(suffix)]
