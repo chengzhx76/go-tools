@@ -75,6 +75,7 @@ func NumberFormatCn(num int64) string {
 			return fmt.Sprintf("%d千", maxNum)
 		}
 		return fmt.Sprintf("%d千%d百", maxNum, decimal)*/
+
 	} else if len(numStr) >= 5 {
 		maxNum := StringToInt64(strings.Replace(numStr, SubString(numStr, -4, 0), SYMBOL_EMPTY, 1))
 		decimalPart := SubString(numStr, -4, 2)
