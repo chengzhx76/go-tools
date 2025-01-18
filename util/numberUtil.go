@@ -85,7 +85,7 @@ func NumberFormatCn(num int64) string {
 			maxNum += 1
 			return fmt.Sprintf("%d万", maxNum)
 		}
-		return fmt.Sprintf("%d万%d千", maxNum, decimal)
+		return fmt.Sprintf("%d.%d万", maxNum, decimal)
 
 	}
 	return Int64ToString(num)
