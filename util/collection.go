@@ -3,9 +3,15 @@ package util
 import (
 	"fmt"
 	. "github.com/chengzhx76/go-tools/consts"
+	"math/rand"
 	"regexp"
 	"sort"
+	"time"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func Contains(coll []string, value string) bool {
 	if !IsNil(coll) && len(coll) > 0 {
@@ -66,6 +72,7 @@ func Uint8IndexOf(coll []uint8, value uint8) int {
 	}
 	return -1
 }
+
 func Int64IndexOf(coll []int64, value int64) int {
 	for index, item := range coll {
 		if item == value {
@@ -74,6 +81,7 @@ func Int64IndexOf(coll []int64, value int64) int {
 	}
 	return -1
 }
+
 func BoolIndexOf(coll []bool, value bool) int {
 	for index, item := range coll {
 		if item == value {
@@ -171,4 +179,16 @@ func IntCollectionSymbolJoin(coll []int, symbol string) string {
 		}
 	}
 	return result
+}
+
+// 泛型打乱函数，长度小于等于 1 时直接返回；Fisher–Yates 洗牌算法
+func Shuffle[T any](slice []T) {
+	if len(slice) <= 1 {
+		return
+	}
+
+	for i := len(slice) - 1; i > 0; i-- {
+		j := rand.Intn(i + 1)
+		slice[i], slice[j] = slice[j], slice[i]
+	}
 }
