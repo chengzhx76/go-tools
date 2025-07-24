@@ -39,21 +39,9 @@ func PostRequest(url string, headers map[string]string, params map[string]any) (
 }
 
 func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
-	client := &http.Client{}
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	resp, err := GetRequestToResponse(url, headers)
 	if err != nil {
-		log.Println("get request err", err)
-		return nil, err
-	}
-	if headers != nil && len(headers) > 0 {
-		for key, value := range headers {
-			req.Header.Set(key, value)
-		}
-	}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Println("get request err", err)
+		log.Println("get request error", err)
 		return nil, err
 	}
 	defer resp.Body.Close()
@@ -64,12 +52,8 @@ func GetRequestByte(url string, headers map[string]string) ([]byte, error) {
 	}
 	result, err := io.ReadAll(body)
 	if err != nil {
-		log.Println("get request err", err)
+		log.Println("get request error", err)
 		return nil, err
-	}
-	if resp.StatusCode != 200 {
-		log.Println(fmt.Sprintf("get request status code<%v> body<%s>", resp.StatusCode, result))
-		return nil, errors.New("request status code not is 200")
 	}
 
 	return result, nil
@@ -142,5 +126,31 @@ func PostRequestToResponse(link string, headers map[string]string, params map[st
 	if resp.StatusCode != 200 {
 		log.Println("post request status code<%d>", resp.StatusCode)
 	}
+	return resp, err
+}
+
+func GetRequestToResponse(url string, headers map[string]string) (*http.Response, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		log.Println("get request err", err)
+		return nil, err
+	}
+	if headers != nil && len(headers) > 0 {
+		for key, value := range headers {
+			req.Header.Set(key, value)
+		}
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("get request err", err)
+		return nil, err
+	}
+	if resp.StatusCode != 200 {
+		log.Println(fmt.Sprintf("get request status code<%v>", resp.StatusCode))
+		return nil, errors.New("request status code not is 200")
+	}
+
 	return resp, err
 }
