@@ -11,6 +11,11 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
+// 生成随机bool值
+func RangeBool() bool {
+	return rand.Intn(2) == 0
+}
+
 // 指定范围的随机数
 func RangeInt(min int, max int) int {
 	return rand.Intn(max-min) + min
