@@ -124,7 +124,15 @@ func SliceRemoveInt64(s []int64, index int) []int64 {
 	return append(s[:index], s[index+1:]...)
 }
 
-func SliceRemove(s []any, index int) []any {
+/*func SliceRemove(s []any, index int) []any {
+	return append(s[:index], s[index+1:]...)
+}*/
+
+// 移除指定位置的元素，返回新切片(支持泛型)
+func SliceRemove[T any](s []T, index int) []T {
+	if index < 0 || index >= len(s) {
+		return s // 或者 panic
+	}
 	return append(s[:index], s[index+1:]...)
 }
 
