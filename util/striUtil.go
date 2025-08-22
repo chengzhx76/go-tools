@@ -233,6 +233,9 @@ func SubAfterString(s string, length int) string {
 // SubString("0123456789", -3, 0) // = 789
 // SubString2("0123456789", 0, 0) // = 0123456789
 func SubString(str string, start, length int) string {
+	if IsBlank(str) {
+		return SYMBOL_EMPTY
+	}
 	s := []rune(str)
 	totalLen := len(s)
 	if totalLen == 0 {
