@@ -594,6 +594,7 @@ func ParseLocalTimeError(layout, value string) (time.Time, error) {
 	return dateTime, nil
 }
 
+// 格式化时间
 func FormatTime(time time.Time, layout string) string {
 	timeCn := ""
 	if !IsInitTime(time) {

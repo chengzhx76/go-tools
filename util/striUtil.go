@@ -375,6 +375,26 @@ func ValSlice(body map[string]any, key string, def ...[]any) []any {
 	return AnyToSlice(body[key], def...)
 }
 
+func ValInt32Slice(body map[string]any, key string, def ...[]int32) []int32 {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return nil
+	}
+	return AnySliceToInt32Slice(AnyToSlice(body[key]))
+}
+
+func ValStringSlice(body map[string]any, key string, def ...[]string) []string {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return nil
+	}
+	return AnySliceToStringSlice(AnyToSlice(body[key]))
+}
+
 func ValFloat64(body map[string]any, key string, def ...float64) float64 {
 	if body == nil {
 		if len(def) > 0 {
@@ -735,6 +755,22 @@ func StringToBool(boolStr string) bool {
 		log.Fatal(fmt.Sprintf("string to bool err<%s>", err.Error()))
 	}
 	return boolVal
+}
+
+func AnySliceToInt32Slice(is []any) []int32 {
+	ss := make([]int32, len(is))
+	for i, v := range is {
+		ss[i] = AnyToInt32(v)
+	}
+	return ss
+}
+
+func AnySliceToStringSlice(is []any) []string {
+	ss := make([]string, len(is))
+	for i, v := range is {
+		ss[i] = AnyToString(v)
+	}
+	return ss
 }
 
 func Uint8SliceToStringSlice(is []uint8) []string {
