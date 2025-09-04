@@ -684,3 +684,49 @@ func TimeFormat(t time.Time) *TimeFormatDTO {
 		}
 	}
 }
+
+// ParseTodayHours 解析小时字符串（如 "0", "01", "10"）为今天的整点时间
+func ParseTodayHours(hours []string) []time.Time {
+	now := time.Now()
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+
+	var times []time.Time
+
+	for _, hs := range hours {
+		hour, err := strconv.Atoi(hs)
+		if err != nil || hour < 0 || hour > 23 {
+			continue // 跳过无效输入
+		}
+		t := time.Date(today.Year(), today.Month(), today.Day(), hour, 0, 0, 0, today.Location())
+		times = append(times, t)
+	}
+
+	return times
+}
+
+// 处理字符串时间点["01","016","10","14",]，返回还未发生的时间点（字符串格式）
+func GetFutureHourPointsStr(hourStrs []string, now time.Time) []string {
+	currentHour := now.Hour()
+	currentMinute := now.Minute()
+	currentSecond := now.Second()
+
+	var futurePoints []string
+
+	for _, str := range hourStrs {
+		hour, err := strconv.Atoi(str)
+		if err != nil || hour < 0 || hour > 23 {
+			continue // 跳过无效输入
+		}
+
+		if hour > currentHour {
+			futurePoints = append(futurePoints, fmt.Sprintf("%02d", hour))
+		} else if hour == currentHour && (currentMinute == 0 && currentSecond == 0) {
+			// 当前正好是整点，不算未来时间
+			continue
+		} else if hour == currentHour && (currentMinute > 0 || currentSecond > 0) {
+			continue
+		}
+	}
+
+	return futurePoints
+}
