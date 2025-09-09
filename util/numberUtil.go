@@ -14,6 +14,19 @@ func Round(num int64, downDouble int) string {
 }
 
 /*
+	函数功能：将浮点数 val 四舍五入到指定的小数位数 precision。
+
+	参数说明：
+
+	val：需要四舍五入的浮点数
+	precision：保留的小数位数
+
+	RoundFloat(3.14159, 2) → 3.14
+	RoundFloat(3.14159, 4) → 3.1416
+	RoundFloat(3.145, 2) → 3.15（四舍五入）
+	RoundFloat(3.144, 2) → 3.14
+	RoundFloat(123.456, 0) → 123（保留0位小数，即取整）
+
 	https://gosamples.dev/round-float/
 
 	number := 12.3456789
@@ -42,6 +55,15 @@ func RoundFloat(val float64, precision uint) float64 {
 	ratio := math.Pow(10, float64(precision))
 	return math.Round(val*ratio) / ratio
 }
+
+/*
+函数功能：将浮点数 val 四舍五入后转换为 int64 类型的整数。
+RoundInt64(3.14) → 3
+RoundInt64(3.5) → 4（四舍五入）
+RoundInt64(3.9) → 4
+RoundInt64(-2.7) → -3
+RoundInt64(-2.3) → -2
+*/
 func RoundInt64(val float64) int64 {
 	return int64(RoundFloat(val, 0))
 }
@@ -91,6 +113,19 @@ func NumberFormatCn(num int64) string {
 	}
 	return Int64ToString(num)
 }
+
+/*
+函数功能：将 numToRound 向上取整到最接近的 multiple 的倍数。
+
+参数说明：
+numToRound：需要取整的数字
+multiple：倍数基准
+
+RoundUpMultiple(10, 3) → 12（10除以3余1，需要加2）
+RoundUpMultiple(15, 5) → 15（15除以5余0，已经是5的倍数）
+RoundUpMultiple(17, 4) → 20（17除以4余1，需要加3）
+RoundUpMultiple(1, 10) → 10（1除以10余1，需要加9）
+*/
 func RoundUpMultiple(numToRound, multiple int64) int64 {
 	if multiple == 0 {
 		return numToRound
