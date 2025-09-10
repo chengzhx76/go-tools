@@ -96,11 +96,27 @@ func NilToBlank(data any) string {
 	if IsNil(data) {
 		return SYMBOL_EMPTY
 	}
-	val, ok := data.(string)
-	if ok {
-		return val
-	} else {
-		log.Printf("data not string type, is type %v \n", reflect.TypeOf(data))
+	switch v := data.(type) {
+	case string:
+		return v
+	case *string:
+		if v != nil {
+			return *v
+		}
+	case int, int8, int16, int32, int64:
+		return fmt.Sprintf("%d", v)
+	case uint, uint8, uint16, uint32, uint64:
+		return fmt.Sprintf("%d", v)
+	case float32, float64:
+		return fmt.Sprintf("%v", v)
+	case bool:
+		return fmt.Sprintf("%t", v)
+	case []byte:
+		return string(v)
+	case fmt.Stringer:
+		return v.String()
+	default:
+		log.Printf("NilToBlank: unsupported type: %v\n", reflect.TypeOf(data))
 	}
 	return SYMBOL_EMPTY
 }
@@ -659,7 +675,7 @@ func AnyToFloat64(data any, defVal ...float64) float64 {
 
 	switch data.(type) {
 	case float64:
-		val = float64(data.(float64))
+		val = data.(float64)
 	case string:
 		val = StringToFloat64(data.(string))
 	default:
