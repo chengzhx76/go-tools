@@ -26,6 +26,15 @@ func Test_Differ(t *testing.T) {
 
 }
 
+func Test_AddDay(t *testing.T) {
+
+	s := util.AddDay(1, util.EndOfDay(time.Now()))
+	num := util.DayDiffer(s, time.Now())
+
+	t.Logf("===> %v %d", s, num)
+
+}
+
 func Test_Differ_s(t *testing.T) {
 	start := util.ParseLocalTime(consts.DATE_TIME_FORMAT, "2024-11-12 01:59:59")
 	end := util.ParseLocalTime(consts.DATE_TIME_FORMAT, "2024-11-14 23:59:59")

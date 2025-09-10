@@ -29,6 +29,7 @@ func AddMonth(offset int, dateTime time.Time) time.Time {
 	return time.Date(offsetAfterMonthFirstDate.Year(), offsetAfterMonthFirstDate.Month(), offsetAfterMonthLastDate.Day(), hour, min, sec, dateTime.Nanosecond(), dateTime.Location())
 }
 
+// 季度
 func AddQuarter(offset int, dateTime time.Time) time.Time {
 	return AddMonth(3*offset, dateTime)
 }
@@ -104,6 +105,8 @@ func GetSpecifyHourAndMinTime(dateTime time.Time, hour, min int) time.Time {
 func GetMinStartTime(dateTime time.Time) time.Time {
 	return StartOfMin(dateTime)
 }
+
+// 获取某一分钟的0秒时间
 func StartOfMin(dateTime time.Time) time.Time {
 	return GetSpecifyHourAndMinTime(dateTime, dateTime.Hour(), dateTime.Minute())
 }
