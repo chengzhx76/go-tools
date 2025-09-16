@@ -34,7 +34,7 @@ minGap: 间隔
 */
 func RandomNumbers(count, min, max, minGap int) []int {
 	if (max - min) < (count*minGap)*3 {
-		log.Println(fmt.Sprintf("the range is insufficient to generate %d unique numbers with a minimum gap of %d", count, minGap))
+		log.Println(fmt.Sprintf("min<%d> max<%d> the range is insufficient to generate %d unique numbers with a minimum gap of %d", min, max, count, minGap))
 		return nil
 	}
 	selected := make(map[int]bool)
