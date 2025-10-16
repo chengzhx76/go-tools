@@ -491,6 +491,17 @@ func ValUnit8(body map[string]any, key string, def ...uint8) uint8 {
 	return AnyToUint8(valObj, def...)
 }
 
+func ValUnit(body map[string]any, key string, def ...uint) uint {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return 0
+	}
+	valObj := body[key]
+	return AnyToUint(valObj, def...)
+}
+
 func ValInt(body map[string]any, key string, def ...int) int {
 	if body == nil {
 		if len(def) > 0 {
@@ -597,6 +608,24 @@ func AnyToUint8(data any, defVal ...uint8) uint8 {
 	} else {
 		keyType := reflect.TypeOf(data)
 		log.Printf("AnyToUint8 data is <%v> not num type ret default 0", keyType)
+		return 0
+	}
+}
+
+func AnyToUint(data any, defVal ...uint) uint {
+	if data == nil {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
+		log.Println("AnyToUint8 data is nil ret default 0")
+		return 0
+	}
+	val, ok := data.(float64)
+	if ok {
+		return uint(val)
+	} else {
+		keyType := reflect.TypeOf(data)
+		log.Printf("AnyToUint data is <%v> not num type ret default 0", keyType)
 		return 0
 	}
 }
@@ -812,6 +841,7 @@ func StringToUint8(s string) uint8 {
 	u8 := uint8(u64)
 	return u8
 }
+
 func StringToInt(s string) int {
 	i, err := strconv.Atoi(s)
 	if err != nil {
@@ -819,6 +849,18 @@ func StringToInt(s string) int {
 		return int(UNKNOWN)
 	}
 	return i
+}
+
+func StringToUint(s string) uint {
+	s = strings.TrimSpace(s)
+	if IsBlank(s) {
+		return uint(UNKNOWN)
+	}
+	u64, err := strconv.ParseUint(s, 10, 0) // 0 表示自动使用 uint 的位数
+	if err != nil {
+		return uint(UNKNOWN)
+	}
+	return uint(u64)
 }
 
 func StringToInt32(s string) int32 {
