@@ -491,7 +491,7 @@ func ValUnit8(body map[string]any, key string, def ...uint8) uint8 {
 	return AnyToUint8(valObj, def...)
 }
 
-func ValUnit(body map[string]any, key string, def ...uint) uint {
+func ValUint(body map[string]any, key string, def ...uint) uint {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
