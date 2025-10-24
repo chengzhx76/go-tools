@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	. "github.com/chengzhx76/go-tools/consts"
 	"io"
 	"log"
 	"reflect"
@@ -14,10 +13,11 @@ import (
 	"strconv"
 	"strings"
 	"unicode/utf8"
+
+	. "github.com/chengzhx76/go-tools/consts"
 )
 
-//https://www.cnblogs.com/lpgit/p/10632756.html
-
+// https://www.cnblogs.com/lpgit/p/10632756.html
 func IsBlank(str string) bool {
 	str = TrimSpace(str)
 	return len(str) == 0 || str == SYMBOL_EMPTY
@@ -87,6 +87,7 @@ func GenerateBytesUUID(len int) string {
 	uuidString := idBytesToStr(uuid, len)
 	return uuidString
 }
+
 func idBytesToStr(id []byte, length int) string {
 	str := fmt.Sprintf("%x%x%x%x%x", id[0:4], id[4:6], id[6:8], id[8:10], id[10:])
 	return str[:length]
@@ -131,7 +132,7 @@ func Replace(s string, value map[string]string) string {
 }
 
 func ParamEncode(params map[string]string, start string) string {
-	var args = start
+	args := start
 	for key, value := range params {
 		args += key + SYMBOL_EQUAL + value + SYMBOL_AND
 	}
@@ -163,7 +164,7 @@ func TrimSuffix(s, suffix string) string {
 
 // 去掉所有空格
 func TrimSpace(str string) string {
-	return strings.Replace(str, SYMBOL_SPACE, SYMBOL_EMPTY, -1)
+	return strings.Replace(strings.TrimSpace(str), SYMBOL_SPACE, SYMBOL_EMPTY, -1)
 }
 
 // 删除指定位置元素
@@ -227,7 +228,6 @@ func SubBeforeString(s string, length int) string {
 // 废弃 建议使用 SubString
 // Deprecated
 func SubAfterString(s string, length int) string {
-
 	endIndex := len(s)
 	startIndex := endIndex - length
 	if startIndex < 0 {
@@ -480,7 +480,7 @@ func ValFloat64ToInt64(body map[string]any, key string, def ...int64) int64 {
 	return ValInt64(body, key, def...)
 }
 
-func ValUnit8(body map[string]any, key string, def ...uint8) uint8 {
+func ValUint8(body map[string]any, key string, def ...uint8) uint8 {
 	if body == nil {
 		if len(def) > 0 {
 			return def[0]
@@ -782,6 +782,7 @@ func InterfaceToInt64(data any, defVal ...int64) int64 {
 func IntToString(i int) string {
 	return strconv.Itoa(i)
 }
+
 func Int32ToString(i int32) string {
 	return strconv.Itoa(int(i))
 }
@@ -897,6 +898,7 @@ func StringToFloat32(s string) float64 {
 	}
 	return f32
 }
+
 func StringToFloat64(s string) float64 {
 	f64, err := strconv.ParseFloat(s, 64)
 	if err != nil {

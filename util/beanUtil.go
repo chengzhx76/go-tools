@@ -11,7 +11,7 @@ func BeanCopy(dst, src any) (err error) {
 	// 防止意外panic
 	defer func() {
 		if e := recover(); e != nil {
-			err = errors.New(fmt.Sprintf("%v", e))
+			err = fmt.Errorf("%v", e)
 		}
 	}()
 

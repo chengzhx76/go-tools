@@ -18,6 +18,7 @@ const (
 	UNKNOWN_BOOL  uint8 = 99     // 未知
 	UNKNOWN_INT   int   = -99999 // 未知
 	UNKNOWN_INT32 int32 = -99999 // 未知
+	UNKNOWN_INT64 int64 = -99999 // 未知
 )
 
 const (
@@ -25,8 +26,8 @@ const (
 	SYMBOL_DOT      = "."
 	SYMBOL_POINT    = "·"
 	SYMBOL_ASTERISK = "*"
-	//SYMBOL_FOUR_ASTERISK = "****" // strings.Repeat(SYMBOL_ASTERISK, 3)
-	//SYMBOL_THREE_DOT     = "..."  // strings.Repeat(SYMBOL_DOT, 3)
+	// SYMBOL_FOUR_ASTERISK = "****" // strings.Repeat(SYMBOL_ASTERISK, 3)
+	// SYMBOL_THREE_DOT     = "..."  // strings.Repeat(SYMBOL_DOT, 3)
 	SYMBOL_COMMA         = ","
 	SYMBOL_BACKQUOTE     = "`"
 	SYMBOL_CAESURA       = "、"
@@ -86,6 +87,7 @@ const (
 	YES uint8 = 1
 	NO  uint8 = 0
 )
+
 const (
 	ALL uint8 = 99
 )
