@@ -787,6 +787,10 @@ func Int32ToString(i int32) string {
 	return strconv.Itoa(int(i))
 }
 
+func UintToString(i uint) string {
+	return strconv.Itoa(int(i))
+}
+
 func Uint8ToString(i uint8) string {
 	return strconv.Itoa(int(i))
 }
@@ -862,6 +866,18 @@ func StringToUint(s string) uint {
 		return uint(UNKNOWN)
 	}
 	return uint(u64)
+}
+
+func StringToUint64(s string) uint64 {
+	s = strings.TrimSpace(s)
+	if IsBlank(s) {
+		return uint64(UNKNOWN)
+	}
+	u64, err := strconv.ParseUint(s, 10, 0) // 0 表示自动使用 uint 的位数
+	if err != nil {
+		return uint64(UNKNOWN)
+	}
+	return uint64(u64)
 }
 
 func StringToInt32(s string) int32 {
