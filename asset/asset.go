@@ -2,6 +2,7 @@ package asset
 
 import (
 	"errors"
+
 	"github.com/chengzhx76/go-tools/util"
 )
 
@@ -46,26 +47,31 @@ func (as *Asset) IsNil(obj any, err error) {
 		as.Err = IsNil(obj, err)
 	}
 }
+
 func (as *Asset) NotNil(obj any, err error) {
 	if as.Err == nil {
 		as.Err = NotNil(obj, err)
 	}
 }
+
 func (as *Asset) IsNilStr(obj any, msg string) {
 	if as.Err == nil {
 		as.Err = IsNilStr(obj, msg)
 	}
 }
+
 func (as *Asset) NotNilStr(obj any, msg string) {
 	if as.Err == nil {
 		as.Err = NotNilStr(obj, msg)
 	}
 }
+
 func (as *Asset) IsTrue(bl bool, err error) {
 	if as.Err == nil {
 		as.Err = IsTrue(bl, err)
 	}
 }
+
 func (as *Asset) NotTrue(bl bool, err error) {
 	if as.Err == nil {
 		as.Err = NotTrue(bl, err)
@@ -77,29 +83,40 @@ func (as *Asset) IsTrueStr(bl bool, msg string) {
 		as.Err = IsTrueStr(bl, msg)
 	}
 }
+
 func (as *Asset) NotTrueStr(bl bool, msg string) {
 	if as.Err == nil {
 		as.Err = NotTrueStr(bl, msg)
 	}
 }
+
 func (as *Asset) IsEmpty(objs []any, err error) {
 	if as.Err == nil {
 		as.Err = IsEmpty(objs, err)
 	}
 }
+
 func (as *Asset) NotIsEmpty(objs []any, err error) {
 	if as.Err == nil {
 		as.Err = NotIsEmpty(objs, err)
 	}
 }
+
 func (as *Asset) IsEmptyStr(objs []any, msg string) {
 	if as.Err == nil {
 		as.Err = IsEmptyStr(objs, msg)
 	}
 }
+
 func (as *Asset) NotIsEmptyStr(objs []any, msg string) {
 	if as.Err == nil {
 		as.Err = NotIsEmptyStr(objs, msg)
+	}
+}
+
+func (as *Asset) HaveError(obj error) {
+	if as.Err == nil {
+		as.Err = obj
 	}
 }
 
