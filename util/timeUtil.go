@@ -2,11 +2,12 @@ package util
 
 import (
 	"fmt"
-	. "github.com/chengzhx76/go-tools/consts"
 	"log"
 	"math"
 	"strconv"
 	"time"
+
+	. "github.com/chengzhx76/go-tools/consts"
 )
 
 func AddDay(offset int, dateTime time.Time) time.Time {
@@ -119,7 +120,7 @@ func GetLastTime(dateTime time.Time) time.Time {
 
 // 获取某一天的最后时间
 func EndOfDay(dateTime time.Time) time.Time {
-	return time.Date(dateTime.Year(), dateTime.Month(), dateTime.Day(), 23, 59, 59, 0, dateTime.Location())
+	return time.Date(dateTime.Year(), dateTime.Month(), dateTime.Day(), 23, 59, 59, 999, dateTime.Location())
 }
 
 // 获取某一天的 开始时间和结束时间
@@ -127,6 +128,7 @@ func EndOfDay(dateTime time.Time) time.Time {
 func GetDayBetweenTime(dateTime time.Time) (time.Time, time.Time) {
 	return StartAndEndOfDay(dateTime)
 }
+
 func StartAndEndOfDay(dateTime time.Time) (time.Time, time.Time) {
 	return StartOfDay(dateTime), EndOfDay(dateTime)
 }
@@ -136,6 +138,7 @@ func StartAndEndOfDay(dateTime time.Time) (time.Time, time.Time) {
 func GetYear(date time.Time) int {
 	return Year(date)
 }
+
 func Year(date time.Time) int {
 	return date.Year()
 }
@@ -145,6 +148,7 @@ func Year(date time.Time) int {
 func GetWeek(dateTime time.Time) int {
 	return Week(dateTime)
 }
+
 func Week(dateTime time.Time) int {
 	week := int(dateTime.Weekday())
 	if week == 0 {
@@ -158,6 +162,7 @@ func Week(dateTime time.Time) int {
 func GetWeekDays(dateTime time.Time, format string) []string {
 	return WeekDays(dateTime, format)
 }
+
 func WeekDays(dateTime time.Time, format string) []string {
 	days := []string{
 		dateTime.Format(format),
@@ -177,6 +182,7 @@ func WeekDays(dateTime time.Time, format string) []string {
 func GetDay(date time.Time) int {
 	return Day(date)
 }
+
 func Day(date time.Time) int {
 	return date.Day()
 }
@@ -264,10 +270,11 @@ func EndOfYear(year time.Time) time.Time {
 // 获取传入的时间所在月份的第一天，即某月第一天的0点。如传入time.Now(), 返回当前月份的第一天0点时间。
 // Deprecated 建议使用 StartOfMonth
 func GetFirstDateOfMonth(d time.Time) time.Time {
-	//d = d.AddDate(0, 0, -d.Day()+1)
-	//return GetZeroTime(d)
+	// d = d.AddDate(0, 0, -d.Day()+1)
+	// return GetZeroTime(d)
 	return StartOfMonth(d)
 }
+
 func StartOfMonth(month time.Time) time.Time {
 	return time.Date(month.Year(), month.Month(), 1, 0, 0, 0, 0, month.Location())
 }
@@ -275,9 +282,10 @@ func StartOfMonth(month time.Time) time.Time {
 // 获取传入的时间所在月份的最后一天，即某月最后一天的23:59:59点。如传入time.Now(), 返回当前月份的最后一天23:59:59点时间。
 // Deprecated 建议使用 EndOfMonth
 func GetLastDateOfMonth(d time.Time) time.Time {
-	//return GetFirstDateOfMonth(d).AddDate(0, 1, -1)
+	// return GetFirstDateOfMonth(d).AddDate(0, 1, -1)
 	return EndOfMonth(d)
 }
+
 func EndOfMonth(month time.Time) time.Time {
 	return time.Date(month.Year(), month.Month(), 31, 23, 59, 59, 0, month.Location())
 }
@@ -299,6 +307,7 @@ func GetNumMonthDays(num int, date time.Time) []string {
 func GetNumDays(num int, date time.Time) []string {
 	return NumDays(num, date)
 }
+
 func NumDays(num int, date time.Time) []string {
 	var days []string
 	for i := 0; i < num; i++ {
@@ -313,6 +322,7 @@ func NumDays(num int, date time.Time) []string {
 func GetMonth(num int, date time.Time) []string {
 	return NumMonths(num, date)
 }
+
 func NumMonths(num int, date time.Time) []string {
 	var months []string
 	for i := 0; i < num; i++ {
@@ -338,7 +348,7 @@ func GetCurrentDateNextNumMonthNum(offset int, date time.Time) (year, month int)
 // 返回昨天和今天 所以是 1 天；
 func DayDiffer(end, start time.Time) int {
 	days := StartOfDay(end).Sub(StartOfDay(start)).Hours() / 24
-	//return int(math.Ceil(days)) + 1
+	// return int(math.Ceil(days)) + 1
 	return int(math.Ceil(days))
 }
 
@@ -419,7 +429,7 @@ func AmBetweenTime(t time.Time) (start time.Time, end time.Time) {
 
 // 13:00 - 24:59
 func PmBetweenTime(t time.Time) (start time.Time, end time.Time) {
-	start = GetSpecifyHourAndMinTime(t, 13, 00)
+	start = GetSpecifyHourAndMinTime(t, 13, 0)
 	end = EndOfDay(t)
 	return start, end
 }

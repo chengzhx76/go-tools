@@ -9,48 +9,45 @@ import (
 	"unsafe"
 )
 
-// Timeout Hash Wheel / Calendar Queue implementation of a callout wheel for timeouts.
-// Ticking happens from a time.Ticker
-
+// Timeout 哈希轮 / Calendar Queue 的实现，用于定时任务调度。
+// 通过 time.Ticker 驱动定时滴答。
 const (
-	defaultTickInterval = time.Millisecond // 默认周期
-	defaultNumBuckets   = 2048             // 默认桶的大小
+	defaultTickInterval = time.Millisecond // 默认的时间粒度
+	defaultNumBuckets   = 2048             // 默认桶数量
 
 	cacheline    = 64
 	bitsInUint64 = 64
 )
 
 const (
-	// states of the TimeoutWheel
+	// TimeoutWheel 的生命周期状态
 	stopped int32 = iota
 	stopping
 	running
 )
 
 const (
-	// states of a Timeout
+	// 单个 Timeout 的状态
 	timeoutInactive = iota
 	timeoutExpired
 	timeoutActive
 )
 
 var (
-	// ErrSystemStopped is returned when a user tries to schedule a timeout after stopping the
-	// timeout system.
+	// ErrSystemStopped 在用户尝试在系统停止后继续调度时返回
 	ErrSystemStopped = errors.New("Timeout System is stopped")
 
-	// 4*(NumCPU rounded down to the next power of 2.)
+	// 4*(NumCPU 向下取整到最接近的 2 的幂次方)
 	defaultPoolSize = uint64(1 << uint(findMSB(uint64(runtime.NumCPU()))+2))
 )
 
-// Timeout represents a single timeout function pending expiration.
+// Timeout 表示一个待触发的回调函数。
 type Timeout struct {
 	generation uint64
 	timeout    *timeout
 }
 
-// Stop stops the scheduled timeout so that the callback will not be called. It returns true if it
-// successfully canceled
+// Stop 停止已调度的超时，防止回调被执行。返回 true 表示取消成功。
 func (t *Timeout) Stop() bool {
 	if t.timeout == nil {
 		return false
@@ -62,6 +59,7 @@ func (t *Timeout) Stop() bool {
 		return false
 	}
 
+	// 从桶中移除并放回空闲链表
 	t.timeout.removeLocked()
 	t.timeout.wheel.putTimeoutLocked(t.timeout)
 	t.timeout.mtx.Unlock()
@@ -74,9 +72,7 @@ type timeout struct {
 	expireArg any
 	deadline  uint64
 
-	// list pointers for the freelist/buckets of the queue. The list is implemented as a forward
-	// pointer and a pointer to the address of the previous next field. It is doubly linked in this
-	// manner so that removal does not require traversal. It can only be iterated in the forward.
+	// 前向指针以及前驱的 next 指针地址。通过这种方式实现 O(1) 删除。
 	next  *timeout
 	prev  **timeout
 	state int32
@@ -111,13 +107,12 @@ func (t *timeout) removeLocked() {
 	t.prev = nil
 }
 
-// TimeoutWheel is a bucketed collection of Timeouts that have a deadline in the future.
-// (current tick granularity is 1ms).
+// TimeoutWheel 是按桶划分的定时器集合（当前 tick 精度为 1ms）。
 type TimeoutWheel struct {
-	// ticks is an atomic
+	// ticks 为全局滴答计数器
 	ticks uint64
 
-	// buckets[i] and freelists[i] is locked by mtxPool[i&poolMask]
+	// buckets[i] 和 freelists[i] 的锁由 mtxPool[i&poolMask] 控制
 	mtxPool      []paddedMutex
 	bucketMask   uint64
 	poolMask     uint64
@@ -130,7 +125,7 @@ type TimeoutWheel struct {
 	done      chan struct{}
 }
 
-// Option is a configuration option to NewTimeoutWheel
+// Option 用于配置 NewTimeoutWheel
 type Option func(*opts)
 
 type opts struct {
@@ -139,33 +134,32 @@ type opts struct {
 	poolsize     uint64
 }
 
-// sync.Mutex padded to a cache line to keep the locks from false sharing with each other
+// 加入填充以避免 mutex 发生伪共享
 type paddedMutex struct {
 	sync.Mutex
 	_ [cacheline - unsafe.Sizeof(sync.Mutex{})]byte
 }
 
-// WithTickInterval sets the frequency of ticks.
+// WithTickInterval 设置滴答间隔
 func WithTickInterval(interval time.Duration) Option {
 	return func(opts *opts) { opts.tickInterval = interval }
 }
 
-// WithBucketsExponent sets the number of buckets in the hash table.
+// WithBucketsExponent 设置桶数量的幂指数
 func WithBucketsExponent(bucketExp uint) Option {
 	return func(opts *opts) {
 		opts.size = uint64(1 << bucketExp)
 	}
 }
 
-// WithLocksExponent sets the number locks in the lockpool used to lock the time buckets. If the
-// number is greater than the number of buckets, the number of buckets will be used instead.
+// WithLocksExponent 设置锁池数量的幂指数，当大于桶数量时自动取桶数量
 func WithLocksExponent(lockExp uint) Option {
 	return func(opts *opts) {
 		opts.poolsize = uint64(1 << lockExp)
 	}
 }
 
-// NewTimeoutWheel creates and starts a new TimeoutWheel collection.
+// NewTimeoutWheel 创建并启动一个 TimeoutWheel。
 func NewTimeoutWheel(options ...Option) *TimeoutWheel {
 	opts := &opts{
 		tickInterval: defaultTickInterval,
@@ -204,7 +198,7 @@ func (t *TimeoutWheel) updateState(state int32) {
 	atomic.StoreInt32(&t.state, state)
 }
 
-// Start starts a stopped timeout wheel. Subsequent calls to Start panic.
+// Start 启动一个已停止的 TimeoutWheel。重复调用会导致 panic。
 func (t *TimeoutWheel) Start() {
 	t.lockAllBuckets()
 	defer t.unlockAllBuckets()
@@ -212,6 +206,7 @@ func (t *TimeoutWheel) Start() {
 	for t.getState() != stopped {
 		switch t.getState() {
 		case stopping:
+			// 如果正在停止，等待停止流程完成
 			t.unlockAllBuckets()
 			<-t.done
 			t.lockAllBuckets()
@@ -220,6 +215,7 @@ func (t *TimeoutWheel) Start() {
 		}
 	}
 
+	// 初始化运行状态和通道
 	t.updateState(running)
 	t.done = make(chan struct{})
 	t.calloutCh = make(chan timeoutList)
@@ -228,7 +224,7 @@ func (t *TimeoutWheel) Start() {
 	go t.doExpired()
 }
 
-// Stop stops tick processing, and deletes any remaining timeouts.
+// Stop 停止滴答并清理剩余超时任务。
 func (t *TimeoutWheel) Stop() {
 	t.lockAllBuckets()
 
@@ -240,20 +236,19 @@ func (t *TimeoutWheel) Stop() {
 		}
 	}
 
-	// unlock so the callouts can finish.
+	// 解锁以便回调 goroutine 完成
 	t.unlockAllBuckets()
 	<-t.done
 }
 
-// Schedule adds a new function to be called after some duration of time has
-// elapsed. The returned Timeout can be used to cancel calling the function. If the duration falls
-// between two ticks, the latter tick is used.
+// Schedule 在持续时间 d 后调度执行回调函数。若 d 介于两个滴答之间，将归入后一个滴答。
 func (t *TimeoutWheel) Schedule(d time.Duration, expireCb func(any), arg any) (Timeout, error) {
 	dTicks := (d + t.tickInterval - 1) / t.tickInterval
 	deadline := atomic.LoadUint64(&t.ticks) + uint64(dTicks)
 	timeout := t.getTimeoutLocked(deadline)
 
 	if t.getState() != running {
+		// 若当前未运行，直接回收 timeout
 		t.putTimeoutLocked(timeout)
 		timeout.mtx.Unlock()
 		return Timeout{}, ErrSystemStopped
@@ -266,7 +261,7 @@ func (t *TimeoutWheel) Schedule(d time.Duration, expireCb func(any), arg any) (T
 	timeout.state = timeoutActive
 	out := Timeout{timeout: timeout, generation: timeout.generation}
 
-	// execute the callback now, return a Timeout that is already Stopped (generation is bumped)
+	// 若该桶的 lastTick 已超过 deadline，则立即执行回调
 	if bucket.lastTick >= deadline {
 		t.putTimeoutLocked(timeout)
 		timeout.mtx.Unlock()
@@ -274,12 +269,13 @@ func (t *TimeoutWheel) Schedule(d time.Duration, expireCb func(any), arg any) (T
 		return out, nil
 	}
 
+	// 插入到目标桶的链表头
 	timeout.prependLocked(bucket)
 	timeout.mtx.Unlock()
 	return out, nil
 }
 
-// doTick handles the ticker goroutine of the timer system
+// doTick 负责处理滴答的 goroutine。
 func (t *TimeoutWheel) doTick() {
 	var expiredList timeoutList
 
@@ -287,6 +283,7 @@ func (t *TimeoutWheel) doTick() {
 	for range ticker.C {
 		v := atomic.AddUint64(&t.ticks, 1)
 
+		// 锁定对应桶，保证对同一桶的安全访问
 		mtx := t.lockBucket(v)
 		if t.getState() != running {
 			mtx.Unlock()
@@ -297,7 +294,7 @@ func (t *TimeoutWheel) doTick() {
 		timeout := bucket.head
 		bucket.lastTick = v
 
-		// find all the expired timeouts in the bucket.
+		// 遍历该桶，找出已到期的 timeout
 		for timeout != nil {
 			next := timeout.next
 			if timeout.deadline <= v {
@@ -313,10 +310,12 @@ func (t *TimeoutWheel) doTick() {
 			continue
 		}
 
+		// 将已到期的任务转移到 callout 通道等待回调处理
 		select {
 		case t.calloutCh <- expiredList:
 			expiredList.head = nil
 		default:
+			// 如果通道已满，留待下次循环继续发送
 		}
 	}
 
@@ -371,6 +370,7 @@ func (t *TimeoutWheel) freeBucketLocked(head timeoutList) {
 	}
 }
 
+// doExpired 负责回调执行和资源回收
 func (t *TimeoutWheel) doExpired() {
 	for list := range t.calloutCh {
 		timeout := list.head
@@ -383,19 +383,21 @@ func (t *TimeoutWheel) doExpired() {
 			timeout.mtx.Unlock()
 
 			if expireCb != nil {
+				// 执行用户回调
 				expireCb(expireArg)
 			}
 			timeout = next
 		}
 	}
 
+	// 确保结束时状态恢复为 stopped
 	t.lockAllBuckets()
 	t.updateState(stopped)
 	t.unlockAllBuckets()
 	close(t.done)
 }
 
-// return the bit position of the most significant bit of the number passed in (base zero)
+// findMSB 返回 value 的最高有效位位置（从 0 开始）
 func findMSB(value uint64) int {
 	for i := bitsInUint64 - 1; i >= 0; i-- {
 		if value&(1<<uint(i)) != 0 {
