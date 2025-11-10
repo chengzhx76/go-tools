@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 	"unicode/utf8"
 
 	. "github.com/chengzhx76/go-tools/consts"
@@ -370,6 +371,16 @@ func ValStr(body map[string]any, key string, def ...string) string {
 	return AnyToString(body[key], def...)
 }
 
+func ValTime(body map[string]any, key string, def ...time.Time) time.Time {
+	if body == nil {
+		if len(def) > 0 {
+			return def[0]
+		}
+		return INIT_TIME
+	}
+	return AnyToTime(body[key], def...)
+}
+
 func ValString(body map[string]string, key string, def ...string) string {
 	if body == nil {
 		if len(def) > 0 {
@@ -591,6 +602,19 @@ func AnyToString(data any, defVal ...string) string {
 		}
 	}
 	return val
+}
+
+func AnyToTime(data any, defVal ...time.Time) time.Time {
+	val := NilToBlank(data)
+	if !IsBlank(val) {
+		return ParseLocalTime(DATE_TIME_FORMAT, val)
+	} else {
+		if len(defVal) > 0 {
+			return defVal[0]
+		}
+	}
+	log.Println("AnyToTime data is nil ret default INIT_TIME")
+	return INIT_TIME
 }
 
 func AnyToUint8(data any, defVal ...uint8) uint8 {
