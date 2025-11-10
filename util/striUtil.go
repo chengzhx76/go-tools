@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/rand"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -351,14 +350,14 @@ func JSONMarshal(v any, safeEncoding bool) ([]byte, error) {
 func ValidateValNotNil(body map[string]any, key string) error {
 	valObj := body[key]
 	if IsNil(valObj) {
-		return errors.New(fmt.Sprintf("<%s> value is nil"))
+		return fmt.Errorf("<%s> value is nil", key)
 	}
 	return nil
 }
 
 func ValStrNotNil(body map[string]any, key string) (string, error) {
 	err := ValidateValNotNil(body, key)
-	return ValStr(body, key), err
+	return AnyToString(body[key]), err
 }
 
 func ValStr(body map[string]any, key string, def ...string) string {
