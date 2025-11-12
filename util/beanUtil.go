@@ -179,6 +179,12 @@ func MergeStructFields(dst any, src any, fields ...string) error {
 	return nil
 }
 
+// Ptr returns a pointer to the provided value.
+// Usage: util.Ptr(time.Now()) -> *time.Time
+func Ptr[T any](v T) *T {
+	return &v
+}
+
 // example:
 // src := UserDTO{
 // 	FullName: "Alice Wang",
