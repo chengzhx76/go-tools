@@ -823,6 +823,11 @@ func BoolToString(boolVal bool) string {
 }
 
 func StringToBool(boolStr string) bool {
+	if Uint8ToString(YES) == boolStr {
+		return true
+	} else if Uint8ToString(NO) == boolStr {
+		return false
+	}
 	boolVal, err := strconv.ParseBool(boolStr)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("string to bool err<%s>", err.Error()))
