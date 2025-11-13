@@ -14,7 +14,12 @@ func NewAsset() *Asset {
 	return &Asset{}
 }
 
+// Deprecated 建议使用 Validate
 func (as *Asset) HasError() bool {
+	return as.Err != nil
+}
+
+func (as *Asset) Validate() bool {
 	return as.Err != nil
 }
 
@@ -36,9 +41,21 @@ func (as *Asset) IsBlankStr(str string, msg string) {
 	}
 }
 
+func (as *Asset) NotBlankSlice(strs []string, err error) {
+	if as.Err == nil {
+		as.Err = NotBlankSlice(strs, err)
+	}
+}
+
 func (as *Asset) NotBlankStr(str string, msg string) {
 	if as.Err == nil {
 		as.Err = NotBlankStr(str, msg)
+	}
+}
+
+func (as *Asset) NotBlankSliceStr(strs []string, msg string) {
+	if as.Err == nil {
+		as.Err = NotBlankSliceStr(strs, msg)
 	}
 }
 
@@ -96,6 +113,11 @@ func (as *Asset) IsEmpty(objs []any, err error) {
 	}
 }
 
+func (as *Asset) NotEmpty(objs []any, err error) {
+	as.NotIsEmpty(objs, err)
+}
+
+// Deprecated 建议使用 NotEmpty
 func (as *Asset) NotIsEmpty(objs []any, err error) {
 	if as.Err == nil {
 		as.Err = NotIsEmpty(objs, err)
@@ -108,6 +130,11 @@ func (as *Asset) IsEmptyStr(objs []any, msg string) {
 	}
 }
 
+func (as *Asset) NotEmptyStr(objs []any, msg string) {
+	as.NotIsEmptyStr(objs, msg)
+}
+
+// Deprecated 建议使用 NotEmptyStr
 func (as *Asset) NotIsEmptyStr(objs []any, msg string) {
 	if as.Err == nil {
 		as.Err = NotIsEmptyStr(objs, msg)
@@ -128,6 +155,10 @@ func IsBlankStr(str string, msg string) error {
 
 func NotBlankStr(str string, msg string) error {
 	return NotBlank(str, errors.New(msg))
+}
+
+func NotBlankSliceStr(strs []string, msg string) error {
+	return NotBlankSlice(strs, errors.New(msg))
 }
 
 func IsNilStr(obj any, msg string) error {
@@ -165,6 +196,13 @@ func IsBlank(str string, err error) error {
 
 func NotBlank(str string, err error) error {
 	if util.IsBlank(str) {
+		return err
+	}
+	return nil
+}
+
+func NotBlankSlice(strs []string, err error) error {
+	if len(strs) == 0 {
 		return err
 	}
 	return nil
