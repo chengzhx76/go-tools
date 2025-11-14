@@ -15,8 +15,9 @@ func BeanCopy(dst, src any) (err error) {
 // CopyStructFields 将 src 中的导出字段拷贝到 dst，支持可选的字段别名映射。
 //   - dst 必须是非 nil 的结构体指针。
 //   - src 可以是结构体或结构体指针。
-//   - 可选参数 alias（最多传一个 map）：key 为 src 字段名，value 为 dst 字段名。
-//     如果未提供 alias，则使用同名字段策略。
+//   - alias（最多一个 map），key 为 src 字段名，value 为 dst 字段名。
+//     若未提供 alias，则使用同名字段策略。
+//   - 会递归展开匿名嵌入字段（struct 或 *struct）。
 func CopyStructFields(dst, src any, alias ...map[string]string) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -53,14 +54,43 @@ func CopyStructFields(dst, src any, alias ...map[string]string) (err error) {
 		aliasMap = alias[0]
 	}
 
+	copyStructFieldsRecursive(dstVal, srcVal, aliasMap)
+	return nil
+}
+
+func copyStructFieldsRecursive(dstVal, srcVal reflect.Value, aliasMap map[string]string) {
 	srcType := srcVal.Type()
+
 	for i := 0; i < srcVal.NumField(); i++ {
-		srcFieldInfo := srcType.Field(i)
-		if srcFieldInfo.PkgPath != "" { // 未导出字段跳过
+		fieldInfo := srcType.Field(i)
+
+		// 跳过未导出字段
+		if fieldInfo.PkgPath != "" {
 			continue
 		}
 
-		srcFieldName := srcFieldInfo.Name
+		srcField := srcVal.Field(i)
+
+		// 如果是匿名嵌入字段并且内部是 struct / *struct，则递归展开
+		if fieldInfo.Anonymous {
+			switch srcField.Kind() {
+			case reflect.Pointer:
+				if srcField.IsNil() {
+					continue
+				}
+				elem := srcField.Elem()
+				if elem.Kind() == reflect.Struct {
+					copyStructFieldsRecursive(dstVal, elem, aliasMap)
+					continue
+				}
+			case reflect.Struct:
+				copyStructFieldsRecursive(dstVal, srcField, aliasMap)
+				continue
+			}
+			// 其他匿名字段当普通字段处理
+		}
+
+		srcFieldName := fieldInfo.Name
 		dstFieldName := srcFieldName
 		if aliasMap != nil {
 			if mapped, ok := aliasMap[srcFieldName]; ok {
@@ -73,18 +103,45 @@ func CopyStructFields(dst, src any, alias ...map[string]string) (err error) {
 			continue
 		}
 
-		srcField := srcVal.Field(i)
-		switch {
-		case srcField.Type().AssignableTo(dstField.Type()):
-			dstField.Set(srcField)
-		case srcField.Type().ConvertibleTo(dstField.Type()):
-			dstField.Set(srcField.Convert(dstField.Type()))
-		default:
-			// 不可赋值也不可转换，跳过
-		}
+		assignValue(dstField, srcField)
+	}
+}
+
+func assignValue(dstField, srcField reflect.Value) {
+	// 解开接口
+	if srcField.Kind() == reflect.Interface && !srcField.IsNil() {
+		srcField = srcField.Elem()
 	}
 
-	return nil
+	// src 是指针
+	if srcField.Kind() == reflect.Pointer {
+		if srcField.IsNil() {
+			// src 是 nil 指针，则将 dst 指针也置零（如果 dst 是指针类型）
+			if dstField.Kind() == reflect.Pointer {
+				dstField.Set(reflect.Zero(dstField.Type()))
+			}
+			return
+		}
+		srcField = srcField.Elem()
+	}
+
+	// dst 是指针
+	if dstField.Kind() == reflect.Pointer {
+		// 如果 dst 当前是 nil，需要先分配一个新值
+		if dstField.IsNil() {
+			dstField.Set(reflect.New(dstField.Type().Elem()))
+		}
+		dstField = dstField.Elem()
+	}
+
+	// 直接赋值或可转换赋值
+	if srcField.Type().AssignableTo(dstField.Type()) {
+		dstField.Set(srcField)
+		return
+	}
+	if srcField.Type().ConvertibleTo(dstField.Type()) {
+		dstField.Set(srcField.Convert(dstField.Type()))
+	}
 }
 
 // MapToStruct 将 map[string]any 映射到结构体。
