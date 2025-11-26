@@ -835,6 +835,15 @@ func StringToBool(boolStr string) bool {
 	return boolVal
 }
 
+func StringToTime(s string) time.Time {
+	t, err := time.ParseInLocation(DATE_TIME_FORMAT, s, time.Local)
+	if err != nil {
+		log.Println("string to time error", err)
+		return time.Time{}
+	}
+	return t
+}
+
 func AnySliceToInt32Slice(is []any) []int32 {
 	ss := make([]int32, len(is))
 	for i, v := range is {
