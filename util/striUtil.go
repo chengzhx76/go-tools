@@ -982,6 +982,31 @@ func HidePhone(phone string) string {
 	return phone[:3] + strings.Repeat(SYMBOL_ASTERISK, 4) + phone[len(phone)-4:]
 }
 
+// 脱敏姓名
+func HideRealName(name string) string {
+	name = TrimSpace(name)
+	if IsBlank(name) {
+		return SYMBOL_EMPTY
+	}
+	rs := []rune(name)
+	l := len(rs)
+	if l <= 1 {
+		return strings.Repeat(SYMBOL_ASTERISK, l)
+	}
+	return string(rs[:1]) + strings.Repeat(SYMBOL_ASTERISK, l-1)
+}
+
+// 脱敏身份证号
+func HideIDCard(id string) string {
+	if len(id) == 18 {
+		return id[:6] + strings.Repeat(SYMBOL_ASTERISK, 8) + id[14:]
+	}
+	if len(id) == 15 {
+		return id[:6] + strings.Repeat(SYMBOL_ASTERISK, 6) + id[12:]
+	}
+	return id
+}
+
 func IsHidePhone(phone string) bool {
 	if len(phone) != 11 {
 		return false
