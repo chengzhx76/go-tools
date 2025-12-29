@@ -44,6 +44,7 @@ const (
 	SYMBOL_LT            = "<"
 	SYMBOL_GT            = ">"
 	SYMBOL_REPLACE_EMOJI = "[e]"
+	SYMBOL_LINE          = "\n"
 	ERROR_CODE_DELIMITER = "__"
 )
 
