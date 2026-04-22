@@ -83,6 +83,19 @@ func (as *Asset) NotNilStr(obj any, msg string) {
 	}
 }
 
+// ValidEnum 验证uint8是否为枚举值
+func (as *Asset) ValidEnumUint8(value uint8, err error, validValues ...uint8) {
+	if as.Err == nil {
+		as.Err = ValidEnum(value, err, validValues...)
+	}
+}
+
+func (as *Asset) ValidEnumUint8Str(value uint8, msg string, validValues ...uint8) {
+	if as.Err == nil {
+		as.Err = ValidEnum(value, errors.New(msg), validValues...)
+	}
+}
+
 func (as *Asset) IsTrue(bl bool, err error) {
 	if as.Err == nil {
 		as.Err = IsTrue(bl, err)
@@ -248,4 +261,13 @@ func NotIsEmpty(objs []any, err error) error {
 		return err
 	}
 	return nil
+}
+
+func ValidEnum[T comparable](value T, err error, validValues ...T) error {
+	for _, v := range validValues {
+		if value == v {
+			return nil
+		}
+	}
+	return err
 }
